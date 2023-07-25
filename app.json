@@ -24,6 +24,14 @@
         "backgroundColor": "#ffffff"
       }
     },
+    "plugins": [
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "LANDSCAPE"
+        }
+      ]
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
     }

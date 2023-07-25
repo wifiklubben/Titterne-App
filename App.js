@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ImageBackground, Dimensions, Pressable } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Image, Dimensions, Pressable } from 'react-native';
 import {  useFonts  } from 'expo-font';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
-
-// import { BottomTabBarHeightCallbackContext, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-// import { NavigationContainer } from '@react-navigation/native';
 
 import HomeIcon from './assets/graphics/homeIcon.svg';
 import MuteIcon from './assets/graphics/muteIcon.svg';
 import SettingsIcon from './assets/graphics/settingsIcon';
 
 
-// Lock screen to landscape
-ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
+
 
 
 
@@ -40,7 +36,12 @@ export default () => {
   });
 
      // ********* EFFECTS ************
+
   useEffect(() => {
+
+    // Researched that this won't work in the simulator, but will work on an exported app (https://github.com/expo/expo/issues/5188)
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
+
     // Load the custom font on app start
     if (!fontLoaded) {
       return;
@@ -50,6 +51,8 @@ export default () => {
   if (!fontLoaded) {
     return null;
   }
+
+
 
 
   // ********* GLOBAL STYLES ***********************
@@ -123,7 +126,23 @@ export default () => {
           source = {require('./assets/All_gfx_setup.png')}
             style={styles.backgroundImage}>
           <View style={styles.fullScreenView}>
-            <Text style={styles.h1Text}>Fullscreen Home 1</Text>
+
+
+            {/* music room button */}
+            <Pressable onPress={() => handleViewChange(2)}
+                 style={[styles.ImgButton, {
+                  position: 'absolute',
+                  width: 135,
+                  height: 150,
+                  left: 10,
+                  top: -135,
+                  borderWidth: 2,
+                  borderColor: 'red',
+                  borderStyle: 'dashed'
+                 }]}>
+            </Pressable>
+
+
           </View>
         </ImageBackground>
       )}
@@ -133,14 +152,14 @@ export default () => {
         source = {require('./assets/Music_room_icon.png')}
           style={styles.backgroundImage}>
         <View style={styles.fullScreenView}>
-          <Text style={styles.h1Text}>Fullscreen Page 2</Text>
+          <Text style={styles.h1Text}>Music room!</Text>
         </View>
         </ImageBackground>
       )}
 
       {activeView === 30 && (
         <View style={styles.fullScreenView}>
-          <Text style={styles.h1Text}>Fullscreen Settings</Text>
+          <Text style={styles.h1Text}> Settings Page</Text>
         </View>
       )}  
         
@@ -174,4 +193,3 @@ export default () => {
 
   );
 }
-
