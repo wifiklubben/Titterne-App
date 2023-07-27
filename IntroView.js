@@ -7,6 +7,7 @@ export default function IntroView({ onViewChange, styles }) {
 
     const animatedScaleValue = useRef(new Animated.Value(0)).current;
     const animatedOpacityValue = useRef(new Animated.Value(0)).current;
+    // const animatedDropValue = useRef(new Animated.Value(-550)).current; title animation abandoned
 
     useEffect(() => {
 
@@ -19,11 +20,20 @@ export default function IntroView({ onViewChange, styles }) {
 
           const opacityAnimation = Animated.timing(animatedOpacityValue, {
             toValue: 1,
-            duration: 150,
+            duration: 250,
             useNativeDriver: false,
           });
 
-        Animated.sequence([scaleAnimation, Animated.delay(100), opacityAnimation, Animated.delay(500)]).start(() => {
+        //   title animation abandoned
+        //   const titleAnimation = Animated.timing(animatedDropValue,{
+        //     toValue: 25,
+        //     duration: 150,
+        //     useNativeDriver: false,
+        //   })
+
+        Animated.sequence([scaleAnimation, Animated.delay(100), opacityAnimation, Animated.delay(150), 
+            // titleAnimation, Animated.delay(1000) abandoned title animnation
+        ]).start(() => {
             onViewChange(1);
         });
 
@@ -68,6 +78,11 @@ export default function IntroView({ onViewChange, styles }) {
         opacity: animatedOpacityValue
     };
 
+    // title animation abandoned
+    // const dropAnimation = {
+    //     top: animatedDropValue
+    // }
+
 
 
     return (
@@ -75,6 +90,17 @@ export default function IntroView({ onViewChange, styles }) {
             <ImageBackground source = {require('./assets/sky.png')}
             //  <ImageBackground source = {require('./assets/All_gfx_setup.png')}
                 style={styles.backgroundImage}>
+
+                    {/* // title animation abandoned
+                    <Animated.Image source = {require('./assets/TitterneLogo.png')}
+                        style={[{
+                            position: 'absolute',
+                            width: '70%',
+                            height: '70%',
+                            left: '15%',
+                            overflow: 'visible',
+                        }, dropAnimation ]}
+                        /> */}
 
                     <Animated.Image source = {require('./assets/Bg_trees.png')}
                         style = {[{
@@ -106,6 +132,8 @@ export default function IntroView({ onViewChange, styles }) {
                             opacity: 0,                   
                         }, animatedWindow]} 
                     />
+
+
 
                     <Image source = {require('./assets/forground.png')}
                         style ={{
