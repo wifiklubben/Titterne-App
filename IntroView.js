@@ -5,12 +5,13 @@ import { View, ImageBackground, Animated, Image } from 'react-native';
 
 export default function IntroView({ onViewChange, styles }) {
 
+
     const animatedScaleValue = useRef(new Animated.Value(0)).current;
     const animatedOpacityValue = useRef(new Animated.Value(0)).current;
     // const animatedDropValue = useRef(new Animated.Value(-550)).current; title animation abandoned
 
     useEffect(() => {
-
+        console.log("IntroView useEffect called");
         const scaleAnimation = Animated.timing(animatedScaleValue, {
             toValue: 1,
             duration: 2000,
@@ -31,9 +32,10 @@ export default function IntroView({ onViewChange, styles }) {
         //     useNativeDriver: false,
         //   })
 
-        Animated.sequence([scaleAnimation, Animated.delay(100), opacityAnimation, Animated.delay(150), 
+        Animated.sequence([scaleAnimation, Animated.delay(10000), opacityAnimation, Animated.delay(10000), 
             // titleAnimation, Animated.delay(1000) abandoned title animnation
         ]).start(() => {
+            console.log("IntroView animation completed");
             onViewChange(1);
         });
 

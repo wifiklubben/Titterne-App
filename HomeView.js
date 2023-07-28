@@ -49,7 +49,6 @@ export default function HomeView({styles, children}) {
                             transform: [
                                 {
                                     translateX: cloud1Anim,
-                                
                                 }
                             ]
                         }}/>
@@ -66,7 +65,6 @@ export default function HomeView({styles, children}) {
                             transform: [
                                 {
                                     translateX: cloud2Anim,
-                                
                                 }
                             ]
                         }}/>
