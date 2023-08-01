@@ -3,22 +3,13 @@ import { StyleSheet, Text, View, ImageBackground, Image, Dimensions, Pressable }
 
 import {  useFonts  } from 'expo-font';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import { Audio } from 'expo-av';
 import * as SplashScreen from 'expo-splash-screen';
 import { Asset }  from 'expo-asset';
-import AppLoading from 'expo-app-loading';
-
 
 import HomeIcon from './assets/graphics/homeIcon.svg';
-import MuteIcon from './assets/graphics/muteIcon.svg';
-import UnmuteIcon from './assets/graphics/UnmuteIcon.svg';
 import SettingsIcon from './assets/graphics/settingsIcon';
-import PlayIcon from './assets/graphics/playIcon.svg';
-import PauseIcon from './assets/graphics/pauseIcon.svg';
-
 
 import HomeView from './HomeView';
-import IntroView from './IntroView';
 import MusicRoomView from './MusicRoomView';
 import SettingsView from './SettingsView';
 
@@ -40,20 +31,18 @@ export default () => {
     // ********* STATES ************
 
   // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(0);
+  const [activeView, setActiveView] = useState(1);
 
   const handleViewChange = (viewNumber) => {
 
     setActiveView(viewNumber);
   };
 
+  const [showIntroAnimation, setShowIntroAnimation] = useState(true);
+
   // is content cached yet?
   const [ isLoaded, setIsLoaded] = useState(false);
 
-
-  // audio load 
-const [ music, setMusic ] = useState();
-const [ volume, setVolume ] = useState(0.5);
 
 SplashScreen.preventAutoHideAsync();
 
@@ -70,7 +59,8 @@ SplashScreen.preventAutoHideAsync();
         require('./assets/Bg_trees.png'),
         require('./assets/House.png'),
         require('./assets/House_open_music_room.png'),
-        require('./assets/forground.png')
+        require('./assets/forground.png'),
+        require('./assets/TitterneLogo.png'),
       ]
 
       const cacheImages = images.map(image => {
@@ -80,10 +70,12 @@ SplashScreen.preventAutoHideAsync();
       try {
 
         await Promise.all(cacheImages);
-
-        await SplashScreen.hideAsync();
-
+        
         setIsLoaded(true);
+        console.log('setIsLoaded true app.js');
+        
+        console.log('splashcreen hidden');
+        await SplashScreen.hideAsync();
 
       } catch (e) {
 
@@ -96,78 +88,7 @@ SplashScreen.preventAutoHideAsync();
       loadAssets();
     }, []);
 
-//loading music for music room
-useEffect(() => {
-  async function loadMusic() {
-    try {
-      const { sound } = await Audio.Sound.createAsync( require('./assets/audio/Gamma_Ray.mp3')
-    );
-    setMusic( sound );
-    } catch (error) {
-      console.log(error);
-    }    
-  }
-  loadMusic();
 
-  return () => {
-    if (music) {
-      music.unloadAsync();
-    }
-  }
-
-}, [])
-
-
-// play music funtion
-  async function playMusic() {
-    try {
-      if (music) {
-        await music.playAsync();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  
-
-  //  pause music function
-  async function pauseMusic() {
-    try{
-     if (music) {
-      await music.pauseAsync()
-     }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  // raise volume function
-  async function raiseVolume() {
-    try{
-      if (music) {
-        const newVolume = Math.min(Number((volume + 0.1).toFixed(1)), 1);
-        setVolume(newVolume);
-        await music.setVolumeAsync(newVolume);
-        console.log(newVolume)
-      } 
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  // lower volume function
-  async function lowerVolume() {
-    try{
-      if (music) {
-        const newVolume = Math.max(Number(volume - 0.1).toFixed((1)), 0);
-        setVolume(newVolume);
-        await music.setVolumeAsync(newVolume);
-        console.log(newVolume)
-      } 
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
 
   // Force hoiztonral orientation
@@ -213,6 +134,11 @@ useEffect(() => {
       backgroundColor: '#000',
       height: '100%',
       width: '100%',
+    },
+
+    animationContainer: {
+      width: '100%',
+      height: '100%',
     },
 
     settingsContainer: {
@@ -286,18 +212,11 @@ useEffect(() => {
   return (
     <View style={styles.container}>
 
-
-      {activeView === 0 && (
-
-
-        <IntroView onViewChange={handleViewChange} styles={styles} fullWidth={fullWidth} isLoaded={ isLoaded }/>
-      )}
-
   {/* Home View */}
   
       {activeView === 1 && (
 
-          <HomeView styles={styles}>
+          <HomeView styles={styles} isLoaded={isLoaded} setShowAnimation={setShowIntroAnimation} showAnimation={showIntroAnimation}>
             {/* music room transition button */}
 
             <ImageBackground source={require('./assets/Music_room_icon.png')}
@@ -314,37 +233,7 @@ useEffect(() => {
 
 {/* Music Room */}
       {activeView === 2 && (
-          <MusicRoomView styles={styles}>
-  
-            <View style={styles.musicButtonContainer}>
-
-                <Pressable onPress={playMusic} style={styles.roundButton}>  
-
-                    <PlayIcon width={72} height={60}/>
-
-                </Pressable>
-
-                <Pressable onPress={pauseMusic} style={styles.roundButton}>
-
-                    <PauseIcon width={60} height={60}/>
-
-                </Pressable>
-
-                <Pressable onPress={raiseVolume} style={styles.roundButton}>
-
-                    <UnmuteIcon width={60} height={60}/>
-
-                </Pressable>
-
-                <Pressable onPress={lowerVolume} style={styles.roundButton}>
-
-                    <MuteIcon width={72} height={72}/>
-                  
-                </Pressable>
-
-              </View>
-
-          </MusicRoomView>
+          <MusicRoomView styles={styles}></MusicRoomView>
       )}
 
 {/* Settings View */}
