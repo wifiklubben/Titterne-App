@@ -3,7 +3,7 @@ import { View, ImageBackground, Image, Animated } from 'react-native';
 
 
 
-export default function HomeView({styles, children}) {
+export default function HomeView({styles, children }) {
 
     const cloud1Anim = useRef(new Animated.Value(1200)).current;
     const cloud2Anim = useRef(new Animated.Value(1300)).current;
@@ -35,7 +35,7 @@ export default function HomeView({styles, children}) {
 
 
     return (
-        <View>
+         <View>
             <ImageBackground source = {require('./assets/sky.png')}
                 style={styles.backgroundImage}>
 
@@ -79,7 +79,7 @@ export default function HomeView({styles, children}) {
                         }} 
                     />
 
-                    <Image source = {require('./assets/House_open_window.png')}
+                    <Image source = {require('./assets/House_open_music_room.png')}
                         style = {{
                             position: 'absolute',
                             bottom: 0,

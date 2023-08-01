@@ -3,7 +3,7 @@ import { View, ImageBackground, Animated, Image } from 'react-native';
 
 
 
-export default function IntroView({ onViewChange, styles }) {
+export default function IntroView({ onViewChange, styles, isLoaded }) {
 
 
     const animatedScaleValue = useRef(new Animated.Value(0)).current;
@@ -11,7 +11,9 @@ export default function IntroView({ onViewChange, styles }) {
     // const animatedDropValue = useRef(new Animated.Value(-550)).current; title animation abandoned
 
     useEffect(() => {
-        console.log("IntroView useEffect called");
+
+        console.log('isLoaded: ', isLoaded);
+
         const scaleAnimation = Animated.timing(animatedScaleValue, {
             toValue: 1,
             duration: 2000,
@@ -32,14 +34,14 @@ export default function IntroView({ onViewChange, styles }) {
         //     useNativeDriver: false,
         //   })
 
-        Animated.sequence([scaleAnimation, Animated.delay(10000), opacityAnimation, Animated.delay(10000), 
+        Animated.sequence([Animated.delay(6000), scaleAnimation, Animated.delay(350), opacityAnimation, Animated.delay(550), 
             // titleAnimation, Animated.delay(1000) abandoned title animnation
         ]).start(() => {
-            console.log("IntroView animation completed");
             onViewChange(1);
         });
 
-    }, [onViewChange]) ;
+    }, [ isLoaded ]) ;
+
 
 
     const animatedHouse = {
@@ -124,7 +126,7 @@ export default function IntroView({ onViewChange, styles }) {
                         }, animatedHouse]} 
                     />
 
-                    <Animated.Image source = {require('./assets/House_open_window.png')}
+                    <Animated.Image source = {require('./assets/House_open_music_room.png')}
                         style = {[{
                             position: 'absolute',
                             bottom: 0,

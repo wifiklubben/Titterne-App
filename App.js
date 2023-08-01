@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ImageBackground, Image, Dimensions, Pressable } from 'react-native';
+
 import {  useFonts  } from 'expo-font';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { Audio } from 'expo-av';
+import * as SplashScreen from 'expo-splash-screen';
+import { Asset }  from 'expo-asset';
+import AppLoading from 'expo-app-loading';
 
 
 import HomeIcon from './assets/graphics/homeIcon.svg';
@@ -16,6 +20,7 @@ import PauseIcon from './assets/graphics/pauseIcon.svg';
 import HomeView from './HomeView';
 import IntroView from './IntroView';
 import MusicRoomView from './MusicRoomView';
+import SettingsView from './SettingsView';
 
 
 export default () => {
@@ -36,19 +41,62 @@ export default () => {
 
   // set page being viewed, default 1
   const [activeView, setActiveView] = useState(0);
-  
+
   const handleViewChange = (viewNumber) => {
+
     setActiveView(viewNumber);
   };
+
+  // is content cached yet?
+  const [ isLoaded, setIsLoaded] = useState(false);
 
 
   // audio load 
 const [ music, setMusic ] = useState();
 const [ volume, setVolume ] = useState(0.5);
 
+SplashScreen.preventAutoHideAsync();
+
+
 
      // ********* EFFECTS ************
 
+    //splashscreen for hiding loading assets
+
+    useEffect(() => {
+    const loadAssets = async () => {
+      const images = [
+        require('./assets/sky.png'), 
+        require('./assets/Bg_trees.png'),
+        require('./assets/House.png'),
+        require('./assets/House_open_music_room.png'),
+        require('./assets/forground.png')
+      ]
+
+      const cacheImages = images.map(image => {
+        return Asset.fromModule(image).downloadAsync();
+      });
+
+      try {
+
+        await Promise.all(cacheImages);
+
+        await SplashScreen.hideAsync();
+
+        setIsLoaded(true);
+
+      } catch (e) {
+
+        console.warn('Error = ', e)
+        
+      }
+
+      };
+
+      loadAssets();
+    }, []);
+
+//loading music for music room
 useEffect(() => {
   async function loadMusic() {
     try {
@@ -166,6 +214,15 @@ useEffect(() => {
       height: '100%',
       width: '100%',
     },
+
+    settingsContainer: {
+      display: 'flex',
+      gap: 50,
+      height: '100%',
+      width: '100%',
+      alignItems: 'center',
+      paddingTop: 100,
+    },
   
     buttonContainer: {
       position: 'absolute',
@@ -206,7 +263,6 @@ useEffect(() => {
   
     h1Text: {
       fontSize: 60, 
-      zIndex: 99,
       fontFamily: 'Bubblegum',
       color: 'white',
     },
@@ -228,11 +284,13 @@ useEffect(() => {
 
 
   return (
-
     <View style={styles.container}>
 
+
       {activeView === 0 && (
-        <IntroView onViewChange={handleViewChange} styles={styles} fullWidth={fullWidth}/>
+
+
+        <IntroView onViewChange={handleViewChange} styles={styles} fullWidth={fullWidth} isLoaded={ isLoaded }/>
       )}
 
   {/* Home View */}
@@ -242,13 +300,14 @@ useEffect(() => {
           <HomeView styles={styles}>
             {/* music room transition button */}
 
-            {/* <ImageBackground source={require('./assets/Music_room_icon.png')}> */}
+            <ImageBackground source={require('./assets/Music_room_icon.png')}
+                              >
 
               <Pressable onPress={() => handleViewChange(2)}
                     style={ styles.RoomButton }>
               </Pressable>
 
-            {/* </ImageBackground> */}
+            </ImageBackground>
 
           </HomeView>
       )}
@@ -290,9 +349,8 @@ useEffect(() => {
 
 {/* Settings View */}
       {activeView === 30 && (
-        <View style={styles.fullScreenView}>
-          <Text style={styles.h1Text}> Settings Page</Text>
-        </View>
+        <SettingsView styles={styles}>
+        </SettingsView>
       )}  
         
         
@@ -309,14 +367,17 @@ useEffect(() => {
           </Pressable>
           )}
 
+
           <Pressable style={styles.roundButton} onPress={() => handleViewChange(30)}>
             
             <SettingsIcon width={72} height={72}/>
 
           </Pressable>
+          
 
         </View>
         )}
+
 
       
       </View>
