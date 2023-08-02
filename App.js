@@ -31,7 +31,7 @@ export default () => {
     // ********* STATES ************
 
   // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(1);
+  const [activeView, setActiveView] = useState(2);
 
   const handleViewChange = (viewNumber) => {
 
@@ -167,6 +167,11 @@ SplashScreen.preventAutoHideAsync();
       flexDirection: 'column',
       gap: 10,
     },
+
+    musicSlider: {
+      width: 200,
+      height: 40,
+    },
   
     roundButton: {
       backgroundColor : 'white',
@@ -216,7 +221,7 @@ SplashScreen.preventAutoHideAsync();
   
       {activeView === 1 && (
 
-          <HomeView styles={styles} isLoaded={isLoaded} setShowAnimation={setShowIntroAnimation} showAnimation={showIntroAnimation}>
+          <HomeView styles={styles} isLoaded={isLoaded} setShowIntroAnimation={setShowIntroAnimation} showIntroAnimation={showIntroAnimation}>
             {/* music room transition button */}
 
             <ImageBackground source={require('./assets/Music_room_icon.png')}

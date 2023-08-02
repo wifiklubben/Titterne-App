@@ -9,7 +9,6 @@ export default function HomeView({ styles, isLoaded, children, setShowIntroAnima
   const animatedScaleValue = useRef(new Animated.Value(0)).current;
   const animatedOpacityValue = useRef(new Animated.Value(0)).current;
   const animatedTitleValue = useRef(new Animated.Value(0)).current
-  // const animatedDropValue = useRef(new Animated.Value(-550)).current; title animation abandoned
 
   const cloud1Anim = useRef(new Animated.Value(1200)).current;
   const cloud2Anim = useRef(new Animated.Value(1300)).current;
@@ -17,11 +16,10 @@ export default function HomeView({ styles, isLoaded, children, setShowIntroAnima
 
   useEffect(() => {
 
-    console.log("isloaded is,", isLoaded);
 
     if (isLoaded && showIntroAnimation) {
 
-      console.log('showIntroAnimation ');
+
 
       const scaleAnimation = Animated.timing(animatedScaleValue, {
         toValue: 1,
@@ -42,7 +40,7 @@ export default function HomeView({ styles, isLoaded, children, setShowIntroAnima
       })
 
 
-console.log('starting intro animation');
+
       Animated.sequence([
           scaleAnimation,
           titleAnimation,
@@ -51,13 +49,13 @@ console.log('starting intro animation');
         Animated.delay(550),
       ]).start(() => {
         setShowIntroAnimation(false);
-        console.log('setShowIntroAnimation(false)');
+
       });
 
     } else {
 
         if (isLoaded && !showIntroAnimation){ 
-            console.log('showMainAnimation ');
+
             Animated.loop(
               Animated.timing(cloud1Anim, {
                 toValue: -500, 
