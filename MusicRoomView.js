@@ -19,14 +19,14 @@ const [musicLoaded, setMusicLoaded ] = useState(false);
 const [ track1, setTrack1 ] = useState();
 const [ track2, setTrack2 ] = useState();
 const [ track3, setTrack3 ] = useState();
+const [ sfx1, setSfx1 ] = useState();
+const [ sfx2, setSfx2 ] = useState();
 const [ volume1, setVolume1 ] = useState(0.0);
 const [ volume2, setVolume2 ] = useState(0.0);
 const [ volume3, setVolume3 ] = useState(0.0);
 const [ volumeDisplay1, setVolumeDisplay1 ] = useState(0)
 const [ volumeDisplay2, setVolumeDisplay2 ] = useState(0)
 const [ volumeDisplay3, setVolumeDisplay3 ] = useState(0)
-const [sfx1, setSfx1] = useState();
-const [sfx2, setSfx2] = useState();
 
 
   //loading music for music room
@@ -65,7 +65,6 @@ const [sfx2, setSfx2] = useState();
      
       const { sound } = await Audio.Sound.createAsync( require('./assets/audio/Pelota.mp3'));
       setTrack3( sound );
-      console.log("Track3 loaded: ", setTrack3);
 
     } catch (error) {
       console.log("error in initial loadMusic of track 3: ", error);
@@ -74,9 +73,9 @@ const [sfx2, setSfx2] = useState();
 
   async function loadSfx1() {
     try {
-      const { sound } = await Audio.Sound.createAsync( require('./assets/audio/fart.mp3'));
+      const { sound } = await Audio.Sound.createAsync( require('./assets/audio/sax1.mp3'));
       setSfx1( sound );
-      console.log("SFX1 loaded: ", sfx1);
+      console.log("SFX1 loaded: ", setSfx1);
 
     } catch (error) {
       console.log("error in initial loadMusic of sfx1: ", error);
@@ -87,7 +86,7 @@ const [sfx2, setSfx2] = useState();
     try {
       const { sound } = await Audio.Sound.createAsync( require('./assets/audio/Airhorn.mp3'));
       setSfx2( sound );
-      console.log("SFX2 loaded: ", sfx2);
+      console.log("SFX2 loaded: ", setSfx2);
       
 
     } catch (error) {
@@ -119,10 +118,10 @@ const [sfx2, setSfx2] = useState();
         await track2.setVolumeAsync(volume2)
         await track3.setVolumeAsync(volume3)
 
-        console.log("tracks playing");
         await track1.playAsync();
         await track2.playAsync();
         await track3.playAsync();
+        console.log("tracks playing");
       }
     } catch (error) {
       console.log("This is the error: ", error);
@@ -138,12 +137,12 @@ const [sfx2, setSfx2] = useState();
       await track1.setVolumeAsync(volume1)
       await track2.setVolumeAsync(volume2)
       await track3.setVolumeAsync(volume3)
-
-      console.log("tracks paused");
-
+      
       await track1.pauseAsync()
       await track2.pauseAsync()
       await track3.pauseAsync()
+
+      console.log("tracks paused");
 
      }
 
@@ -210,7 +209,7 @@ useEffect(() => {
   async function changeVolume3() {
     try{
       if(musicLoaded) {
-      await track3.setVolumeAsync(volume2)
+      await track3.setVolumeAsync(volume3)
       }
     } catch (error) {
       console.log("error changing volume3: ", error);
@@ -218,7 +217,6 @@ useEffect(() => {
   } changeVolume3()
  
 }, [ volume3 ])
-
 
 
 // volume handling 3
@@ -235,12 +233,21 @@ setVolume3(newVolume);
  
   return (
 
-<ImageBackground source = {require('./assets/Music_room_icon.png')}
+<ImageBackground source = {require('./assets/Music_room_inside.png')}
         style={styles.fullWidthBackground}>
             
-        <View>
+        <View style={{   
+                  height: 100,
+                  flexDirection: 'row',
+                  gap: 10}}>
+                    
 
             <View style={styles.musicButtonContainer}>
+
+              <View style={{   
+                  height: 100,
+                  flexDirection: 'row',
+                  gap: 10}}>
 
               <Pressable onPress={playMusic} style={styles.roundButton}>  
 
@@ -253,6 +260,8 @@ setVolume3(newVolume);
                   <PauseIcon width={60} height={60}/>
 
               </Pressable>
+
+              </View>
 
             <Multitrack styles={styles} volume={volume1} handleVolumeChange={handleVolumeChange1}>
 
@@ -268,7 +277,7 @@ setVolume3(newVolume);
 
             <Multitrack styles={styles} volume={volume3} handleVolumeChange={handleVolumeChange3}>
 
-              <Text style={styles.h1Text}> Track 2volume: {volumeDisplay3} </Text>
+              <Text style={styles.h1Text}> Track 3 volume: {volumeDisplay3} </Text>
               
             </Multitrack>
 
@@ -277,15 +286,27 @@ setVolume3(newVolume);
 
 
 
-            <View styles={{
-              position: 'absolute',
-              left: 300,
-              width: 200,
-            }}>
+            <View style={{   
+                  position: 'absolute',
+                  top: 50,
+                  right: 200,
+                  height: 100,
+                  flexDirection: 'row',
+                  gap: 10}}>
 
-              <OneShot styles={styles} soundToPlay={sfx1}/>
 
-              <OneShot styles={styles} soundToPlay={sfx2}/>
+              <OneShot styles={styles} soundToPlay={sfx1}>
+
+                <Text>Saxophone</Text>
+
+              </OneShot>
+
+
+              <OneShot styles={styles} soundToPlay={sfx2}>
+
+              <Text>Air horn</Text>
+
+              </OneShot>
 
             </View>
 

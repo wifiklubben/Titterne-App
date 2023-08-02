@@ -1,20 +1,19 @@
 import React from 'react';
 import { View, Pressable, Text } from 'react-native'
-import {Audio} from 'expo-av';
 
 
 
-function OneShot({styles, soundToPlay}) {
+function OneShot({styles, soundToPlay, children}) {
 
     
     async function playSound() {
 
-      console.log("trying to play sound");
-      
+      console.log("trying to play sound: ", soundToPlay);
+
     try {
-        const { sound } =  await Audio.Sound.createAsync(soundToPlay);
+
         
-        await sound.playAsync()
+        await soundToPlay.playAsync()
 
     } catch (error) {
 
@@ -23,11 +22,11 @@ function OneShot({styles, soundToPlay}) {
     
 }
   return (
-    <View>
+    <>
         <Pressable style={styles.roundButton} onPress={playSound}>
-        <Text> Push me </Text>
+        { children }
         </Pressable>
-    </View>
+    </>
   )
 }
 
