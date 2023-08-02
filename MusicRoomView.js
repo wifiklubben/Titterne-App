@@ -22,6 +22,7 @@ const [ track1, setTrack1 ] = useState();
 const [ track2, setTrack2 ] = useState();
 const [ track3, setTrack3 ] = useState();
 const [ volume, setVolume ] = useState(0.0);
+const [ volumeDisplay, setVolumeDisplay ] = useState(0)
 
 
   //loading music for music room
@@ -106,7 +107,7 @@ const [ volume, setVolume ] = useState(0.0);
       await track1.setVolumeAsync(volume)
       await track2.setVolumeAsync(volume)
       await track3.setVolumeAsync(volume)
-      
+
       console.log("tracks paused");
       await track1.pauseAsync()
       await track2.pauseAsync()
@@ -118,7 +119,6 @@ const [ volume, setVolume ] = useState(0.0);
   }
 
   // change volume function
-
   useEffect(() => {
     async function changeVolume() {
 
@@ -134,12 +134,12 @@ const [ volume, setVolume ] = useState(0.0);
 
 
   // volume handling 
-
  const handleVolumeChange = (rawVolume) => {
 
-  console.log("volume change triggered");
   const newVolume = Math.round(rawVolume)/100;
+  const volumeTen = Math.round(newVolume*100)
 
+  setVolumeDisplay(volumeTen)
   setVolume(newVolume);
 
  }
@@ -176,7 +176,7 @@ const [ volume, setVolume ] = useState(0.0);
               minimumTrackTintColor="#FFFFFF"
               maximumTrackTintColor="#000000"
               />
-              <Text style={styles.h1Text}>All tracks volume: {volume} </Text>
+              <Text style={styles.h1Text}>All tracks volume: {volumeDisplay} </Text>
 
             </View>
 
