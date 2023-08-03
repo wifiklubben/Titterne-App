@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, ImageBackground, Pressable, Text } from 'react-native'
 
-import {Audio} from 'expo-av';
+import { Audio } from 'expo-av';
 
 import PlayIcon from './assets/graphics/playIcon.svg';
 import PauseIcon from './assets/graphics/pauseIcon.svg';
@@ -10,7 +10,9 @@ import OneShot from './OneShot';
 
 
 
-export default function MusicRoomView({ styles }) {
+export default function MusicRoomView({ styles, activeView }) {
+
+
 
 
     // audio load 
@@ -29,6 +31,8 @@ const [ volumeDisplay2, setVolumeDisplay2 ] = useState(0)
 const [ volumeDisplay3, setVolumeDisplay3 ] = useState(0)
 
 
+
+
   //loading music for music room
 
   useEffect(() => {
@@ -45,6 +49,7 @@ const [ volumeDisplay3, setVolumeDisplay3 ] = useState(0)
       console.log("error in initial loadMusic of track 1", error);
 
     }    
+
   }
 
   async function loadMusic2() {
@@ -95,14 +100,49 @@ const [ volumeDisplay3, setVolumeDisplay3 ] = useState(0)
 
   }
 
+  
   loadSfx1()
   loadSfx2()
   loadMusic1()
   loadMusic2()
   loadMusic3()
   setMusicLoaded(true);
+  
 
 }, [])
+
+
+// unload tracks on unmount
+
+useEffect(() =>{
+  if(track1) {
+    return () => {
+      if (track1) {
+        track1.unloadAsync();
+      }
+    }
+  }
+}, [track1])
+
+useEffect(() =>{
+  if(track2) {
+    return () => {
+      if (track2) {
+        track2.unloadAsync();
+      }
+    }
+  }
+}, [track2])
+
+useEffect(() =>{
+  if(track3) {
+    return () => {
+      if (track3) {
+        track3.unloadAsync();
+      }
+    }
+  }
+}, [track3])
 
 
 
@@ -144,7 +184,7 @@ const [ volumeDisplay3, setVolumeDisplay3 ] = useState(0)
 
       console.log("tracks paused");
 
-     }
+     } 
 
     } catch (error) {
       console.log(error);
