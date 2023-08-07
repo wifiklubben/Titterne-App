@@ -240,87 +240,87 @@ const animatedWindow = {
 
             </ImageBackground>       
         </View> 
-) : (
-    // Intro Animation
-    <View>
- 
-    <ImageBackground source = {require('./assets/sky.png')}
+    ) : (
+        // Intro Animation
 
-        style={styles.backgroundImage}>
+        <View>
+          <ImageBackground source = {require('./assets/sky.png')}
 
-            <Animated.Image source = {require('./assets/Bg_trees.png')}
-                style = {[{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0 ,
-                    width: '100%',
-                    height: '100%',                       
-                }, animatedTrees]} 
-            />
+              style={styles.backgroundImage}>
 
-            <Animated.Image source = {require('./assets/House.png')}
-                style = {[{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0 ,
-                    width: '100%',
-                    height: '100%',                       
-                }, animatedHouse]} 
-            />
+                  <Animated.Image source = {require('./assets/Bg_trees.png')}
+                      style = {[{
+                          position: 'absolute',
+                          bottom: 0,
+                          left: 0 ,
+                          width: '100%',
+                          height: '100%',                       
+                      }, animatedTrees]} 
+                  />
 
-            <Animated.Image source = {require('./assets/House_open_music_room.png')}
-                style = {[{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0 ,
-                    width: '100%',
-                    height: '100%',  
-                    opacity: 0,                   
-                }, animatedWindow]} 
-            />
+                  <Animated.Image source = {require('./assets/House.png')}
+                      style = {[{
+                          position: 'absolute',
+                          bottom: 0,
+                          left: 0 ,
+                          width: '100%',
+                          height: '100%',                       
+                      }, animatedHouse]} 
+                  />
 
-            <Animated.Image 
-                source={require('./assets/cloud_2.png')}
-                style={[{
-                    position: 'absolute',
-                    overflow: 'visible',
-                    height: '100%',
-                    width: '100%',
-                    
-                }, animatedCloud1]}/>
+                  <Animated.Image source = {require('./assets/House_open_music_room.png')}
+                      style = {[{
+                          position: 'absolute',
+                          bottom: 0,
+                          left: 0 ,
+                          width: '100%',
+                          height: '100%',  
+                          opacity: 0,                   
+                      }, animatedWindow]} 
+                  />
 
-            <Animated.Image 
-                source={require('./assets/cloud_1.png')}
-                style={[{
-                    position: 'absolute',
-                    overflow: 'visible',
-                    top: -200,
-                    height: '100%',
-                    width: '100%',
-                }, animatedCloud2]}
-                />
+                  <Animated.Image 
+                      source={require('./assets/cloud_2.png')}
+                      style={[{
+                          position: 'absolute',
+                          overflow: 'visible',
+                          height: '100%',
+                          width: '100%',
+                          
+                      }, animatedCloud1]}/>
 
-            <Animated.Image source = {require('./assets/TitterneLogo.png')}
-                style={[{
-                    position: 'absolute',
-                    width: '50%',
-                    height: '50%',
-                    left: '25%',
-                    top: '20%',
-                    overflow: 'visible',
-                },  animatedTitleIn ]}
-                />
+                  <Animated.Image 
+                      source={require('./assets/cloud_1.png')}
+                      style={[{
+                          position: 'absolute',
+                          overflow: 'visible',
+                          top: -200,
+                          height: '100%',
+                          width: '100%',
+                      }, animatedCloud2]}
+                      />
+
+                  <Animated.Image source = {require('./assets/TitterneLogo.png')}
+                      style={[{
+                          position: 'absolute',
+                          width: '50%',
+                          height: '50%',
+                          left: '25%',
+                          top: '20%',
+                          overflow: 'visible',
+                      },  animatedTitleIn ]}
+                      />
 
 
-            <Animated.Image source = {require('./assets/forground.png')}
-                style ={[{
-                    position: 'absolute',
-                    height: '100%',
-                    width: '100%',
-            }, animatedForeGround]}/>
+                  <Animated.Image source = {require('./assets/forground.png')}
+                      style ={[{
+                          position: 'absolute',
+                          height: '100%',
+                          width: '100%',
+                  }, animatedForeGround]}/>
 
-    </ImageBackground>       
-</View> 
+          </ImageBackground>       
+    </View> 
 )
 
 

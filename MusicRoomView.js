@@ -22,13 +22,9 @@ const [ track3, setTrack3 ] = useState();
 const [ sfx1, setSfx1 ] = useState();
 const [ sfx2, setSfx2 ] = useState();
 
-const [sfx1Playing, setSfx1Playing] = useState();
-const [sfx2Playing, setSfx2Playing] = useState();
-
 const [ volume1, setVolume1 ] = useState(0.0);
 const [ volume2, setVolume2 ] = useState(0.0);
 const [ volume3, setVolume3 ] = useState(0.0);
-
 
 
 
@@ -265,6 +261,28 @@ setVolume3(newVolume);
 
 // animation functions
 
+const wiggleAnimation = () => {
+  console.log("wiggling!");
+  Animated.sequence([
+    Animated.timing(animatedValue, {
+      toValue: 10,
+      duration: 50,
+      useNativeDriver: true,
+    }),
+    Animated.timing(animatedValue, {
+      toValue: -10,
+      duration: 50,
+      useNativeDriver: true,
+    }),
+    Animated.timing(animatedValue, {
+      toValue: 0,
+      duration: 50,
+      useNativeDriver: true,
+    }),
+  ]).start();
+};
+
+
 
 
   return (
@@ -302,17 +320,10 @@ setVolume3(newVolume);
               <OneShot soundToPlay={sfx1} styles={styles}>
 
                <Animated.Image source={require('./assets/ThordenBass.png')}
-                          styles={styles.speakerButton}
-                          // style={{
-                          //   transform: [
-                          //     { translateX: animatedWiggleValue.interpolate({
-                          //         inputRange: [0, 0.5, 1],
-                          //         outputRange: [0, 10, 0],
-                          //       })
-                          //     }
-                          //   ]
-
-                          // }}
+                          styles={[
+                            styles.speakerButton
+                          ]}
+                          onPress={wiggleAnimation}
                           />
 
               </OneShot>

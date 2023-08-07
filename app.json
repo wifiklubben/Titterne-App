@@ -3,14 +3,14 @@
     "name": "titterne",
     "slug": "titterne",
     "owner": "wifiklubben",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "orientation": "landscape",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/TitterneSplash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#8AC1DF"
     },
     "assetBundlePatterns": [
       "**/*"

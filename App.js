@@ -32,7 +32,7 @@ export default () => {
     // ********* STATES ************
 
   // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(2);
+  const [activeView, setActiveView] = useState(1);
 
   const handleViewChange = (viewNumber) => {
 
