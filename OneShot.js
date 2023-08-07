@@ -1,19 +1,24 @@
-import React from 'react';
-import { View, Pressable, Text } from 'react-native'
+import React, {useState}from 'react';
+import { View, Pressable, Image } from 'react-native'
 
 
 
-function OneShot({styles, soundToPlay, children}) {
+function OneShot({soundToPlay, children }) {
 
+  const [playingRightNow, setPlayingRightNow] = useState(null)
     
     async function playSound() {
-
-      console.log("trying to play sound: ", soundToPlay);
+      console.log("playSound()");
 
     try {
-
+      if (playingRightNow !== null) {
+      console.log("stopping, starting");
+        soundToPlay.stopAsync();
+        soundToPlay.playAsync();
+      }
         
-        await soundToPlay.playAsync()
+        const { sound } = await soundToPlay.playAsync();
+        setPlayingRightNow(sound);
 
     } catch (error) {
 
@@ -23,7 +28,7 @@ function OneShot({styles, soundToPlay, children}) {
 }
   return (
     <>
-        <Pressable style={styles.roundButton} onPress={playSound}>
+        <Pressable onPress={playSound} >
         { children }
         </Pressable>
     </>

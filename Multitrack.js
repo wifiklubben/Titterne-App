@@ -9,22 +9,23 @@ function Multitrack( {styles, volume, handleVolumeChange, children} ) {
 
   return (
 
-    <View> 
+    <> 
 
         <Slider 
             style={styles.musicSlider} 
             minimumValue={0}
-            maximumValue={100}
-            steps={100}
+            maximumValue={1}
+            step={1}
+            tapToSeek={true}
             value={volume}
             onValueChange={handleVolumeChange}
-            minimumTrackTintColor="#FFFFFF"
-            maximumTrackTintColor="#000000"
+            minimumTrackTintColor="#fff"
+            maximumTrackTintColor="red"
             />
 
         { children } 
 
-  </View>
+  </>
 
   )
 }

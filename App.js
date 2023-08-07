@@ -32,7 +32,7 @@ export default () => {
     // ********* STATES ************
 
   // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(1);
+  const [activeView, setActiveView] = useState(2);
 
   const handleViewChange = (viewNumber) => {
 
@@ -161,16 +161,17 @@ SplashScreen.preventAutoHideAsync();
     },
 
     musicButtonContainer: {
+      transform:'90deg',
       position: 'absolute',
-      top: 50,
-      left: 50,
+      top: 450,
+      left: 150,
       height: 100,
       flexDirection: 'column',
-      gap: 10,
+      gap: 20,
     },
 
     musicSlider: {
-      width: 200,
+      width: 100,
       height: 40,
     },
   
@@ -209,7 +210,7 @@ SplashScreen.preventAutoHideAsync();
       fontFamily: 'Bubblegum',
       fontSize: 30, 
     },
-  
+
   
   });
 

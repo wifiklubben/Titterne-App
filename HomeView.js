@@ -165,7 +165,6 @@ const animatedTrees = {
       ],
 }
 
-
 const animatedWindow = {
     opacity: animatedOpacityValue
 };
