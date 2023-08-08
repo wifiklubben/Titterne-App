@@ -135,9 +135,9 @@ const animatedCloud2 = {
 
 const animatedForeGround = {
   transform: [{
-    scaleY: animatedScaleValue.interpolate({
+    scale: animatedScaleValue.interpolate({
       inputRange: [0 , 1],
-      outputRange: [0.9, 1],
+      outputRange: [0.92, 1],
     })
   }]
 }

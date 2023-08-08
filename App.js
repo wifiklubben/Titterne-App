@@ -12,6 +12,7 @@ import SettingsIcon from './assets/graphics/settingsIcon';
 import HomeView from './HomeView';
 import MusicRoomView from './MusicRoomView';
 import SettingsView from './SettingsView';
+import BedroomView from './BedroomView';
 
 
 
@@ -32,7 +33,7 @@ export default () => {
     // ********* STATES ************
 
   // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(1);
+  const [activeView, setActiveView] = useState(3);
 
   const handleViewChange = (viewNumber) => {
 
@@ -186,11 +187,19 @@ SplashScreen.preventAutoHideAsync();
       alignItems: 'center',
     },
 
-    RoomButton: {
+    MusicRoomButton: {
       position: 'absolute',
       width: 135,
       height: 160,
       left: (fullWidth/2) + 10,
+      top: (fullHeight/2) - 140,
+    },
+
+    BedroomButton: {
+      position: 'absolute',
+      width: 135,
+      height: 160,
+      left: (fullWidth/2) - 210,
       top: (fullHeight/2) - 140,
     },
   
@@ -226,22 +235,29 @@ SplashScreen.preventAutoHideAsync();
           <HomeView styles={styles} isLoaded={isLoaded} setShowIntroAnimation={setShowIntroAnimation} showIntroAnimation={showIntroAnimation}>
             {/* music room transition button */}
 
-            <ImageBackground source={require('./assets/Music_room_icon.png')}
-                              >
-
+            <ImageBackground source={require('./assets/Music_room_icon.png')}>
               <Pressable onPress={() => handleViewChange(2)}
-                    style={ styles.RoomButton }>
+                    style={ styles.MusicRoomButton }>
               </Pressable>
-
             </ImageBackground>
+
+
+              <Pressable onPress={() => handleViewChange(3)} 
+                      style={ styles.BedroomButton}>
+              </Pressable>
 
           </HomeView>
       )}
 
-{/* Music Room */}
+{/* Music Room View */}
       {activeView === 2 && (
           <MusicRoomView styles={styles} activeView={activeView}></MusicRoomView>
       )}
+
+{/* Bedroom View */}
+        {activeView === 3 && (
+          <BedroomView styles={styles} activeVIew={activeView}></BedroomView>
+        )}
 
 {/* Settings View */}
       {activeView === 30 && (
