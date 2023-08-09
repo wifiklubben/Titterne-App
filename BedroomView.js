@@ -10,16 +10,15 @@ import { Audio } from 'expo-av'
 // matching socks stock function
 function areSocksMatched(sock1, sock2) {
 
+    console.log("sock1 id: ", sock1.id);
+    console.log("sock2 id: ", sock2.id);
 
-    if (sock1.sock.color === sock2.sock.color) {
+    if (sock1.sock.color === sock2.sock.color && sock1.id != sock2.id) {
 
         return(sock1, sock2)
 
     } else {}
 }
-
-
-
 
 
 export default function BedroomView({ styles }) {
@@ -206,7 +205,6 @@ useEffect(() => {
 const renderItem = ({item, index}) => {
     const image = item.image
     const sockId = index
-
 
     const isCardOpen = openCards.some(card => card.id === sockId);
     const isCardCleared = clearedCards.some(card => card.sock.color === item.color);
