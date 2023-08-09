@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, ImageBackground, Animated, Image } from 'react-native';
 
+
+
 export default function HomeView({ styles, isLoaded, children, setShowIntroAnimation, showIntroAnimation }) {
-
-
 
 
   const animatedScaleValue = useRef(new Animated.Value(0)).current;
   const animatedOpacityValue = useRef(new Animated.Value(0)).current;
   const animatedTitleInValue = useRef(new Animated.Value(0)).current;
 
-
-
   const cloud1Anim = useRef(new Animated.Value(1200)).current;
   const cloud2Anim = useRef(new Animated.Value(1300)).current;
+
+
 
 
   useEffect(() => {
@@ -81,6 +81,7 @@ export default function HomeView({ styles, isLoaded, children, setShowIntroAnima
               ).start();
             }
    
+
     }
   }, [ isLoaded, showIntroAnimation ]);
 

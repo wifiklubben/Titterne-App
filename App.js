@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ImageBackground, Image, Dimensions, Pressable } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Dimensions, Pressable } from 'react-native';
 
 import {  useFonts  } from 'expo-font';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import * as SplashScreen from 'expo-splash-screen';
 import { Asset }  from 'expo-asset';
+import { Audio } from 'expo-av';
 
 import HomeIcon from './assets/graphics/homeIcon.svg';
 import SettingsIcon from './assets/graphics/settingsIcon';
@@ -33,7 +34,7 @@ export default () => {
     // ********* STATES ************
 
   // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(3);
+  const [activeView, setActiveView] = useState(1);
 
   const handleViewChange = (viewNumber) => {
 
@@ -46,11 +47,50 @@ export default () => {
   const [ isLoaded, setIsLoaded] = useState(false);
 
 
+  // music
+
+  const [ambientSound, setAmbientSound] = useState();
+
+
 SplashScreen.preventAutoHideAsync();
 
 
 
      // ********* EFFECTS ************
+
+
+    //  BG audio form home screen
+
+  useEffect(() => {
+
+    async function loadAmbientSound() {
+      try {
+        const { sound } = await Audio.Sound.createAsync( require('./assets/audio/birdsAmbient.mp3'));
+        setAmbientSound( sound ); 
+      } catch (error) {
+        console.log("error loading ambient sound: ", error);
+      }
+  }
+  loadAmbientSound()
+},[])
+
+    useEffect(() => {
+      console.log("activeView: ", activeView);
+  
+        if (activeView === 1 && ambientSound) {
+         ambientSound.playAsync();
+        console.log("ambient sound playing");
+        
+      } else if (activeView != 1){
+        console.log("ambient sound stopped");
+  
+        ambientSound.stopAsync();
+  
+      } else {
+        console.log("ambient sound not yet loaded");
+      }
+      
+    },  [activeView, ambientSound])
 
     //splashscreen for hiding loading assets
 
@@ -74,9 +114,7 @@ SplashScreen.preventAutoHideAsync();
         await Promise.all(cacheImages);
         
         setIsLoaded(true);
-        console.log('setIsLoaded true app.js');
         
-        console.log('splashcreen hidden');
         await SplashScreen.hideAsync();
 
       } catch (e) {
@@ -232,7 +270,7 @@ SplashScreen.preventAutoHideAsync();
   
       {activeView === 1 && (
 
-          <HomeView styles={styles} isLoaded={isLoaded} setShowIntroAnimation={setShowIntroAnimation} showIntroAnimation={showIntroAnimation}>
+          <HomeView styles={styles} isLoaded={isLoaded} setShowIntroAnimation={setShowIntroAnimation} showIntroAnimation={showIntroAnimation} activeView={activeView}>
             {/* music room transition button */}
 
             <ImageBackground source={require('./assets/Music_room_icon.png')}>

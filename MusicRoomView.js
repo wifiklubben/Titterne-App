@@ -8,7 +8,9 @@ import Mixer from './Mixer';
 
 
 
-export default function MusicRoomView({ styles }) {
+export default function MusicRoomView({ styles, activeView }) {
+
+  console.log("activeView from muaic room is: ", activeView);
 
 
     // audio load 
@@ -119,6 +121,8 @@ useEffect(() =>{
     }
   }
 }, [track1])
+
+
 
 useEffect(() =>{
   if(track2) {
