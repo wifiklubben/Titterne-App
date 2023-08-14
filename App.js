@@ -14,6 +14,7 @@ import HomeView from './HomeView';
 import MusicRoomView from './MusicRoomView';
 import SettingsView from './SettingsView';
 import BedroomView from './BedroomView';
+import TreehouseView from './TreehouseView';
 
 
 
@@ -34,7 +35,7 @@ export default () => {
     // ********* STATES ************
 
   // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(1);
+  const [activeView, setActiveView] = useState(4);
 
   const handleViewChange = (viewNumber) => {
 
@@ -49,7 +50,8 @@ export default () => {
 
   // music
 
-  const [ambientSound, setAmbientSound] = useState();
+  const [birdsAmbientSound, setBirdsAmbientSound] = useState();
+  const [treesAmbientSound, setTreesAmbientSound] = useState();
 
 
 SplashScreen.preventAutoHideAsync();
@@ -63,34 +65,68 @@ SplashScreen.preventAutoHideAsync();
 
   useEffect(() => {
 
-    async function loadAmbientSound() {
+    async function loadBirdsAmbientSound() {
       try {
         const { sound } = await Audio.Sound.createAsync( require('./assets/audio/birdsAmbient.mp3'));
-        setAmbientSound( sound ); 
+        
+        setBirdsAmbientSound( sound ); 
+
+        console.log("birds ambient loaded");
+        
       } catch (error) {
-        console.log("error loading ambient sound: ", error);
+        console.log("error loading birds ambient sound: ", error);
       }
   }
-  loadAmbientSound()
+  
+  async function loadTreesAmbientSound() {
+
+    try {
+      const { sound } = await Audio.Sound.createAsync( require('./assets/audio/trees.mp3'));
+      setTreesAmbientSound( sound );
+      console.log("trees ambient loaded");
+
+    } catch (error) {
+      console.log("error loading trees ambient sound ", error);
+    }
+  }
+
+  loadTreesAmbientSound()
+  loadBirdsAmbientSound()
 },[])
 
     useEffect(() => {
+
       console.log("activeView: ", activeView);
   
-        if (activeView === 1 && ambientSound) {
-         ambientSound.playAsync();
-        console.log("ambient sound playing");
-        
-      } else if (activeView != 1){
-        console.log("ambient sound stopped");
+        if (activeView === 1 && birdsAmbientSound) {
+
+          birdsAmbientSound.playAsync();
+          
+          console.log("ambient bird sound playing");
+          
+          
+        } else if (activeView != 1){
+          
+          if (birdsAmbientSound) {
+            birdsAmbientSound.stopAsync();
+          }
+          
+        console.log("birds ambient stopping");
+
+        if (activeView === 4 && treesAmbientSound){
+          console.log("treesambient sound playing");
+          treesAmbientSound.playAsync()
   
-        ambientSound.stopAsync();
-  
-      } else {
+           } else if (activeView != 4){
+          treesAmbientSound.stopAsync();
+          console.log("treesambient sound stopping");
+        }
+
+      } else  {
         console.log("ambient sound not yet loaded");
       }
       
-    },  [activeView, ambientSound])
+    },  [activeView, birdsAmbientSound, treesAmbientSound])
 
     //splashscreen for hiding loading assets
 
@@ -240,6 +276,17 @@ SplashScreen.preventAutoHideAsync();
       left: (fullWidth/2) - 210,
       top: (fullHeight/2) - 140,
     },
+
+    TreehouseButton: {
+      position: 'absolute',
+      left: (fullWidth/2) + 205,
+      top: (fullHeight/2) - 120,
+      width: 145,
+      height: 160,
+      borderWidth: 3,
+      borderColor: 'red',
+
+    },
   
     h1Text: {
       fontSize: 60, 
@@ -284,6 +331,10 @@ SplashScreen.preventAutoHideAsync();
                       style={ styles.BedroomButton}>
               </Pressable>
 
+              <Pressable onPress={() => handleViewChange(4)} 
+              style={ styles.TreehouseButton}>
+              </Pressable>
+
           </HomeView>
       )}
 
@@ -295,6 +346,11 @@ SplashScreen.preventAutoHideAsync();
 {/* Bedroom View */}
         {activeView === 3 && (
           <BedroomView styles={styles} activeVIew={activeView}></BedroomView>
+        )}
+
+{/* Treehouse View */}
+        {activeView === 4 && (
+          <TreehouseView styles={styles} activeView={activeView}></TreehouseView>
         )}
 
 {/* Settings View */}

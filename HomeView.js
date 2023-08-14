@@ -170,10 +170,8 @@ const animatedWindow = {
     opacity: animatedOpacityValue
 };
 
-    
-
-
     return (
+      
        !showIntroAnimation ? (
         // Main view 
          <View>

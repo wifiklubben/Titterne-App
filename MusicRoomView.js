@@ -10,9 +10,6 @@ import Mixer from './Mixer';
 
 export default function MusicRoomView({ styles, activeView }) {
 
-  console.log("activeView from muaic room is: ", activeView);
-
-
     // audio load 
 const [musicLoaded, setMusicLoaded ] = useState(false);
 const [musicPlaying, setMusicPlaying] = useState(false);
