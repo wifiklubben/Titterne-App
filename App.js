@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, ImageBackground, Dimensions, Pressable } from 'react-native';
 
 import {  useFonts  } from 'expo-font';
-import * as ScreenOrientation from 'expo-screen-orientation';
 import * as SplashScreen from 'expo-splash-screen';
 import { Asset }  from 'expo-asset';
 import { Audio } from 'expo-av';
@@ -155,23 +154,6 @@ export default () => {
       loadAssets();
     }, []);
 
-
-
-
-  // Force hoiztonral orientation
-  //* commented out because app.json appears to be taking care of this
-  // useEffect(() => {
-
-  //   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
-  //   // Researched that this won't work in the simulator, but will work on an exported app (https://github.com/expo/expo/issues/5188)
-
-  // }, []); 
-
-
-
-
-
-
   // ********* STYLES ***********************
 
   const styles = StyleSheet.create({
@@ -268,6 +250,7 @@ export default () => {
       top: (fullHeight/2) - 120,
       width: 145,
       height: 160,
+      overflow: 'visible'
     },
   
     h1Text: {
@@ -311,9 +294,18 @@ export default () => {
                       style={ styles.BedroomButton}>
               </Pressable>
 
-              <Pressable onPress={() => handleViewChange(4)} 
-              style={ styles.TreehouseButton}>
-              </Pressable>
+              <ImageBackground source={require('./assets/SkyDancing.png')}
+              style={{
+                position: 'absolute',
+                height: 50,
+                width: 50,
+                left: (fullWidth/2) + 235,
+                top: (fullHeight/2) - 45,
+              }}>
+                <Pressable onPress={() => handleViewChange(4)} 
+                style={ styles.TreehouseButton}>
+                </Pressable>
+              </ImageBackground>
 
           </HomeView>
       )}

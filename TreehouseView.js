@@ -66,7 +66,7 @@ function TreehouseView( {styles}) {
                 'Hendes bedstemor synes hun skulle forkæles!',
                 'Hun fik en helt ny hestevogn og en ny kjole',
                 'Prinsen sagde "hej", men hun blev bange og løb væk!',
-                'Han tog ud for at finde hende for han havde hendes sko’',
+                'Han tog ud for at finde hende for han havde hendes sko',
                 'Hun savnede sin sko så hun giftede sig straks med ham'
             ],
 
@@ -114,7 +114,7 @@ function TreehouseView( {styles}) {
             thumbnail: '',
             verses: [],
             speeches: [],
-            pictures: []
+            pictures: [],
         }
     );
     const [currentPage, setCurrentPage] = useState(0);
@@ -218,23 +218,35 @@ function TreehouseView( {styles}) {
         async function playFirstSpeech() {
 
                 currentSpeeches[0].playAsync();
+
            
         } playFirstSpeech()
     }, [currentSpeeches])
 
 
-    async function turnPageWithSpeech(pageIndex) {
-        try {
-            console.log("turn page function called");
-            setCurrentPage(pageIndex)
-            setCurrentSpeechIndex((pageIndex +1))
+     function turnPageWithSpeech(pageIndex) {
 
-            if (currentSpeeches[currentSpeechIndex]) {
+        try {
+
+            setCurrentPage(pageIndex)
+
+            const nextSpeechIndex = pageIndex;
+
+            
+            if (currentSpeeches[nextSpeechIndex]) {
                 pageSound.stopAsync();
                 pageSound.playAsync();
 
-                currentSpeeches[currentSpeechIndex].stopAsync();
-                currentSpeeches[currentSpeechIndex].playAsync();
+                if (currentSpeeches[currentSpeechIndex]) {
+                    currentSpeeches[currentSpeechIndex].stopAsync();
+                }
+
+                currentSpeeches[nextSpeechIndex].playAsync();
+
+                setCurrentSpeechIndex(nextSpeechIndex);
+
+            } else {
+                setCurrentSpeechIndex(nextSpeechIndex -1);
             };
 
         } catch(error) {
@@ -244,7 +256,7 @@ function TreehouseView( {styles}) {
 
 
     async function  handleBookClose() {
-        console.log("book closed");
+
         setIsBookOpen(false),
         setCurrentStory({
             title: '',
@@ -260,7 +272,7 @@ function TreehouseView( {styles}) {
     }
 
     async function handleStoryClose() {
-        console.log("story closed");
+
         setCurrentStory({
             title: '',
             tag: '',
