@@ -1,5 +1,5 @@
 import React, {useState, useRef}from 'react';
-import { View, Pressable, Image, Animated } from 'react-native'
+import { Pressable, Animated } from 'react-native'
 
 
 
@@ -46,22 +46,18 @@ const animatedValue = useRef(new Animated.Value(0)).current;
   const [playingRightNow, setPlayingRightNow] = useState(null)
     
     async function playSound() {
-      console.log("playSound()");
 
     try {
-      if (playingRightNow !== null) {
-        console.log("stopping, starting");
-
+      if (playingRightNow !== null) 
+      {
         soundToPlay.stopAsync();
-        soundToPlay.playAsync();
-      }
+      } 
 
       wiggleAnimation();
         const { sound } = await soundToPlay.playAsync();
         setPlayingRightNow(sound);
 
     } catch (error) {
-
         console.log("error in playing SFX: ",error);
     }
     
@@ -72,7 +68,7 @@ const animatedValue = useRef(new Animated.Value(0)).current;
           <Animated.View
               style={{
                 transform: [
-                  { translateX: interpolatedTranslateX},
+                  {translateX: interpolatedTranslateX},
                   {rotate: interpolatedRotation}
                 ],
                 }} >

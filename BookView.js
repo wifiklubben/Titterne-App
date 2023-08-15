@@ -49,7 +49,6 @@ function BookView(props) {
                         {props.currentStory.title === '' && (
                             <PagerView 
                             initialPage={0}
-                            onPageScrollStateChanged={() => props.turnPage() }
                             style={{flex: 1}}>
 
                                 <View key="1" style={{
@@ -102,7 +101,7 @@ function BookView(props) {
                             <View style={{flex: 1}}>
                                 <PagerView 
                                     initialPage={0}
-                                    onPageScrollStateChanged={() => props.turnPage()}
+                                    onPageSelected={(event) => props.turnPage(event.nativeEvent.position)}
                                     style={{flex: 1}}>
 
                                     {props.renderStoryContents()}

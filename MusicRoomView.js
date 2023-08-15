@@ -40,11 +40,8 @@ const [ volume3, setVolume3 ] = useState(0.0);
       setTrack1( sound );
 
     } catch (error) {
-
       console.log("error in initial loadMusic of track 1", error);
-
     }    
-
   }
 
   async function loadMusic2() {
@@ -61,6 +58,7 @@ const [ volume3, setVolume3 ] = useState(0.0);
 
 
   async function loadMusic3() {
+
     try {
      
       const { sound } = await Audio.Sound.createAsync( require('./assets/audio/Pelota.mp3'));
@@ -75,9 +73,10 @@ const [ volume3, setVolume3 ] = useState(0.0);
     try {
       const { sound } = await Audio.Sound.createAsync( require('./assets/audio/guitarLick.mp3'));
       setSfx1( sound );
-      console.log("SFX1 loaded: ", setSfx1);
+
 
     } catch (error) {
+      
       console.log("error in initial loadMusic of sfx1: ", error);
     }
 
@@ -86,9 +85,7 @@ const [ volume3, setVolume3 ] = useState(0.0);
     try {
       const { sound } = await Audio.Sound.createAsync( require('./assets/audio/Airhorn.mp3'));
       setSfx2( sound );
-      console.log("SFX2 loaded: ", setSfx2);
-      
-
+    
     } catch (error) {
       console.log("error in initial loadMusic of sfx2: ", error);
     }
@@ -106,7 +103,6 @@ const [ volume3, setVolume3 ] = useState(0.0);
 
 }, [])
 
-
 // unload tracks on unmount
 
 useEffect(() =>{
@@ -118,7 +114,6 @@ useEffect(() =>{
     }
   }
 }, [track1])
-
 
 
 useEffect(() =>{

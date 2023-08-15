@@ -35,7 +35,7 @@ export default () => {
     // ********* STATES ************
 
   // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(2);
+  const [activeView, setActiveView] = useState(1);
 
   const handleViewChange = (viewNumber) => {
 
@@ -54,7 +54,7 @@ export default () => {
   const [treesAmbientSound, setTreesAmbientSound] = useState();
 
 
-SplashScreen.preventAutoHideAsync();
+  SplashScreen.preventAutoHideAsync();
 
 
 
@@ -70,68 +70,52 @@ SplashScreen.preventAutoHideAsync();
         const { sound } = await Audio.Sound.createAsync( require('./assets/audio/birdsAmbient.mp3'));
         sound.setVolumeAsync(0.5);
         setBirdsAmbientSound( sound ); 
-
-        console.log("birds ambient loaded");
         
       } catch (error) {
         console.log("error loading birds ambient sound: ", error);
       }
   }
   
-  async function loadTreesAmbientSound() {
+    async function loadTreesAmbientSound() {
 
-    try {
-      const { sound } = await Audio.Sound.createAsync( require('./assets/audio/trees.mp3'));
+      try {
+        const { sound } = await Audio.Sound.createAsync( require('./assets/audio/trees.mp3'));
 
-      sound.setVolumeAsync(0.3);
-      setTreesAmbientSound( sound );
+        sound.setVolumeAsync(0.3);
+        setTreesAmbientSound( sound );
 
-
-      console.log("trees ambient loaded");
-
-    } catch (error) {
-      console.log("error loading trees ambient sound ", error);
+      } catch (error) {
+        console.log("error loading trees ambient sound ", error);
+      }
     }
-  }
 
   loadTreesAmbientSound()
   loadBirdsAmbientSound()
+
 },[])
 
     useEffect(() => {
 
-      console.log("activeView: ", activeView);
   
         if (activeView === 1 && birdsAmbientSound) {
 
           if (treesAmbientSound) {
             treesAmbientSound.stopAsync();
-            console.log("treesambient sound stopping");
           }
 
           birdsAmbientSound.playAsync();
-          
-          console.log("ambient bird sound playing");
-          
-          
+                  
         } else if (activeView != 1){
           
           if (birdsAmbientSound) {
             birdsAmbientSound.stopAsync();
           }
-          
-        console.log("birds ambient stopping");
 
         if (activeView === 4 && treesAmbientSound){
-          console.log("treesambient sound playing");
           treesAmbientSound.playAsync()
-  
-           
         }
 
-      } else  {
-        console.log("ambient sound not yet loaded");
-      }
+      } 
       
     },  [activeView, birdsAmbientSound, treesAmbientSound])
 
@@ -160,9 +144,9 @@ SplashScreen.preventAutoHideAsync();
         
         await SplashScreen.hideAsync();
 
-      } catch (e) {
+      } catch (error) {
 
-        console.warn('Error = ', e)
+        console.warn('Error: ', error)
         
       }
 
@@ -175,21 +159,15 @@ SplashScreen.preventAutoHideAsync();
 
 
   // Force hoiztonral orientation
+  //* commented out because app.json appears to be taking care of this
+  // useEffect(() => {
 
-  useEffect(() => {
+  //   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
+  //   // Researched that this won't work in the simulator, but will work on an exported app (https://github.com/expo/expo/issues/5188)
 
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
-    // Researched that this won't work in the simulator, but will work on an exported app (https://github.com/expo/expo/issues/5188)
+  // }, []); 
 
-    // Load the font 
-    if (!fontLoaded) {
-      return;
-    }
-  }, [fontLoaded]); 
 
-  if (!fontLoaded) {
-    return null;
-  }
 
 
 
@@ -290,9 +268,6 @@ SplashScreen.preventAutoHideAsync();
       top: (fullHeight/2) - 120,
       width: 145,
       height: 160,
-      borderWidth: 3,
-      borderColor: 'red',
-
     },
   
     h1Text: {
@@ -310,7 +285,6 @@ SplashScreen.preventAutoHideAsync();
       fontFamily: 'Bubblegum',
       fontSize: 30, 
     },
-
   
   });
 

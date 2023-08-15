@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, ImageBackground, Text, Image, Pressable } from 'react-native';
 
-
-
 import { Audio } from 'expo-av'
 
 import BookView from './BookView'
@@ -13,21 +11,37 @@ function TreehouseView( {styles}) {
 
     const storyTitles = [
         {
-            title: 'Chickens are Brave',
+            title: 'Kyllinger er modige',
             tag: 'chickenFight',
             thumbnail: require('./assets/StoryContents/Thumbnails/ChickenFightThumbnail.png'),
+
             verses: 
             [
-                'This is a story of a chicken,',
-                'and a Grandma.',
-                'The chicken is scared of Grandma!',
-                'Because Grandma looks HUNGRY!',
-                'REALLY Hungry.',
-                'But chickens are brave,',
-                'fighting is wrong, and',
-                'Grandma is strong,',
-                'But chickens are BRAVE!',
+                'Her er en historie om en lille kylling,',
+                'og en bedstemor.',
+                'Den lille kylling er bange for bedstemoderen!',
+                'For bedstemoderen ser sulten ud!',
+                'Virkelig sulten!',
+                'Men kyllinger er modige,',
+                'det er forkert at slås, og',
+                'bedstemor er stærk,',
+                'Men kyllinger er MODIGE!’',
             ],
+
+            speeches:
+            [
+                require('./assets/StoryContents/Speeches/ChickenFightSpeech1.mp3'),
+                require('./assets/StoryContents/Speeches/ChickenFightSpeech2.mp3'),
+                require('./assets/StoryContents/Speeches/ChickenFightSpeech3.mp3'),
+                require('./assets/StoryContents/Speeches/ChickenFightSpeech4.mp3'),
+                require('./assets/StoryContents/Speeches/ChickenFightSpeech5.mp3'),
+                require('./assets/StoryContents/Speeches/ChickenFightSpeech6.mp3'),
+                require('./assets/StoryContents/Speeches/ChickenFightSpeech7.mp3'),
+                require('./assets/StoryContents/Speeches/ChickenFightSpeech8.mp3'),
+                require('./assets/StoryContents/Speeches/ChickenFightSpeech9.mp3')
+
+            ],
+
             pictures: 
             [
                 require('./assets/StoryContents/Pictures/ChickenFight1.png'),
@@ -48,13 +62,23 @@ function TreehouseView( {styles}) {
             thumbnail: require('./assets/StoryContents/Thumbnails/CinderellaThumbnail.png'),
             verses: 
             [
-                'Cinderlla was not treated nicely!',
-                'Her fairy godmother said she needed a treat!',
-                'She got a brand new cart and a makeover',
-                'The prince said "hello" so she got scared and ran off!',
-                'He went looking for her because he had her shoe',
-                'Women love shoes so she immediately married him'
+                'Askepot blev ikke behandlet ordenligt!',
+                'Hendes bedstemor synes hun skulle forkæles!',
+                'Hun fik en helt ny hestevogn og en ny kjole',
+                'Prinsen sagde "hej", men hun blev bange og løb væk!',
+                'Han tog ud for at finde hende for han havde hendes sko’',
+                'Hun savnede sin sko så hun giftede sig straks med ham'
             ],
+
+            speeches: [
+                require('./assets/StoryContents/Speeches/AskepotSpeech1.mp3'),
+                require('./assets/StoryContents/Speeches/AskepotSpeech2.mp3'),
+                require('./assets/StoryContents/Speeches/AskepotSpeech3.mp3'),
+                require('./assets/StoryContents/Speeches/AskepotSpeech4.mp3'),
+                require('./assets/StoryContents/Speeches/AskepotSpeech5.mp3'),
+                require('./assets/StoryContents/Speeches/AskepotSpeech6.mp3'),
+            ],
+
             pictures: [
                 require('./assets/StoryContents/Pictures/Cinderella1.png'),
                 require('./assets/StoryContents/Pictures/Cinderella2.png'),
@@ -71,7 +95,10 @@ function TreehouseView( {styles}) {
             thumbnail: require('./assets/StoryContents/Thumbnails/RomeoJulietThumbnail.png'),
             verses: 
             [
-                "This one's a little ambitious for us maybe...",
+                "This one's a little ambitious for us maybe >>>>",
+            ],
+            speeches: [
+                require('./assets/StoryContents/Speeches/RomeoJulietSpeech1.mp3'),
             ],
             pictures: [
                 require('./assets/StoryContents/Pictures/ShakespeareShrug.jpeg'),
@@ -80,16 +107,19 @@ function TreehouseView( {styles}) {
     ];
 
     const [isBookOpen, setIsBookOpen] = useState(false);
-    const [showContents, setShowContents] = useState(true)
     const [currentStory, setCurrentStory] = useState(
         {
             title: '',
             tag: '',
             thumbnail: '',
             verses: [],
+            speeches: [],
             pictures: []
         }
     );
+    const [currentPage, setCurrentPage] = useState(0);
+    const [currentSpeechIndex, setCurrentSpeechIndex] = useState(0);
+    const [currentSpeeches, setCurrentSpeeches] = useState([])
 
    
     //render story page
@@ -124,13 +154,7 @@ function TreehouseView( {styles}) {
                     alignItems: 'center',
                     }}>
 
-                    <Pressable onPress={() => setCurrentStory({
-                            title: '',
-                            tag: '',
-                            thumbnail: '',
-                            verses: [],
-                            pictures: []
-                        })}
+                    <Pressable onPress={() => handleStoryClose()}
 >
                         <Text style={[styles.h1Text, {
                             textAlign: 'center',
@@ -147,6 +171,30 @@ function TreehouseView( {styles}) {
             return pages
         };
 
+        // load speech sounds
+
+        useEffect(() => {
+            if (currentStory.speeches.length > 0) {
+                setCurrentSpeechIndex(0)
+                loadSpeechSounds(currentStory.speeches)
+            }
+        }, [currentStory])
+
+        const loadSpeechSounds = async (speeches) => {
+            const loadedSounds = [];
+            for (const speech of speeches) {
+                try {
+                    const { sound } = await Audio.Sound.createAsync(speech)
+                    loadedSounds.push(sound);
+                } catch (error) {
+                    console.log("error loading speech soundsL ", error);
+                }
+            }
+
+            setCurrentSpeeches(loadedSounds)
+            console.log("current speeches loaded");
+
+        };
 
 
     const [pageSound, setPageSound] = useState();
@@ -156,37 +204,74 @@ function TreehouseView( {styles}) {
             try {
                 const { sound } = await Audio.Sound.createAsync(require('./assets/audio/pageTurn.mp3'));
                 setPageSound( sound ) 
-
             } catch (error) {
                 console.log("error loading page sound: ", error);
             }
         }
         loadPageSound();
+
     }, [])
 
+    //catch first page 
+
+    useEffect(() => {
+        async function playFirstSpeech() {
+
+                currentSpeeches[0].playAsync();
+           
+        } playFirstSpeech()
+    }, [currentSpeeches])
 
 
-    async function turnPage() {
-
+    async function turnPageWithSpeech(pageIndex) {
         try {
-            pageSound.stopAsync();
-            pageSound.playAsync();
-        
+            console.log("turn page function called");
+            setCurrentPage(pageIndex)
+            setCurrentSpeechIndex((pageIndex +1))
+
+            if (currentSpeeches[currentSpeechIndex]) {
+                pageSound.stopAsync();
+                pageSound.playAsync();
+
+                currentSpeeches[currentSpeechIndex].stopAsync();
+                currentSpeeches[currentSpeechIndex].playAsync();
+            };
+
         } catch(error) {
             console.log("failed to play page turn sound: ", error);
         }
-
     }
 
+
     async function  handleBookClose() {
+        console.log("book closed");
         setIsBookOpen(false),
         setCurrentStory({
             title: '',
             tag: '',
             thumbnail: '',
             verses: [],
+            speeches: [],
             pictures: []
-        })
+        }),
+        setCurrentSpeechIndex(0)
+        setCurrentPage(0)
+        setCurrentSpeeches([])
+    }
+
+    async function handleStoryClose() {
+        console.log("story closed");
+        setCurrentStory({
+            title: '',
+            tag: '',
+            thumbnail: '',
+            verses: [],
+            speeches: [],
+            pictures: []
+        }),
+        setCurrentSpeechIndex(0)
+        setCurrentPage(0)
+        setCurrentSpeeches([])
     }
 
   return (
@@ -223,12 +308,11 @@ function TreehouseView( {styles}) {
                 <BookView 
                 currentStory={currentStory}
                 setCurrentStory={setCurrentStory}
-                showContents={showContents}
                 storyTitles={storyTitles}
                 styles={styles}
                 renderStoryContents={renderStoryContents}
                 handleBookClose={handleBookClose}
-                turnPage={turnPage}
+                turnPage={turnPageWithSpeech}
                 />)}
 
         </ImageBackground>
