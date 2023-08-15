@@ -1,61 +1,155 @@
-import React, {useEffect, useState} from 'react'
-import { View, ImageBackground, Text, Image, Pressable, FlatList } from 'react-native';
-import PagerView from 'react-native-pager-view'
+import React, { useEffect, useState } from 'react';
+import { View, ImageBackground, Text, Image, Pressable } from 'react-native';
+
+
 
 import { Audio } from 'expo-av'
+
+import BookView from './BookView'
 
 
 
 function TreehouseView( {styles}) {
 
-    const [isBookOpen, setIsBookOpen] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [currentStory, setCurrentStory] = useState('contents')
-
     const storyTitles = [
         {
-            title: 'Chicken Fight',
+            title: 'Chickens are Brave',
+            tag: 'chickenFight',
             thumbnail: require('./assets/StoryContents/Thumbnails/ChickenFightThumbnail.png'),
-            page1Text: 'This is a story of a chicken'
+            verses: 
+            [
+                'This is a story of a chicken,',
+                'and a Grandma.',
+                'The chicken is scared of Grandma!',
+                'Because Grandma looks HUNGRY!',
+                'REALLY Hungry.',
+                'But chickens are brave,',
+                'fighting is wrong, and',
+                'Grandma is strong,',
+                'But chickens are BRAVE!',
+            ],
+            pictures: 
+            [
+                require('./assets/StoryContents/Pictures/ChickenFight1.png'),
+                require('./assets/StoryContents/Pictures/ChickenFight2.png'),
+                require('./assets/StoryContents/Pictures/ChickenFight3.png'),
+                require('./assets/StoryContents/Pictures/ChickenFight4.png'),
+                require('./assets/StoryContents/Pictures/ChickenFight5.png'),
+                require('./assets/StoryContents/Pictures/ChickenFight6.png'),
+                require('./assets/StoryContents/Pictures/ChickenFight7.png'),
+                require('./assets/StoryContents/Pictures/ChickenFight8.png'),
+                require('./assets/StoryContents/Pictures/ChickenFight9.png'),
+            ],
         },
+
         {
             title: 'Cinderella',
-            thumbnail: require('./assets/icon.png'),
-            page1Text: 'Work work work work'
+            tag: 'cinderella',
+            thumbnail: require('./assets/StoryContents/Thumbnails/CinderellaThumbnail.png'),
+            verses: 
+            [
+                'Cinderlla was not treated nicely!',
+                'Her fairy godmother said she needed a treat!',
+                'She got a brand new cart and a makeover',
+                'The prince said "hello" so she got scared and ran off!',
+                'He went looking for her because he had her shoe',
+                'Women love shoes so she immediately married him'
+            ],
+            pictures: [
+                require('./assets/StoryContents/Pictures/Cinderella1.png'),
+                require('./assets/StoryContents/Pictures/Cinderella2.png'),
+                require('./assets/StoryContents/Pictures/Cinderella3.png'),
+                require('./assets/StoryContents/Pictures/Cinderella4.png'),
+                require('./assets/StoryContents/Pictures/Cinderella5.png'),
+                require('./assets/StoryContents/Pictures/Cinderella6.png'),
+            ]
         },
+
         {
             title: 'Romeo & Juliet',
+            tag: 'romeoJuliet',
             thumbnail: require('./assets/StoryContents/Thumbnails/RomeoJulietThumbnail.png'),
-            page1Text: 'Romeo, Romeo you idiot Romeo...'
+            verses: 
+            [
+                "This one's a little ambitious for us maybe...",
+            ],
+            pictures: [
+                require('./assets/StoryContents/Pictures/ShakespeareShrug.jpeg'),
+            ]
         },
     ];
 
-    const renderItem = ({item}) => {
-        const title = item.title
-        const thumbnail = item.thumbnail
+    const [isBookOpen, setIsBookOpen] = useState(false);
+    const [showContents, setShowContents] = useState(true)
+    const [currentStory, setCurrentStory] = useState(
+        {
+            title: '',
+            tag: '',
+            thumbnail: '',
+            verses: [],
+            pictures: []
+        }
+    );
 
-        return (
-            <View style={{
+   
+    //render story page
+        const renderStoryContents = () => {
 
-                flexBasis: '40%',
-                marginHorizontal: '5%',
-                marginVertical: 5,
-                justifyContent: 'space-around',
-                alignItems: 'center',
+            const pages = currentStory.verses.map((verse, index) => {
 
-            }}>
-                <Image source = {thumbnail} style={{
-                    height: 150,
-                    width: 150,
-                }}/>
-                <Text style={styles.h2Text}>{title}</Text>
-            </View>
-        )
-    }
+                return(
+                    <View
+                    key={index}
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Image source={ currentStory.pictures[index] } style={{
+                            width: '50%',
+                            height: '50%',
+                            marginBottom: 10
+                        }}/>
+                        <Text style={styles.pText}>{verse}</Text>
+
+                    </View>
+                        );
+                    });
+
+            // add 'the end' to displayed array
+            pages.push(
+                <View
+                key="end"
+                style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    }}>
+
+                    <Pressable onPress={() => setCurrentStory({
+                            title: '',
+                            tag: '',
+                            thumbnail: '',
+                            verses: [],
+                            pictures: []
+                        })}
+>
+                        <Text style={[styles.h1Text, {
+                            textAlign: 'center',
+                        }]}>The End!</Text>
+
+                        <Text style={[styles.pText, {
+                            textAlign: 'center',
+                        }]}>Let's read another?</Text>
+
+                    </Pressable>
+                    
+                </View>
+            )
+            return pages
+        };
+
+
 
     const [pageSound, setPageSound] = useState();
-
-    console.log("isBookOpen: ", isBookOpen);
 
     useEffect(() => {
         async function loadPageSound() {
@@ -73,7 +167,6 @@ function TreehouseView( {styles}) {
 
 
     async function turnPage() {
-        console.log("page turned!");
 
         try {
             pageSound.stopAsync();
@@ -85,104 +178,61 @@ function TreehouseView( {styles}) {
 
     }
 
+    async function  handleBookClose() {
+        setIsBookOpen(false),
+        setCurrentStory({
+            title: '',
+            tag: '',
+            thumbnail: '',
+            verses: [],
+            pictures: []
+        })
+    }
+
   return (
     <>
-<ImageBackground source={require('./assets/TreeHouse_inside.png')}
-        style={styles.fullWidthBackground}>
+        <ImageBackground source={require('./assets/TreeHouse_inside.png')}
+                style={styles.fullWidthBackground}>
 
-<Image source={require('./assets/SkyDancing.png')}
-                style={{
-                    position: 'absolute',
-                    left: 150,
-                    top: 350,
-                }}/>
+        <Image source={require('./assets/SkyDancing.png')}
+                        style={{
+                            position: 'absolute',
+                            left: 150,
+                            top: 350,
+                        }}/>
 
-{isBookOpen === false && ( 
+        {isBookOpen === false && ( 
 
-            <Pressable onPress={() => setIsBookOpen(true)}>
-                <Image source={require('./assets/graphics/books.png')}
-                style={{
-                    position: 'absolute',
-                    right: 120,
-                    top: 245,
-                    width: '15%',
-                    resizeMode: 'contain',
-                    shadowColor: 'white',
-                    shadowOpacity: 1,
-                    shadowRadius: 3,
-                }}
-                />
-            </Pressable>)}
+                    <Pressable onPress={() => setIsBookOpen(true)}>
+                        <Image source={require('./assets/graphics/books.png')}
+                        style={{
+                            position: 'absolute',
+                            right: 120,
+                            top: 245,
+                            width: '15%',
+                            resizeMode: 'contain',
+                            shadowColor: 'white',
+                            shadowOpacity: 1,
+                            shadowRadius: 3,
+                        }}
+                        />
+                    </Pressable>)
+        }
 
-    {isBookOpen &&(
-        <View style={{
-            width: '90%',
-            height: '90%',
-            position: 'absolute',
-            left: '5%',
-            top: '5%'
-        }}>
-            <ImageBackground source={require('./assets/BookOpen.png')}
-            style={{
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                resizeMode: 'cover',
-                right: 20,
-                top: 20,
-            }}>
-
-                {/* story not chosen CONTENTS PAGES */}
-                {currentStory === 'contents' &&(
-                    <PagerView initialPage={0}
-                    onPageSelected={() => turnPage() }
-                            style={{flex: 1}}>
-
-                        <View key="1" style={{
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                        }}>
-                            <FlatList 
-                            numColumns={2}
-                            data={storyTitles}
-                            renderItem={renderItem}
-                            style={{
-                                paddingVertical: '10%',
-                                width: '100%',
-                                height: '100%',
-                            }}>
-                            </FlatList>
-                        </View>
-
-                        <View key="2" style={{
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                        }}>
-                            <Text>More Stories?</Text>
-                        </View>
-
-                        <View key="3" style={{
-
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                        }}>
-
-                            <Text>Even more Stories here?</Text>
-
-                        </View>
-
-                    </PagerView>) }
-                    
-     
+            {isBookOpen &&(
+                <BookView 
+                currentStory={currentStory}
+                setCurrentStory={setCurrentStory}
+                showContents={showContents}
+                storyTitles={storyTitles}
+                styles={styles}
+                renderStoryContents={renderStoryContents}
+                handleBookClose={handleBookClose}
+                turnPage={turnPage}
+                />)}
 
         </ImageBackground>
-        </View>)}
-    
-
-</ImageBackground>
-
-
-</>
+    </>
   )
 }
 

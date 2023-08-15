@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ImageBackground, Dimensions, Pressable } from 'react-native';
+import { StyleSheet, View, ImageBackground, Dimensions, Pressable } from 'react-native';
 
 import {  useFonts  } from 'expo-font';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -35,7 +35,7 @@ export default () => {
     // ********* STATES ************
 
   // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(4);
+  const [activeView, setActiveView] = useState(2);
 
   const handleViewChange = (viewNumber) => {
 
@@ -68,7 +68,7 @@ SplashScreen.preventAutoHideAsync();
     async function loadBirdsAmbientSound() {
       try {
         const { sound } = await Audio.Sound.createAsync( require('./assets/audio/birdsAmbient.mp3'));
-        
+        sound.setVolumeAsync(0.5);
         setBirdsAmbientSound( sound ); 
 
         console.log("birds ambient loaded");
@@ -82,7 +82,11 @@ SplashScreen.preventAutoHideAsync();
 
     try {
       const { sound } = await Audio.Sound.createAsync( require('./assets/audio/trees.mp3'));
+
+      sound.setVolumeAsync(0.3);
       setTreesAmbientSound( sound );
+
+
       console.log("trees ambient loaded");
 
     } catch (error) {
@@ -99,6 +103,11 @@ SplashScreen.preventAutoHideAsync();
       console.log("activeView: ", activeView);
   
         if (activeView === 1 && birdsAmbientSound) {
+
+          if (treesAmbientSound) {
+            treesAmbientSound.stopAsync();
+            console.log("treesambient sound stopping");
+          }
 
           birdsAmbientSound.playAsync();
           
@@ -117,9 +126,7 @@ SplashScreen.preventAutoHideAsync();
           console.log("treesambient sound playing");
           treesAmbientSound.playAsync()
   
-           } else if (activeView != 4){
-          treesAmbientSound.stopAsync();
-          console.log("treesambient sound stopping");
+           
         }
 
       } else  {
@@ -298,7 +305,6 @@ SplashScreen.preventAutoHideAsync();
       fontFamily: 'Bubblegum',
       fontSize: 50, 
     },
-  
   
     pText: {
       fontFamily: 'Bubblegum',
