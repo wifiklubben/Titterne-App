@@ -66,8 +66,11 @@ export default () => {
 
     async function loadBirdsAmbientSound() {
       try {
-        const { sound } = await Audio.Sound.createAsync( require('./assets/audio/birdsAmbient.mp3'));
+        const { sound } = await Audio.Sound.createAsync( 
+          require('./assets/audio/birdsAmbient.mp3'
+          ))
         sound.setVolumeAsync(0.5);
+        sound.setIsLoopingAsync(true);
         setBirdsAmbientSound( sound ); 
         
       } catch (error) {
@@ -81,6 +84,7 @@ export default () => {
         const { sound } = await Audio.Sound.createAsync( require('./assets/audio/trees.mp3'));
 
         sound.setVolumeAsync(0.3);
+        sound.setIsLoopingAsync(true);
         setTreesAmbientSound( sound );
 
       } catch (error) {
@@ -93,30 +97,46 @@ export default () => {
 
 },[])
 
+// background music/sounds per room view
     useEffect(() => {
-
   
         if (activeView === 1 && birdsAmbientSound) {
 
-          if (treesAmbientSound) {
+          if (treesAmbientSound) 
+          {
             treesAmbientSound.stopAsync();
           }
-
           birdsAmbientSound.playAsync();
+
                   
-        } else if (activeView != 1){
+        } else if (activeView === 2) {
           
-          if (birdsAmbientSound) {
+          if (birdsAmbientSound) 
+          {
             birdsAmbientSound.stopAsync();
           }
 
-        if (activeView === 4 && treesAmbientSound){
-          treesAmbientSound.playAsync()
+
+        } else if (activeView === 3) {
+
+          if (birdsAmbientSound) 
+          {
+            birdsAmbientSound.stopAsync();
+          }
         }
 
-      } 
-      
-    },  [activeView, birdsAmbientSound, treesAmbientSound])
+
+        if (activeView === 4 && treesAmbientSound) {
+
+          if (birdsAmbientSound) 
+          {
+            birdsAmbientSound.stopAsync();
+          }
+     
+            treesAmbientSound.playAsync();
+        }
+
+      } ,[activeView, birdsAmbientSound, treesAmbientSound])
 
     //splashscreen for hiding loading assets
 
@@ -250,7 +270,6 @@ export default () => {
       top: (fullHeight/2) - 120,
       width: 145,
       height: 160,
-      overflow: 'visible'
     },
   
     h1Text: {
@@ -281,55 +300,55 @@ export default () => {
       {activeView === 1 && (
 
           <HomeView styles={styles} isLoaded={isLoaded} setShowIntroAnimation={setShowIntroAnimation} showIntroAnimation={showIntroAnimation} activeView={activeView}>
-            {/* music room transition button */}
+  
 
             <ImageBackground source={require('./assets/Music_room_icon.png')}>
               <Pressable onPress={() => handleViewChange(2)}
-                    style={ styles.MusicRoomButton }>
+                style={ styles.MusicRoomButton }>
               </Pressable>
             </ImageBackground>
 
 
-              <Pressable onPress={() => handleViewChange(3)} 
-                      style={ styles.BedroomButton}>
-              </Pressable>
+            <Pressable onPress={() => handleViewChange(3)} 
+              style={ styles.BedroomButton}>
+            </Pressable>
 
-              <ImageBackground source={require('./assets/SkyDancing.png')}
-              style={{
-                position: 'absolute',
-                height: 50,
-                width: 50,
-                left: (fullWidth/2) + 235,
-                top: (fullHeight/2) - 45,
-              }}>
-                <Pressable onPress={() => handleViewChange(4)} 
-                style={ styles.TreehouseButton}>
-                </Pressable>
-              </ImageBackground>
+            <ImageBackground source={require('./assets/SkyDancing.png')}style={{
+              position: 'absolute',
+              height: 70,
+              width: 70,
+              left: (fullWidth/2) + 245,
+              top: (fullHeight/2) - 62,
+              overflow: 'visible'
+              }}/>
+            <Pressable onPress={() => handleViewChange(4)} 
+              style={ styles.TreehouseButton}>
+            </Pressable>
+                
+          
 
           </HomeView>
-      )}
+          )}
 
 {/* Music Room View */}
-      {activeView === 2 && (
-          <MusicRoomView styles={styles} activeView={activeView}></MusicRoomView>
-      )}
+        {activeView === 2 && (
+            <MusicRoomView styles={styles} activeView={activeView}/>
+        )}
 
 {/* Bedroom View */}
         {activeView === 3 && (
-          <BedroomView styles={styles} activeVIew={activeView}></BedroomView>
+          <BedroomView styles={styles} activeVIew={activeView}/>
         )}
 
 {/* Treehouse View */}
         {activeView === 4 && (
-          <TreehouseView styles={styles} activeView={activeView}></TreehouseView>
+          <TreehouseView styles={styles} activeView={activeView}/>
         )}
 
 {/* Settings View */}
-      {activeView === 30 && (
-        <SettingsView styles={styles}>
-        </SettingsView>
-      )}  
+        {activeView === 30 && (
+          <SettingsView styles={styles}/>
+        )}  
         
         
 {/* overview UI buttons, home/mute/settings */}
@@ -339,20 +358,13 @@ export default () => {
 
           {activeView > 1 && (
           <Pressable style={styles.roundButton} onPress={() => handleViewChange(1)}>
-
             <HomeIcon width={72} height={72}/>
-
           </Pressable>
           )}
 
-
-          <Pressable style={styles.roundButton} onPress={() => handleViewChange(30)}>
-            
+          <Pressable style={styles.roundButton} onPress={() => handleViewChange(30)}> 
             <SettingsIcon width={72} height={72}/>
-
           </Pressable>
-          
-
         </View>
         )}
 
