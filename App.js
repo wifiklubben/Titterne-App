@@ -14,6 +14,7 @@ import MusicRoomView from './MusicRoomView';
 import SettingsView from './SettingsView';
 import BedroomView from './BedroomView';
 import TreehouseView from './TreehouseView';
+import ConservatoryView from './ConservatoryView';
 
 
 
@@ -271,6 +272,14 @@ export default () => {
       width: 145,
       height: 160,
     },
+
+    ConservatoryButton: {
+      position: 'absolute',
+      height: 120,
+      width: 120,
+      left: (fullWidth/2) - 350,
+      top: (fullHeight/2) + 70,
+    },
   
     h1Text: {
       fontSize: 60, 
@@ -322,8 +331,19 @@ export default () => {
               overflow: 'visible'
               }}/>
             <Pressable onPress={() => handleViewChange(4)} 
-              style={ styles.TreehouseButton}>
-            </Pressable>
+              style={ styles.TreehouseButton}/>
+  
+
+            <ImageBackground source={require('./assets/SkyDancing.png')} style={{
+              position: 'absolute',
+              height: 100,
+              width: 100,
+              left: (fullWidth/2) - 300,
+              top: (fullHeight/2) + 70,
+            }}/>
+            <Pressable onPress={() => handleViewChange(5)}
+            style={styles.ConservatoryButton}/>
+
                 
           
 
@@ -343,6 +363,11 @@ export default () => {
 {/* Treehouse View */}
         {activeView === 4 && (
           <TreehouseView styles={styles} activeView={activeView}/>
+        )}
+
+{/* Conservartory View */}
+        {activeView === 5 && (
+          <ConservatoryView styles={styles} activeView={activeView}/>
         )}
 
 {/* Settings View */}
