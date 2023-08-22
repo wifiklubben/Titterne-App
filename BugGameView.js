@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef, useMemo} from 'react'
-import { View, ImageBackground, Image, FlatList, Pressable, Animated, Text } from 'react-native';
+import { View, Image, FlatList, Pressable, Animated, Text } from 'react-native';
 
 import { Audio } from 'expo-av'
 
@@ -15,7 +15,7 @@ function areBugsMatched(bug1, bug2) {
     } else{}
 }
 
-function BugGameView( styles ) {
+function BugGameView( {styles} ) {
 
     const [popSound, setPopSound] = useState()
     const [fartSound, setFartSound] = useState()
@@ -28,7 +28,7 @@ function BugGameView( styles ) {
 
 
 
-
+//load sounds
     useEffect(() => {
 
         async function loadPop() {
@@ -131,9 +131,10 @@ function BugGameView( styles ) {
     }
 
     //  animations
-    const FlipAnimView = ( {isOpen, children} ) => {
+    const CardView = React.memo(({isOpen, isCleared, image}) => {
         const flipAnim = useRef(new Animated.Value(0)).current;
 
+    
         const interpolatedRotation = flipAnim.interpolate({
             inputRange: [0, 0.5, 1],
             outputRange: ['0deg', '90deg', '180deg'],
@@ -147,26 +148,55 @@ function BugGameView( styles ) {
         useEffect(() => {
         Animated.timing(flipAnim, {
             toValue: isOpen ? 1 : 0,
-            duration: 180,
+            duration: 250,
             useNativeDriver: true,
         }).start();
-    }, [flipAnim, isOpen])
-;
-    console.log("current Rotation: ", interpolatedRotation);
+    }, [flipAnim, isOpen]);
+
 
     return (
 
-        <Animated.View style={{
-            opacity: interpolatedOpacity,
-            transform: [
-                {
-                  rotateY: interpolatedRotation
-                },
-              ]}}>
-            {children} 
-        </Animated.View>
-    )
-}
+        <View style={{flex: 1}}>
+
+            <Animated.View style={{
+                opacity: isCleared ? 0 : interpolatedOpacity,
+                transform: [
+                    {
+                    rotateY: interpolatedRotation
+                    },
+                ]}}>
+  
+                        <Image
+                        source={image}
+                        style={{
+                            height: 120,
+                            resizeMode: 'contain',
+                            opacity: 1,
+                            overflow: 'visible',
+                        }}
+                        />
+            </Animated.View>
+            <Animated.View
+            style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                opacity: isOpen ? 0 : 1
+            }}>
+                        <Image
+                        source={require('./assets/graphics/bugs/QMark.png')}
+                        style={{
+                            height: 120,
+                            resizeMode: 'contain',
+                            opacity: 1,
+                            overflow: 'visible',
+                        }}/>
+                  
+                    
+            </Animated.View>
+        </View>
+    );
+});
     
     //shuffle function
 
@@ -188,6 +218,7 @@ function BugGameView( styles ) {
 
         if (openCards.length === 1) {
             setOpenCards((prev) => [...prev, {bug: clickedBug, id: bugId}])
+            setMoves((moves) => moves + 1);
         } else {
             setOpenCards([{ bug: clickedBug, id: bugId}])
         }
@@ -216,8 +247,7 @@ function BugGameView( styles ) {
         }
     }, [openCards])
 
-    //checking picked bugs for win condition
-
+    //checking picked bugs for win
     useEffect(() => {
         if (clearedCards.length === 12) {
             const delay = 2000;
@@ -226,6 +256,7 @@ function BugGameView( styles ) {
                 setClearedcards([]);
                 setOpenCards([]);
                 shuffleBugs(unqiqueBugsArray)
+                setMoves(0);
             }, delay)
             return() => clearTimeout(timeoutId)
         }
@@ -249,30 +280,7 @@ function BugGameView( styles ) {
                     marginVertical: 15,
                     marginHorizontal: -20,
                 }}>
-                <FlipAnimView isOpen={isCardOpen}>
-            
-                    {isCardOpen && <Animated.Image
-                    data={'name'}
-                    source = {image}
-                    style={{
-                        height: 120,
-                        resizeMode: 'contain',
-                        opacity: 1,
-                        overflow: 'visible',
-                    }}
-                        /> }
-
-                    {!isCardOpen && <Animated.Image
-                    data={'name'}
-                    source = {require('./assets/graphics/bugs/QMark.png')}
-                    style={{
-                        height: 120,
-                        resizeMode: 'contain',
-                        opacity: 1,
-                        overflow: 'visible',
-                    }}
-                        /> }
-                </FlipAnimView>
+                <CardView isOpen={isCardOpen} isCleared={isCardCleared} image={image} />
             </Pressable>
         )
     }
@@ -343,9 +351,12 @@ function BugGameView( styles ) {
         </FlatList>}
 
         {clearedCards.length  === 12 &&
-        <Text style={styles.h1Text}>You did it!!</Text>}
 
-
+        <Text style={{
+            fontSize: 60, 
+            fontFamily: 'Bubblegum',
+            color: 'white',
+          }}>You did it in only {moves} moves! GOOD JOB!</Text>}
     </View>
 
     </>
