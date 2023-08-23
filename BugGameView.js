@@ -15,7 +15,7 @@ function areBugsMatched(bug1, bug2) {
     } else{}
 }
 
-function BugGameView( {styles} ) {
+function BugGameView() {
 
     const [popSound, setPopSound] = useState()
     const [fartSound, setFartSound] = useState()
@@ -23,6 +23,7 @@ function BugGameView( {styles} ) {
 
     const [openCards, setOpenCards] = useState([])
     const [clearedCards, setClearedcards] = useState([])
+    const [, setFirstCardOpenedID] = useState(0)
 
     const [moves, setMoves] = useState(0);
 
@@ -134,7 +135,6 @@ function BugGameView( {styles} ) {
     const CardView = React.memo(({isOpen, isCleared, image}) => {
         const flipAnim = useRef(new Animated.Value(0)).current;
 
-    
         const interpolatedRotation = flipAnim.interpolate({
             inputRange: [0, 0.5, 1],
             outputRange: ['0deg', '90deg', '180deg'],
@@ -146,6 +146,7 @@ function BugGameView( {styles} ) {
         })
         
         useEffect(() => {
+
         Animated.timing(flipAnim, {
             toValue: isOpen ? 1 : 0,
             duration: 250,
@@ -157,7 +158,6 @@ function BugGameView( {styles} ) {
     return (
 
         <View style={{flex: 1}}>
-
             <Animated.View style={{
                 opacity: isCleared ? 0 : interpolatedOpacity,
                 transform: [
@@ -165,7 +165,6 @@ function BugGameView( {styles} ) {
                     rotateY: interpolatedRotation
                     },
                 ]}}>
-  
                         <Image
                         source={image}
                         style={{
@@ -191,8 +190,6 @@ function BugGameView( {styles} ) {
                             opacity: 1,
                             overflow: 'visible',
                         }}/>
-                  
-                    
             </Animated.View>
         </View>
     );
@@ -221,6 +218,7 @@ function BugGameView( {styles} ) {
             setMoves((moves) => moves + 1);
         } else {
             setOpenCards([{ bug: clickedBug, id: bugId}])
+            setFirstCardOpenedID({bugId})
         }
 
     };
@@ -229,21 +227,19 @@ function BugGameView( {styles} ) {
 
     useEffect(() => {
         if(openCards.length === 2) {
+            const delay = 1000;
             if(areBugsMatched(openCards[0], openCards[1])) {
-                setClearedcards(prevClearedCards => [...prevClearedCards, ...openCards])
-                playYaySound()
+                const timeoutId = setTimeout(() => {
+                    setClearedcards(prevClearedCards => [...prevClearedCards, ...openCards])
+                    playYaySound()
+                }, delay)
             } else {
                 playFartSound()
-                const delay = 1000;
             const timeoutId = setTimeout(() => {
- 
                 setOpenCards([]);
-       
             }, delay)
             return() => clearTimeout(timeoutId)
-    
             }
-
         }
     }, [openCards])
 
