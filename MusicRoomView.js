@@ -8,7 +8,7 @@ import Mixer from './Mixer';
 
 
 
-export default function MusicRoomView({ styles, activeView }) {
+export default function MusicRoomView({ styles}) {
 
     // audio load 
 const [musicLoaded, setMusicLoaded ] = useState(false);

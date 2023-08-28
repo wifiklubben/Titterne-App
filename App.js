@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, ImageBackground, Dimensions, Pressable } from 'react-native';
+import { AppState, StyleSheet, View, ImageBackground, Dimensions, Pressable } from 'react-native';
 
 import {  useFonts  } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { Asset }  from 'expo-asset';
 import { Audio } from 'expo-av';
+
+import { create } from 'zustand';
 
 import HomeIcon from './assets/graphics/homeIcon.svg';
 import SettingsIcon from './assets/graphics/settingsIcon';
@@ -32,13 +34,32 @@ export default () => {
   });
 
 
+
     // ********* STATES ************
+
+
+    // locally stored state  
+
+    const useParentalSettings = create((set) => {
+      return {
+        timeLimitActive: false,
+        timeLimitAmount: 86400,
+        sleepControlActive: false,
+        sleepStart: null,
+        sleepEnd: null,
+        toggleTimeLimitActive: () => {
+          console.log("toggling timeLimitActive in the store");
+          set((state) => ({ timeLimitActive: !state.timeLimitActive }));
+        }
+      }
+    });
+
+    const timeLimitAmount = useParentalSettings((state) => state.timeLimitAmount)
+
 
   // set page being viewed, default 1
   const [activeView, setActiveView] = useState(1);
-
   const handleViewChange = (viewNumber) => {
-
     setActiveView(viewNumber);
   };
 
@@ -48,6 +69,20 @@ export default () => {
   const [ isLoaded, setIsLoaded] = useState(false);
 
 
+  // parental controls states
+
+  const [sleepControlActive, setSleepControlActive] = useState(false)
+  const [isNightTime, setIsNightTime] = useState(false);
+
+  const [isTimeOut, setIsTimeOut] = useState(false);
+
+  // const [timeLimitAmount, setTimeLimitAmount] = useState(9999)
+  // // 24 hours is 86400 seconds
+  // const [timeLimitActive, setTimeLimitActive] = useState(false)
+
+  const [elapsedTime, setElapsedTime] = useState(0);
+ 
+
   // music
 
   const [birdsAmbientSound, setBirdsAmbientSound] = useState();
@@ -56,12 +91,49 @@ export default () => {
 
   SplashScreen.preventAutoHideAsync();
 
-
-
      // ********* EFFECTS ************
 
+    //  Active timer counter for time limit
 
-    //  BG audio form home screen
+      // Start timer
+      useEffect(() => {
+    
+        if (AppState.currentState === 'active') {
+
+          const intervalId = setInterval(() => {
+            setElapsedTime(prevTime => prevTime +1)
+
+          }, 1000);
+          
+          return () => {
+            clearInterval(intervalId)
+          }
+        }
+      }, [])
+
+      //check if Time runs out
+      useEffect(() => {
+        //add warning for 5 mins left?
+        if (elapsedTime > timeLimitAmount) {
+          setIsTimeOut(true);
+        }
+      }, [elapsedTime]);
+
+      // check if timeout === true
+
+      useEffect(() => {
+        // console.log("isTimeOut: ", isTimeOut);
+      }, [isTimeOut]);
+
+      // reset timer everyday
+      useEffect(() => {
+        const now = new Date();
+        nowHours = now.getHours();
+        console.log("now is: ", nowHours);
+      },[])
+
+
+  //  BG audio form home screen
 
   useEffect(() => {
 
@@ -150,6 +222,7 @@ export default () => {
         require('./assets/House_open_music_room.png'),
         require('./assets/forground.png'),
         require('./assets/TitterneLogo.png'),
+        require('./assets/HouseNight.png'),
       ]
 
       const cacheImages = images.map(image => {
@@ -195,7 +268,8 @@ export default () => {
 
     fullWidthBackground: {
       position: 'absolute',
-      backgroundColor: '#000',
+      top: 0,
+      left: 0,
       height: '100%',
       width: '100%',
     },
@@ -305,76 +379,100 @@ export default () => {
     <View style={styles.container}>
 
   {/* Home View */}
-  
-      {activeView === 1 && (
 
-          <HomeView styles={styles} isLoaded={isLoaded} setShowIntroAnimation={setShowIntroAnimation} showIntroAnimation={showIntroAnimation} activeView={activeView}>
-  
+      {isTimeOut ?  (
+        
+        <ImageBackground 
+        style={styles.fullWidthBackground}
+        source={require('./assets/HouseNight.png')}
+        >
+        </ImageBackground>
+     
+      ) : (
+        <>
+        {activeView === 1 && (
 
-            <ImageBackground source={require('./assets/Music_room_icon.png')}>
-              <Pressable onPress={() => handleViewChange(2)}
-                style={ styles.MusicRoomButton }>
-              </Pressable>
-            </ImageBackground>
+      <HomeView styles={styles} isLoaded={isLoaded} setShowIntroAnimation={setShowIntroAnimation} showIntroAnimation={showIntroAnimation} activeView={activeView}>
 
 
-            <Pressable onPress={() => handleViewChange(3)} 
-              style={ styles.BedroomButton}>
-            </Pressable>
+  <ImageBackground source={require('./assets/Music_room_icon.png')}>
+    <Pressable onPress={() => handleViewChange(2)}
+      style={ styles.MusicRoomButton }>
+    </Pressable>
+  </ImageBackground>
 
-            <ImageBackground source={require('./assets/SkyDancing.png')}style={{
-              position: 'absolute',
-              height: 70,
-              width: 70,
-              left: (fullWidth/2) + 245,
-              top: (fullHeight/2) - 62,
-              overflow: 'visible'
-              }}/>
-            <Pressable onPress={() => handleViewChange(4)} 
-              style={ styles.TreehouseButton}/>
-  
 
-            <ImageBackground source={require('./assets/SkyDancing.png')} style={{
-              position: 'absolute',
-              height: 100,
-              width: 100,
-              left: (fullWidth/2) - 300,
-              top: (fullHeight/2) + 70,
-            }}/>
-            <Pressable onPress={() => handleViewChange(5)}
-            style={styles.ConservatoryButton}/>
+  <Pressable onPress={() => handleViewChange(3)} 
+    style={ styles.BedroomButton}>
+  </Pressable>
 
-                
-          
+  <ImageBackground source={require('./assets/SkyDancing.png')}style={{
+    position: 'absolute',
+    height: 70,
+    width: 70,
+    left: (fullWidth/2) + 245,
+    top: (fullHeight/2) - 62,
+    overflow: 'visible'
+    }}/>
+  <Pressable onPress={() => handleViewChange(4)} 
+    style={ styles.TreehouseButton}/>
 
-          </HomeView>
-          )}
+
+  <ImageBackground source={require('./assets/SkyDancing.png')} style={{
+    position: 'absolute',
+    height: 100,
+    width: 100,
+    left: (fullWidth/2) - 300,
+    top: (fullHeight/2) + 70,
+  }}/>
+  <Pressable onPress={() => handleViewChange(5)}
+  style={styles.ConservatoryButton}/>
+
+      
+
+
+</HomeView>
+)}
 
 {/* Music Room View */}
-        {activeView === 2 && (
-            <MusicRoomView styles={styles} activeView={activeView}/>
-        )}
+{activeView === 2 && (
+  <MusicRoomView styles={styles} activeView={activeView}/>
+)}
 
 {/* Bedroom View */}
-        {activeView === 3 && (
-          <BedroomView styles={styles} activeVIew={activeView}/>
-        )}
+{activeView === 3 && (
+<BedroomView styles={styles} activeVIew={activeView}/>
+)}
 
 {/* Treehouse View */}
-        {activeView === 4 && (
-          <TreehouseView styles={styles} activeView={activeView}/>
-        )}
+{activeView === 4 && (
+<TreehouseView styles={styles} activeView={activeView}/>
+)}
 
 {/* Conservartory View */}
-        {activeView === 5 && (
-          <ConservatoryView styles={styles} activeView={activeView}/>
-        )}
+{activeView === 5 && (
+<ConservatoryView styles={styles} activeView={activeView}/>
+)}
 
 {/* Settings View */}
-        {activeView === 30 && (
-          <SettingsView styles={styles}/>
-        )}  
-        
+{activeView === 30 && (
+<SettingsView 
+styles={styles} 
+setIsNightTime={setIsNightTime} 
+setIsTimeOut={setIsTimeOut} 
+sleepControlActive={sleepControlActive} 
+setSleepControlActive={setSleepControlActive} 
+useParentalSettings={useParentalSettings} 
+
+/>
+)}  
+
+        </>
+
+      )}
+ 
+  
+      
         
 {/* overview UI buttons, home/mute/settings */}
 
@@ -387,9 +485,12 @@ export default () => {
           </Pressable>
           )}
 
+          {activeView < 30 && (
           <Pressable style={styles.roundButton} onPress={() => handleViewChange(30)}> 
             <SettingsIcon width={72} height={72}/>
           </Pressable>
+          )}
+
         </View>
         )}
 
