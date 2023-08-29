@@ -32,7 +32,7 @@ export default () => {
   // ********* STATES ************
 
   // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(6);
+  const [activeView, setActiveView] = useState(1);
 
   const handleViewChange = (viewNumber) => {
     setActiveView(viewNumber);
@@ -94,6 +94,10 @@ export default () => {
         birdsAmbientSound.stopAsync();
       }
     } else if (activeView === 3) {
+      if (birdsAmbientSound) {
+        birdsAmbientSound.stopAsync();
+      }
+    } else if (activeView === 6) {
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
@@ -237,6 +241,14 @@ export default () => {
       top: fullHeight / 2 + 70,
     },
 
+    BathroomButton: {
+      position: "absolute",
+      height: 120,
+      width: 120,
+      left: fullWidth / 2 - 40,
+      top: fullHeight / 2 + 70,
+    },
+
     h1Text: {
       fontSize: 60,
       fontFamily: "Bubblegum",
@@ -290,6 +302,18 @@ export default () => {
             }}
           />
           <Pressable onPress={() => handleViewChange(5)} style={styles.ConservatoryButton} />
+
+          <ImageBackground
+            source={require("./assets/Thorden.png")}
+            style={{
+              position: "absolute",
+              height: 100,
+              width: 100,
+              left: fullWidth / 2 - 40,
+              top: fullHeight / 2 + 70,
+            }}
+          />
+          <Pressable onPress={() => handleViewChange(6)} style={styles.BathroomButton} />
         </HomeView>
       )}
 

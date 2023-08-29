@@ -37,7 +37,7 @@ export default function BathroomView({ styles }) {
         </Pressable>
       )}
 
-      {bubbleGameIsOpen === true && <BubbleGame key={refreshKey} styles={styles} handleBubbleGame={handleBubbleGame} />}
+      {bubbleGameIsOpen === true && <BubbleGame key={refreshKey} styles={styles} handleBubbleGame={handleBubbleGame} bubbleGameIsOpen={bubbleGameIsOpen} />}
     </ImageBackground>
   );
 }
