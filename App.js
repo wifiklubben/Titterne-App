@@ -345,11 +345,24 @@ export default () => {
             </Pressable>
           )}
 
-          <Pressable style={styles.roundButton} onPress={() => handleViewChange(30)}>
-            <SettingsIcon width={72} height={72} />
+
+        
+
+          {activeView !== 30 &&
+          
+          <Pressable style={styles.roundButton} onPress={() => handleViewChange(30)}> 
+            <SettingsIcon width={72} height={72}/>
+
           </Pressable>
+          }
         </View>
-      )}
-    </View>
+
+   
+
+          
+        )}
+      </View>
+
+
   );
 };

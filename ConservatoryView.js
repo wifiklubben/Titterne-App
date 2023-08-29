@@ -54,7 +54,7 @@ const handleGameOpen = () => {
     />}
 
     {bugGameOpen === true && 
-    <BugGameView styles={styles}/>
+    <BugGameView styles={ styles }/>
     }
         
 
