@@ -18,7 +18,7 @@ function SettingsView( {styles, sleepControlActive, setSleepControlActive, usePa
   const [showParentalControls, setShowParentalControls] = useState(false);
 
   const { timeLimitActive, toggleTimeLimitActive } = useParentalSettings();
-  const { timeLimitAmount, toggleTimeLimitAmount} = useParentalSettings();
+  const { timeLimitAmount, changeTimeLimitAmount} = useParentalSettings();
 
 
 
@@ -44,7 +44,12 @@ function SettingsView( {styles, sleepControlActive, setSleepControlActive, usePa
     console.log("toggling!");
     toggleTimeLimitActive()
   }
-
+  
+  
+    const handleTimeLimitChange = (limit) => {
+      console.log("changing ");
+      changeTimeLimitAmount(limit)
+    }
 
 
   const handleTimePicker = (event, selected) => {
@@ -149,12 +154,12 @@ function SettingsView( {styles, sleepControlActive, setSleepControlActive, usePa
               <Slider style={{
                 width: "30%"
               }}
-              minimumValue={15}
-              maximumValue={120}
-              step={5}
-              // onValueChange={handleTimeLimitChange}
+              minimumValue={1}
+              maximumValue={180}
+              step={1}
+              onValueChange={handleTimeLimitChange}
               minimumTrackTintColor="000"
-              // value={timeLimitAmount}
+              value={timeLimitAmount}
               >
               </Slider>
               <Text style={styles.pText}>Up to {timeLimitAmount} minutes per day</Text>

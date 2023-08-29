@@ -33,29 +33,79 @@ export default () => {
     Bubblegum: require('./assets/fonts/BubblegumSans-Regular.ttf'),
   });
 
-
-
     // ********* STATES ************
-
 
     // locally stored state  
 
     const useParentalSettings = create((set) => {
       return {
         timeLimitActive: false,
-        timeLimitAmount: 86400,
+        timeLimitAmount: 90,
         sleepControlActive: false,
         sleepStart: null,
         sleepEnd: null,
         toggleTimeLimitActive: () => {
-          console.log("toggling timeLimitActive in the store");
           set((state) => ({ timeLimitActive: !state.timeLimitActive }));
+        },
+        changeTimeLimitAmount: (limit) => {
+          set((state) => ({ timeLimitAmount: limit}))
         }
       }
     });
 
-    const timeLimitAmount = useParentalSettings((state) => state.timeLimitAmount)
+    const [appOpenTime, setAppOpenTime] = useState(new Date().getTime())
 
+
+    // Parental control effects
+
+    useEffect(() => {
+
+      const handleAppStateChange = (nextAppState) => {
+        if (nextAppState === 'active') {
+          setAppOpenTime(new Date().getTime())
+        }
+      }
+
+      const appStateSubscription = AppState.addEventListener('change', handleAppStateChange)
+
+      const intervalId = setInterval(() => {
+
+     
+        const timeLimitActiveValue = useParentalSettings.getState().timeLimitActive;
+        const timeLimitAmountValue = useParentalSettings.getState().timeLimitAmount;
+
+        if (!timeLimitActiveValue || !timeLimitAmountValue) {
+          return
+        }
+      
+
+        const currentTime = new Date().getTime();
+
+
+        const elapsedMilliseconds = currentTime - appOpenTime;
+        const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000)
+        const elapsedMinutes = Math.floor(elapsedMilliseconds/ (1000 * 60))
+
+        console.log("elapsedSeconds: ", elapsedSeconds);
+
+        setElapsedTime(elapsedMinutes);
+
+        if (elapsedMinutes >= timeLimitAmountValue) {
+
+          setIsNightTime(true);
+        } else {
+
+          setIsNightTime(false);
+        }
+      }, 1000)
+
+      return () => {
+        clearInterval(intervalId);
+        appStateSubscription.remove()
+      } 
+    }, [useParentalSettings,  ]);
+
+   
 
   // set page being viewed, default 1
   const [activeView, setActiveView] = useState(1);
@@ -75,11 +125,6 @@ export default () => {
   const [isNightTime, setIsNightTime] = useState(false);
 
   const [isTimeOut, setIsTimeOut] = useState(false);
-
-  // const [timeLimitAmount, setTimeLimitAmount] = useState(9999)
-  // // 24 hours is 86400 seconds
-  // const [timeLimitActive, setTimeLimitActive] = useState(false)
-
   const [elapsedTime, setElapsedTime] = useState(0);
  
 
@@ -93,45 +138,10 @@ export default () => {
 
      // ********* EFFECTS ************
 
-    //  Active timer counter for time limit
-
-      // Start timer
-      useEffect(() => {
-    
-        if (AppState.currentState === 'active') {
-
-          const intervalId = setInterval(() => {
-            setElapsedTime(prevTime => prevTime +1)
-
-          }, 1000);
-          
-          return () => {
-            clearInterval(intervalId)
-          }
-        }
-      }, [])
-
-      //check if Time runs out
-      useEffect(() => {
-        //add warning for 5 mins left?
-        if (elapsedTime > timeLimitAmount) {
-          setIsTimeOut(true);
-        }
-      }, [elapsedTime]);
-
-      // check if timeout === true
-
-      useEffect(() => {
-        // console.log("isTimeOut: ", isTimeOut);
-      }, [isTimeOut]);
-
-      // reset timer everyday
-      useEffect(() => {
-        const now = new Date();
-        nowHours = now.getHours();
-        console.log("now is: ", nowHours);
-      },[])
-
+    //  start recroding screentime
+    useEffect(() => {
+      setAppOpenTime(new Date().getTime());
+    }, []);
 
   //  BG audio form home screen
 
@@ -380,7 +390,7 @@ export default () => {
 
   {/* Home View */}
 
-      {isTimeOut ?  (
+      {isNightTime ?  (
         
         <ImageBackground 
         style={styles.fullWidthBackground}
