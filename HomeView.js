@@ -3,7 +3,10 @@ import { View, ImageBackground, Animated, Image } from 'react-native';
 
 
 
-export default function HomeView({ styles, isLoaded, children, setShowIntroAnimation, showIntroAnimation }) {
+export default function HomeView({ styles, isLoaded, children, setShowIntroAnimation, showIntroAnimation, useStore, isNightTime }) {
+
+
+
 
 
   const animatedScaleValue = useRef(new Animated.Value(0)).current;
@@ -171,6 +174,17 @@ const animatedWindow = {
 };
 
     return (
+
+      isNightTime ?  (
+        
+        <ImageBackground 
+        style={styles.fullWidthBackground}
+        source={require('./assets/HouseNight.png')}
+        >
+        </ImageBackground>
+     
+      ) : (
+        
       
        !showIntroAnimation ? (
         // Main view 
@@ -323,7 +337,7 @@ const animatedWindow = {
 )
 
 
-);
+));
                        ;
 }  
 

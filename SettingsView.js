@@ -9,7 +9,7 @@ import { useStore } from 'zustand';
 
 
 
-function SettingsView( {styles, sleepControlActive, setSleepControlActive, useParentalSettings} ) {
+function SettingsView( {styles, useStore} ) {
 
   //logic to be figured out, this is just a placeholder for now
   
@@ -17,10 +17,11 @@ function SettingsView( {styles, sleepControlActive, setSleepControlActive, usePa
   const [selectTime, setselectTime] = useState(new Date());
   const [showParentalControls, setShowParentalControls] = useState(false);
 
-  const { timeLimitActive, toggleTimeLimitActive } = useParentalSettings();
-  const { timeLimitAmount, changeTimeLimitAmount} = useParentalSettings();
+  const timeLimitAmount = useStore((state) => state.timeLimitAmount)
+  const changeTimeLimitAmount = useStore((state) => state.changeTimeLimitAmount)
 
-
+  const timeLimitActive = useStore((state) => state.timeLimitActive)
+  const toggleTimeLimitActive = useStore((state) => state.toggleTimeLimitActive)
 
   const  showParentals = () => {
     if (showParentalControls === true) {
@@ -30,25 +31,26 @@ function SettingsView( {styles, sleepControlActive, setSleepControlActive, usePa
     }
   };
 
-  const toggleSleep = () => {
-    if (sleepControlActive === true) {
-      setSleepControlActive(false)
-      console.log("sleep control off");
-    } else {
-      setSleepControlActive(true)
-      console.log("sleep control on");
-    }
-  }
+  // const toggleSleep = () => {
+  //   if (sleepControlActive === true) {
+  //     setSleepControlActive(false)
+  //     console.log("sleep control off");
+  //   } else {
+  //     setSleepControlActive(true)
+  //     console.log("sleep control on");
+  //   }
+  // }
 
   const handleToggleTimeLimit = () => {
     console.log("toggling!");
-    toggleTimeLimitActive()
+    toggleTimeLimitActive();
   }
   
   
-    const handleTimeLimitChange = (limit) => {
-      console.log("changing ");
-      changeTimeLimitAmount(limit)
+    const handleTimeLimitChange = (e) => {
+      console.log("changing time Limit to: ", e);
+      changeTimeLimitAmount(e)
+      console.log("timeLimit changed to: ", timeLimitAmount);
     }
 
 
@@ -105,11 +107,12 @@ function SettingsView( {styles, sleepControlActive, setSleepControlActive, usePa
               scale: 1.8
             }],
           }}
-          onValueChange={toggleSleep}
-          value={sleepControlActive}/>
+          // onValueChange={toggleSleep}
+          // value={sleepControlActive}
+          />
          </View>
         <Text style={styles.pText}>On sleep mode Torden and Sky will say goodnight and go to bed. No games will be playable and your child can see Torden and Sky asleep in their beds encouraging their own bedtime. </Text>
-        {sleepControlActive && (
+        {/* {sleepControlActive && (
           <Button title="Select Wake up time" onPress={() => setShowTimePicker(true)}/>
           )}
             {showTimePicker === true && (
@@ -119,7 +122,7 @@ function SettingsView( {styles, sleepControlActive, setSleepControlActive, usePa
             is24Hour={true}
             display='default'
             onChange={handleTimePicker}/>
-            )}
+            )} */}
 
       
       </View>
@@ -157,7 +160,7 @@ function SettingsView( {styles, sleepControlActive, setSleepControlActive, usePa
               minimumValue={1}
               maximumValue={180}
               step={1}
-              onValueChange={handleTimeLimitChange}
+              onValueChange={(e) => handleTimeLimitChange(e)}
               minimumTrackTintColor="000"
               value={timeLimitAmount}
               >

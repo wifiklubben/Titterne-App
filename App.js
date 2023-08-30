@@ -18,6 +18,13 @@ import BedroomView from './BedroomView';
 import TreehouseView from './TreehouseView';
 import ConservatoryView from './ConservatoryView';
 
+const useStore = create((set) => ({
+  timeLimitActive: false,
+  timeLimitAmount: 90,
+  toggleTimeLimitActive: () => set((state) => ({ timeLimitActive: !state.timeLimitActive })),
+  changeTimeLimitAmount: (e) => set({ timeLimitAmount: e }),
+}));
+
 
 
 export default () => {
@@ -35,75 +42,22 @@ export default () => {
 
     // ********* STATES ************
 
-    // locally stored state  
+    // parental controls states
 
-    const useParentalSettings = create((set) => {
-      return {
-        timeLimitActive: false,
-        timeLimitAmount: 90,
-        sleepControlActive: false,
-        sleepStart: null,
-        sleepEnd: null,
-        toggleTimeLimitActive: () => {
-          set((state) => ({ timeLimitActive: !state.timeLimitActive }));
-        },
-        changeTimeLimitAmount: (limit) => {
-          set((state) => ({ timeLimitAmount: limit}))
-        }
-      }
-    });
+    // const [sleepControlActive, setSleepControlActive] = useState(false)
+    const [isNightTime, setIsNightTime] = useState(false);
 
+    const [elapsedTime, setElapsedTime] = useState(0);
+    
     const [appOpenTime, setAppOpenTime] = useState(new Date().getTime())
 
-
-    // Parental control effects
-
-    useEffect(() => {
-
-      const handleAppStateChange = (nextAppState) => {
-        if (nextAppState === 'active') {
-          setAppOpenTime(new Date().getTime())
-        }
-      }
-
-      const appStateSubscription = AppState.addEventListener('change', handleAppStateChange)
-
-      const intervalId = setInterval(() => {
-
-     
-        const timeLimitActiveValue = useParentalSettings.getState().timeLimitActive;
-        const timeLimitAmountValue = useParentalSettings.getState().timeLimitAmount;
-
-        if (!timeLimitActiveValue || !timeLimitAmountValue) {
-          return
-        }
-      
-
-        const currentTime = new Date().getTime();
+    const timeLimitActiveValue = useStore((state) => state.timeLimitActive);
+    const timeLimitAmountValue = useStore((state) => state.timeLimitAmount);
 
 
-        const elapsedMilliseconds = currentTime - appOpenTime;
-        const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000)
-        const elapsedMinutes = Math.floor(elapsedMilliseconds/ (1000 * 60))
 
-        console.log("elapsedSeconds: ", elapsedSeconds);
+   
 
-        setElapsedTime(elapsedMinutes);
-
-        if (elapsedMinutes >= timeLimitAmountValue) {
-
-          setIsNightTime(true);
-        } else {
-
-          setIsNightTime(false);
-        }
-      }, 1000)
-
-      return () => {
-        clearInterval(intervalId);
-        appStateSubscription.remove()
-      } 
-    }, [useParentalSettings,  ]);
 
    
 
@@ -118,14 +72,51 @@ export default () => {
   // is content cached yet?
   const [ isLoaded, setIsLoaded] = useState(false);
 
+ // Parental control 
 
-  // parental controls states
+ useEffect(() => {
 
-  const [sleepControlActive, setSleepControlActive] = useState(false)
-  const [isNightTime, setIsNightTime] = useState(false);
+  // const handleAppStateChange = (nextAppState) => {
+  //   if (nextAppState === 'active') {
+  //     setAppOpenTime(new Date().getTime())
+  //   }
+  // }
 
-  const [isTimeOut, setIsTimeOut] = useState(false);
-  const [elapsedTime, setElapsedTime] = useState(0);
+  // const appStateSubscription = AppState.addEventListener('change', handleAppStateChange)
+
+  const intervalId = setInterval(() => {
+    if (!timeLimitActiveValue || !timeLimitAmountValue) {
+      return
+    } 
+  
+    const currentTime = new Date().getTime();
+
+    const elapsedMilliseconds = currentTime - appOpenTime;
+    const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000)
+    const elapsedMinutes = Math.floor(elapsedMilliseconds/ (1000 * 60))
+
+
+    console.log("elapsed time: ", elapsedMinutes, "timeLimit: ", timeLimitAmountValue);
+
+    setElapsedTime(elapsedMinutes);
+
+    if (elapsedMinutes >= timeLimitAmountValue) {
+
+      setIsNightTime(true);
+
+    } else {
+
+
+      setIsNightTime(false);
+    }
+  }, 1000)
+
+  return () => {
+    clearInterval(intervalId);
+    // appStateSubscription.remove()
+  } 
+     }, [activeView])
+
  
 
   // music
@@ -138,13 +129,12 @@ export default () => {
 
      // ********* EFFECTS ************
 
-    //  start recroding screentime
+    //  start recording screentime
     useEffect(() => {
       setAppOpenTime(new Date().getTime());
     }, []);
 
   //  BG audio form home screen
-
   useEffect(() => {
 
     async function loadBirdsAmbientSound() {
@@ -386,23 +376,21 @@ export default () => {
 
 
   return (
+
     <View style={styles.container}>
 
   {/* Home View */}
 
-      {isNightTime ?  (
-        
-        <ImageBackground 
-        style={styles.fullWidthBackground}
-        source={require('./assets/HouseNight.png')}
-        >
-        </ImageBackground>
-     
-      ) : (
-        <>
-        {activeView === 1 && (
+   {activeView === 1 && (
 
-      <HomeView styles={styles} isLoaded={isLoaded} setShowIntroAnimation={setShowIntroAnimation} showIntroAnimation={showIntroAnimation} activeView={activeView}>
+      <HomeView 
+      styles={styles} 
+      isLoaded={isLoaded} 
+      isNightTime={isNightTime}
+      setShowIntroAnimation={setShowIntroAnimation} 
+      showIntroAnimation={showIntroAnimation} 
+      activeView={activeView} 
+      useStore={useStore}>
 
 
   <ImageBackground source={require('./assets/Music_room_icon.png')}>
@@ -438,9 +426,6 @@ export default () => {
   <Pressable onPress={() => handleViewChange(5)}
   style={styles.ConservatoryButton}/>
 
-      
-
-
 </HomeView>
 )}
 
@@ -468,21 +453,11 @@ export default () => {
 {activeView === 30 && (
 <SettingsView 
 styles={styles} 
-setIsNightTime={setIsNightTime} 
-setIsTimeOut={setIsTimeOut} 
-sleepControlActive={sleepControlActive} 
-setSleepControlActive={setSleepControlActive} 
-useParentalSettings={useParentalSettings} 
-
+useStore={useStore}
 />
 )}  
 
-        </>
 
-      )}
- 
-  
-      
         
 {/* overview UI buttons, home/mute/settings */}
 
