@@ -18,6 +18,7 @@ import BedroomView from './BedroomView';
 import TreehouseView from './TreehouseView';
 import ConservatoryView from './ConservatoryView';
 
+// locally stored variables
 const useStore = create((set) => ({
   timeLimitActive: false,
   timeLimitAmount: 90,
@@ -56,10 +57,6 @@ export default () => {
 
 
 
-   
-
-
-   
 
   // set page being viewed, default 1
   const [activeView, setActiveView] = useState(1);
@@ -75,19 +72,12 @@ export default () => {
  // Parental control 
 
  useEffect(() => {
-
-  // const handleAppStateChange = (nextAppState) => {
-  //   if (nextAppState === 'active') {
-  //     setAppOpenTime(new Date().getTime())
-  //   }
-  // }
-
-  // const appStateSubscription = AppState.addEventListener('change', handleAppStateChange)
+  if (!timeLimitActiveValue) {
+    console.log("is it night time??", isNightTime);
+    setIsNightTime(false);
+  } 
 
   const intervalId = setInterval(() => {
-    if (!timeLimitActiveValue || !timeLimitAmountValue) {
-      return
-    } 
   
     const currentTime = new Date().getTime();
 
@@ -96,28 +86,24 @@ export default () => {
     const elapsedMinutes = Math.floor(elapsedMilliseconds/ (1000 * 60))
 
 
-    console.log("elapsed time: ", elapsedMinutes, "timeLimit: ", timeLimitAmountValue);
 
     setElapsedTime(elapsedMinutes);
 
     if (elapsedMinutes >= timeLimitAmountValue) {
 
-      setIsNightTime(true);
-
+      if (timeLimitActiveValue) {
+        setIsNightTime(true);
+      }
     } else {
-
-
       setIsNightTime(false);
     }
   }, 1000)
 
   return () => {
     clearInterval(intervalId);
-    // appStateSubscription.remove()
   } 
      }, [activeView])
 
- 
 
   // music
 
