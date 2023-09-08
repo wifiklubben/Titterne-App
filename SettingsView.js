@@ -6,6 +6,7 @@ import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 
+
 function SettingsView( {styles, useStore} ) {
 
   const [showParentalControls, setShowParentalControls] = useState(false);

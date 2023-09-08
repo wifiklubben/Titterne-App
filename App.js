@@ -17,6 +17,7 @@ import SettingsView from './SettingsView';
 import BedroomView from './BedroomView';
 import TreehouseView from './TreehouseView';
 import ConservatoryView from './ConservatoryView';
+import BathroomView from "./rooms/bathroom/BathroomView";
 
 // locally stored variables
 const useStore = create((set) => ({
@@ -35,14 +36,6 @@ const useStore = create((set) => ({
 
 }));
 
-
-import HomeView from "./HomeView";
-import MusicRoomView from "./MusicRoomView";
-import SettingsView from "./SettingsView";
-import BedroomView from "./BedroomView";
-import TreehouseView from "./TreehouseView";
-import ConservatoryView from "./ConservatoryView";
-import BathroomView from "./rooms/bathroom/BathroomView";
 
 export default () => {
   // ********* VARIABLES *******************
@@ -99,14 +92,23 @@ export default () => {
   const intervalId = setInterval(() => {
 
     const currentTime = new Date().toISOString();
-    const elapsedMilliseconds = currentTime - appOpenTime;
+    const currentTimeSimple = new Date().getTime();
+    const elapsedMilliseconds = currentTimeSimple - appOpenTime;
     const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000)
     const elapsedMinutes = Math.floor(elapsedMilliseconds/ (1000 * 60))
 
     setElapsedTime(elapsedMinutes);
 
+    // console.log("elapsed seconds ", elapsedSeconds);
+    // console.log("elapsed minutes ", elapsedMinutes);
+    // console.log("time limit: ", timeLimitAmountValue);
+    console.log("time limit is:  ", timeLimitActiveValue);
+
+    // console.log("sleep control active: ", sleepControlActive);
+
     if (elapsedMinutes >= timeLimitAmountValue && timeLimitActiveValue) {
       timeLimitFlag = true;
+      console.log("overtime!");
     } else {
       timeLimitFlag = false;
     }
@@ -115,18 +117,13 @@ export default () => {
     // bed time check
     if (currentTime > sleepControlNight && sleepControlActive) {
       bedTimeFlag = true;
-      console.log("current time: ", currentTime);
-      console.log("bedTime: ", sleepControlNight);
+      
     } else if (currentTime < sleepControlMorning && sleepControlActive) {
       bedTimeFlag = true;
-      console.log("current time: ", currentTime);
-      console.log("morningTime", sleepControlMorning);
+
     } else {
       bedTimeFlag = false;
-      console.log("current time: ", currentTime);
-      console.log("morningTime", sleepControlMorning);
-      console.log("bedTime: ", sleepControlNight);
-      console.log("it's time to play");
+
     }
 
     // setNightMode
@@ -140,7 +137,7 @@ export default () => {
   return () => {
     clearInterval(intervalId);
   } 
-     }, [])
+     }, [activeView])
 
 
 
@@ -452,7 +449,7 @@ export default () => {
 
 {/* Bedroom View */}
 {activeView === 3 && (
-<BedroomView styles={styles} activeVIew={activeView}/>
+<BedroomView styles={styles} activeView={activeView}/>
 )}
 
 {/* Treehouse View */}
@@ -465,11 +462,18 @@ export default () => {
 <ConservatoryView styles={styles} activeView={activeView}/>
 )}
 
+{/* Bathroom View */}
+{activeView === 6 && (
+  <BathroomView styles={styles} activeView={activeView}/>
+)}
+
+
+
 {/* Settings View */}
 {activeView === 30 && (
 <SettingsView 
 styles={styles} 
-useStore={useStore}
+useStore={ useStore }
 />
 )}  
 

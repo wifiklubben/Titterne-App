@@ -15,7 +15,7 @@ function areBugsMatched(bug1, bug2) {
     } else{}
 }
 
-function BugGameView() {
+function BugGameView(props) {
 
     const [popSound, setPopSound] = useState()
     const [fartSound, setFartSound] = useState()
