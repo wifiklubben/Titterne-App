@@ -4,24 +4,26 @@ import { View, Text, Pressable, Switch, Button } from 'react-native'
 import { A } from '@expo/html-elements'
 import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useStore } from 'zustand';
-
-
 
 
 function SettingsView( {styles, useStore} ) {
 
-  //logic to be figured out, this is just a placeholder for now
-  
-  const [showTimePicker, setShowTimePicker] = useState(false);
-  const [selectTime, setselectTime] = useState(new Date());
   const [showParentalControls, setShowParentalControls] = useState(false);
 
-  const timeLimitAmount = useStore((state) => state.timeLimitAmount)
-  const changeTimeLimitAmount = useStore((state) => state.changeTimeLimitAmount)
+  const sleepControlActive = useStore((state) => state.sleepControlActive);
+  const toggleSleepControlActive = useStore((state) => state.toggleSleepControlActive);
 
-  const timeLimitActive = useStore((state) => state.timeLimitActive)
-  const toggleTimeLimitActive = useStore((state) => state.toggleTimeLimitActive)
+  const sleepControlMorning = useStore((state) => state.sleepControlMorning);
+  const sleepControlNight = useStore((state) => state.sleepControlNight);
+  
+  const timeLimitAmount = useStore((state) => state.timeLimitAmount);
+  const changeTimeLimitAmount = useStore((state) => state.changeTimeLimitAmount);
+
+  const timeLimitActive = useStore((state) => state.timeLimitActive);
+  const toggleTimeLimitActive = useStore((state) => state.toggleTimeLimitActive);
+
+  const changeSleepControlMorning = useStore((state) => state.changeSleepControlMorning);
+  const changeSleepControlNight = useStore((state) => state.changeSleepControlNight);
 
   const  showParentals = () => {
     if (showParentalControls === true) {
@@ -31,41 +33,40 @@ function SettingsView( {styles, useStore} ) {
     }
   };
 
-  // const toggleSleep = () => {
-  //   if (sleepControlActive === true) {
-  //     setSleepControlActive(false)
-  //     console.log("sleep control off");
-  //   } else {
-  //     setSleepControlActive(true)
-  //     console.log("sleep control on");
-  //   }
-  // }
+  // Time Limit Settings
 
   const handleToggleTimeLimit = () => {
-    console.log("toggling!");
+    console.log("toggling time limit!");
     toggleTimeLimitActive();
   }
   
   
-    const handleTimeLimitChange = (e) => {
-      console.log("changing time Limit to: ", e);
-      changeTimeLimitAmount(e)
-      console.log("timeLimit changed to: ", timeLimitAmount);
-    }
-
-
-  const handleTimePicker = (event, selected) => {
-     console.log("event: ", event);
-     console.log("selected: ", selected);
+  const handleTimeLimitChange = (e) => {
+    console.log("changing time Limit to: ", e);
+    changeTimeLimitAmount(e)
+    console.log("timeLimit changed to: ", timeLimitAmount);
   }
 
-  useEffect(() => {
-    console.log("show time picker is: ", showTimePicker);
-  }, [showTimePicker])
 
-  useEffect(() => {
-    console.log("time Limit is: ", timeLimitAmount);
-  }, [timeLimitAmount])
+  const handleToggleSleepControlActive = () => {
+    console.log("toggling Sleep");
+    toggleSleepControlActive();
+  }
+  
+  // Sleep Mode Settings
+
+  const handleNightTime = (e, selectedDate) => {
+    const newNight = selectedDate
+     console.log("new night time", selectedDate);
+     changeSleepControlNight(newNight)
+  }
+
+  const handleMorningTime = (e, selectedDate) => {
+    const newMorning = selectedDate
+     console.log("new morning Time: ", newMorning);
+     changeSleepControlMorning(newMorning)
+  }
+
   return (
   <>
   {showParentalControls === false && (
@@ -107,22 +108,63 @@ function SettingsView( {styles, useStore} ) {
               scale: 1.8
             }],
           }}
-          // onValueChange={toggleSleep}
-          // value={sleepControlActive}
+          onValueChange={handleToggleSleepControlActive}
+          value={sleepControlActive}
           />
          </View>
         <Text style={styles.pText}>On sleep mode Torden and Sky will say goodnight and go to bed. No games will be playable and your child can see Torden and Sky asleep in their beds encouraging their own bedtime. </Text>
-        {/* {sleepControlActive && (
-          <Button title="Select Wake up time" onPress={() => setShowTimePicker(true)}/>
-          )}
-            {showTimePicker === true && (
-            <DateTimePicker
-            value={selectTime}
+
+        {sleepControlActive && (
+        <View style={{
+          display: "flex",
+          flexDirection: "row",
+          width: '70%',
+          justifyContent: "space-between",
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginTop: 25,
+        }}>
+
+
+        <View style={{
+          display: "flex",
+          alignItems: "center",
+        }}>
+          <Text style={styles.pText}>Select Wake Up Time</Text>
+
+          <DateTimePicker
+            style={{
+              marginTop: 10
+            }}
+            value={sleepControlMorning}
             mode="time"
+            minuteInterval={15}
             is24Hour={true}
-            display='default'
-            onChange={handleTimePicker}/>
-            )} */}
+            display='clock'
+            onChange={(event, selectedDate) => handleMorningTime(event, selectedDate)}/>
+        </View>
+
+
+        <View style={{
+          display: "flex",
+          alignItems: "center",
+        }}>
+          <Text style={styles.pText}>Select Bed Time</Text>
+
+            <DateTimePicker
+            style={{
+              marginTop: 10
+            }}
+            value={sleepControlNight}
+            mode="time"
+            minuteInterval={15}
+            is24Hour={true}
+            display='clock'
+            onChange={(event, selectedDate) => handleNightTime(event, selectedDate)}/>
+        </View>
+
+        </View>
+            )}
 
       
       </View>

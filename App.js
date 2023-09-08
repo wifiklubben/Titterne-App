@@ -20,10 +20,19 @@ import ConservatoryView from './ConservatoryView';
 
 // locally stored variables
 const useStore = create((set) => ({
+
   timeLimitActive: false,
   timeLimitAmount: 90,
   toggleTimeLimitActive: () => set((state) => ({ timeLimitActive: !state.timeLimitActive })),
   changeTimeLimitAmount: (e) => set({ timeLimitAmount: e }),
+
+  sleepControlActive: false,
+  toggleSleepControlActive: () => set((state) => ({sleepControlActive: !state.sleepControlActive})),
+  sleepControlMorning: new Date(1970, 1, 1, 9, 30),
+  changeSleepControlMorning: (e) => set({sleepControlMorning: e}),
+  sleepControlNight: new Date(1970, 1, 1, 20, 15),
+  changeSleepControlNight: (e) => set({sleepControlNight: e}),
+
 }));
 
 
@@ -55,6 +64,10 @@ export default () => {
     const timeLimitActiveValue = useStore((state) => state.timeLimitActive);
     const timeLimitAmountValue = useStore((state) => state.timeLimitAmount);
 
+    const sleepControlNight = useStore((state) => state.sleepControlNight);
+    const sleepControlMorning = useStore((state) => state.sleepControlMorning);
+    const sleepControlActive = useStore((state) => state.sleepControlActive);
+
 
 
 
@@ -71,38 +84,58 @@ export default () => {
 
  // Parental control 
 
+ let timeLimitFlag 
+ let bedTimeFlag
+
+
  useEffect(() => {
-  if (!timeLimitActiveValue) {
-    console.log("is it night time??", isNightTime);
-    setIsNightTime(false);
-  } 
-
+  //  Time Limit check
   const intervalId = setInterval(() => {
-  
-    const currentTime = new Date().getTime();
 
+    const currentTime = new Date().toISOString();
     const elapsedMilliseconds = currentTime - appOpenTime;
     const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000)
     const elapsedMinutes = Math.floor(elapsedMilliseconds/ (1000 * 60))
 
-
-
     setElapsedTime(elapsedMinutes);
 
-    if (elapsedMinutes >= timeLimitAmountValue) {
-
-      if (timeLimitActiveValue) {
-        setIsNightTime(true);
-      }
+    if (elapsedMinutes >= timeLimitAmountValue && timeLimitActiveValue) {
+      timeLimitFlag = true;
     } else {
-      setIsNightTime(false);
+      timeLimitFlag = false;
+    }
+
+
+    // bed time check
+    if (currentTime > sleepControlNight && sleepControlActive) {
+      bedTimeFlag = true;
+      console.log("current time: ", currentTime);
+      console.log("bedTime: ", sleepControlNight);
+    } else if (currentTime < sleepControlMorning && sleepControlActive) {
+      bedTimeFlag = true;
+      console.log("current time: ", currentTime);
+      console.log("morningTime", sleepControlMorning);
+    } else {
+      bedTimeFlag = false;
+      console.log("current time: ", currentTime);
+      console.log("morningTime", sleepControlMorning);
+      console.log("bedTime: ", sleepControlNight);
+      console.log("it's time to play");
+    }
+
+    // setNightMode
+    if (bedTimeFlag || timeLimitFlag ) {
+      setIsNightTime(true)
+    } else {
+      setIsNightTime(false)
     }
   }, 1000)
 
   return () => {
     clearInterval(intervalId);
   } 
-     }, [activeView])
+     }, [])
+
 
 
   // music
