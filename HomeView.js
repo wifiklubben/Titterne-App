@@ -64,7 +64,7 @@ export default function HomeView({ styles, isLoaded, children, setShowIntroAnima
             Animated.loop(
               Animated.timing(cloud1Anim, {
                 toValue: -500, 
-                duration: 15000, 
+                duration: 60000, 
                 useNativeDriver: true,
               }),
               {
@@ -75,7 +75,7 @@ export default function HomeView({ styles, isLoaded, children, setShowIntroAnima
             Animated.loop(
                 Animated.timing(cloud2Anim, {
                   toValue: -500,
-                  duration: 20000,
+                  duration: 40000,
                   useNativeDriver: true,
                 }),
                 {
