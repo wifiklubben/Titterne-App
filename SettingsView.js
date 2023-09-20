@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import { View, Text, Pressable, Switch, Button } from 'react-native'
 
+import moment from 'moment';
+
 import { A } from '@expo/html-elements'
 import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -58,7 +60,7 @@ function SettingsView( {styles, useStore} ) {
 
   const handleNightTime = (e, selectedDate) => {
     const newNight = selectedDate
-     console.log("new night time", selectedDate);
+    console.log("new night time", newNight);
      changeSleepControlNight(newNight)
   }
 
@@ -142,6 +144,7 @@ function SettingsView( {styles, useStore} ) {
             minuteInterval={15}
             is24Hour={true}
             display='clock'
+            timeZoneName={'Europe/Copenhagen'}
             onChange={(event, selectedDate) => handleMorningTime(event, selectedDate)}/>
         </View>
 
@@ -161,7 +164,7 @@ function SettingsView( {styles, useStore} ) {
             minuteInterval={15}
             is24Hour={true}
             display='clock'
-            onChange={(event, selectedDate) => handleNightTime(event, selectedDate)}/>
+            onChange={(event, selectedTime) => handleNightTime(event, selectedTime)}/>
         </View>
 
         </View>

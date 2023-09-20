@@ -6,6 +6,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { Asset }  from 'expo-asset';
 import { Audio } from 'expo-av';
 
+import moment from 'moment';
+
 import { create } from 'zustand';
 
 import HomeIcon from "./assets/graphics/homeIcon.svg";
@@ -29,9 +31,9 @@ const useStore = create((set) => ({
 
   sleepControlActive: false,
   toggleSleepControlActive: () => set((state) => ({sleepControlActive: !state.sleepControlActive})),
-  sleepControlMorning: new Date(1970, 1, 1, 9, 30),
+  sleepControlMorning: new Date(),
   changeSleepControlMorning: (e) => set({sleepControlMorning: e}),
-  sleepControlNight: new Date(1970, 1, 1, 20, 15),
+  sleepControlNight: new Date(),
   changeSleepControlNight: (e) => set({sleepControlNight: e}),
 
 }));
@@ -91,9 +93,10 @@ export default () => {
   //  Time Limit check
   const intervalId = setInterval(() => {
 
-    const currentTime = new Date().toISOString();
-    const currentTimeSimple = new Date().getTime();
-    const elapsedMilliseconds = currentTimeSimple - appOpenTime;
+ 
+    const currentTime = moment().format("x");
+    const currentTimeHuman = moment().format()
+    const elapsedMilliseconds = currentTime - appOpenTime;
     const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000)
     const elapsedMinutes = Math.floor(elapsedMilliseconds/ (1000 * 60))
 
@@ -102,9 +105,16 @@ export default () => {
     // console.log("elapsed seconds ", elapsedSeconds);
     // console.log("elapsed minutes ", elapsedMinutes);
     // console.log("time limit: ", timeLimitAmountValue);
-    console.log("time limit is:  ", timeLimitActiveValue);
+    // console.log("time limit is:  ", timeLimitActiveValue);
 
     // console.log("sleep control active: ", sleepControlActive);
+    console.log("current time: ", currentTimeHuman);
+    console.log("sleep time  : ", sleepControlNight);
+
+    
+
+
+
 
     if (elapsedMinutes >= timeLimitAmountValue && timeLimitActiveValue) {
       timeLimitFlag = true;
