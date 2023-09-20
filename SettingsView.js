@@ -9,7 +9,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 
-function SettingsView( {styles, useStore} ) {
+function SettingsView( {styles, useStore, timeLimitAmount, timeLimitActive, setTimeLimitActive, setTimeLimitAmount, elapsedTime} ) {
 
   const [showParentalControls, setShowParentalControls] = useState(false);
 
@@ -18,12 +18,7 @@ function SettingsView( {styles, useStore} ) {
 
   const sleepControlMorning = useStore((state) => state.sleepControlMorning);
   const sleepControlNight = useStore((state) => state.sleepControlNight);
-  
-  const timeLimitAmount = useStore((state) => state.timeLimitAmount);
-  const changeTimeLimitAmount = useStore((state) => state.changeTimeLimitAmount);
 
-  const timeLimitActive = useStore((state) => state.timeLimitActive);
-  const toggleTimeLimitActive = useStore((state) => state.toggleTimeLimitActive);
 
   const changeSleepControlMorning = useStore((state) => state.changeSleepControlMorning);
   const changeSleepControlNight = useStore((state) => state.changeSleepControlNight);
@@ -40,13 +35,19 @@ function SettingsView( {styles, useStore} ) {
 
   const handleToggleTimeLimit = () => {
     console.log("toggling time limit!");
-    toggleTimeLimitActive();
+    if (timeLimitActive) {
+      setTimeLimitActive(false);
+      console.log("set time limit true");
+    } else {
+      setTimeLimitActive(true)
+      console.log("set time limit false");
   }
+}
   
   
   const handleTimeLimitChange = (e) => {
     console.log("changing time Limit to: ", e);
-    changeTimeLimitAmount(e)
+    setTimeLimitAmount(e)
     console.log("timeLimit changed to: ", timeLimitAmount);
   }
 
@@ -194,7 +195,7 @@ function SettingsView( {styles, useStore} ) {
           value={timeLimitActive}/>
 
         </View>
-        <Text style={styles.pText}>Decide how long your child will be able to spend on the Titterne app during a day before sleep mode.</Text>
+        <Text style={styles.pText}>Decide how long your child will be able to spend on the Titterne app during this session. Current session time is {elapsedTime} minutes.</Text>
         {timeLimitActive &&(
           <View style={{
             display: 'flex',
@@ -211,7 +212,7 @@ function SettingsView( {styles, useStore} ) {
               value={timeLimitAmount}
               >
               </Slider>
-              <Text style={styles.pText}>Up to {timeLimitAmount} minutes per day</Text>
+              <Text style={styles.pText}>Up to {timeLimitAmount} in total.</Text>
           </View>
         )}
       </View>

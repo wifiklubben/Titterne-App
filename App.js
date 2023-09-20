@@ -24,10 +24,8 @@ import BathroomView from "./rooms/bathroom/BathroomView";
 // locally stored variables
 const useStore = create((set) => ({
 
-  timeLimitActive: false,
-  timeLimitAmount: 90,
-  toggleTimeLimitActive: () => set((state) => ({ timeLimitActive: !state.timeLimitActive })),
-  changeTimeLimitAmount: (e) => set({ timeLimitAmount: e }),
+  showTutorial: false,
+  //todo set to true once user has seen it
 
   sleepControlActive: false,
   toggleSleepControlActive: () => set((state) => ({sleepControlActive: !state.sleepControlActive})),
@@ -62,8 +60,8 @@ export default () => {
     
     const [appOpenTime, setAppOpenTime] = useState(new Date().getTime())
 
-    const timeLimitActiveValue = useStore((state) => state.timeLimitActive);
-    const timeLimitAmountValue = useStore((state) => state.timeLimitAmount);
+    const [timeLimitActive, setTimeLimitActive] = useState(false)
+    const [timeLimitAmount, setTimeLimitAmount] = useState(0);
 
     const sleepControlNight = useStore((state) => state.sleepControlNight);
     const sleepControlMorning = useStore((state) => state.sleepControlMorning);
@@ -108,21 +106,17 @@ export default () => {
     // console.log("time limit is:  ", timeLimitActiveValue);
 
     // console.log("sleep control active: ", sleepControlActive);
-    console.log("current time: ", currentTimeHuman);
-    console.log("sleep time  : ", sleepControlNight);
-
-    
+    // console.log("current time: ", currentTimeHuman);
+    // console.log("sleep time  : ", sleepControlNight);
 
 
 
-
-    if (elapsedMinutes >= timeLimitAmountValue && timeLimitActiveValue) {
+    if (elapsedMinutes >= timeLimitAmount && timeLimitActive) {
       timeLimitFlag = true;
       console.log("overtime!");
     } else {
       timeLimitFlag = false;
     }
-
 
     // bed time check
     if (currentTime > sleepControlNight && sleepControlActive) {
@@ -484,6 +478,11 @@ export default () => {
 <SettingsView 
 styles={styles} 
 useStore={ useStore }
+timeLimitActive = {timeLimitActive}
+setTimeLimitActive = {setTimeLimitActive}
+timeLimitAmount = {timeLimitAmount}
+setTimeLimitAmount = {setTimeLimitAmount}
+elapsedTime = {elapsedTime}
 />
 )}  
 
