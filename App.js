@@ -432,7 +432,7 @@ export default () => {
           />
           <Pressable onPress={() => handleViewChange(5)} style={styles.ConservatoryButton} />
 
-          <ImageBackground
+          {/* <ImageBackground
             source={require("./assets/Thorden.png")}
             style={{
               position: "absolute",
@@ -442,7 +442,7 @@ export default () => {
               top: fullHeight / 2 + 70,
             }}
           />
-          <Pressable onPress={() => handleViewChange(6)} style={styles.BathroomButton} />
+          <Pressable onPress={() => handleViewChange(6)} style={styles.BathroomButton} /> */}
         </HomeView>
       )}
 

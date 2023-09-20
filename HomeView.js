@@ -141,7 +141,7 @@ const animatedForeGround = {
   transform: [{
     scale: animatedScaleValue.interpolate({
       inputRange: [0 , 1],
-      outputRange: [0.92, 1],
+      outputRange: [0.65, 1],
     })
   }]
 }
@@ -244,9 +244,11 @@ const animatedWindow = {
 
                     <Image source = {require('./assets/forground.png')}
                         style ={{
-                            position: 'absolute',
-                            height: '100%',
-                            width: '100%',
+                          position: 'absolute',
+                          height: '120%',
+                          width: '120%',
+                          left: '-9.5%',
+                          top: '-15%',
                     }}/>
                   
             <View>{children}</View>                     
@@ -328,8 +330,10 @@ const animatedWindow = {
                   <Animated.Image source = {require('./assets/forground.png')}
                       style ={[{
                           position: 'absolute',
-                          height: '100%',
-                          width: '100%',
+                          height: '120%',
+                          width: '120%',
+                          left: '-9.5%',
+                          top: '-15%',
                   }, animatedForeGround]}/>
 
           </ImageBackground>       
