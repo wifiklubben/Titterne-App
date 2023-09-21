@@ -5,10 +5,6 @@ import { View, ImageBackground, Animated, Image } from 'react-native';
 
 export default function HomeView({ styles, isLoaded, children, setShowIntroAnimation, showIntroAnimation, useStore, isNightTime }) {
 
-
-
-
-
   const animatedScaleValue = useRef(new Animated.Value(0)).current;
   const animatedOpacityValue = useRef(new Animated.Value(0)).current;
   const animatedTitleInValue = useRef(new Animated.Value(0)).current;

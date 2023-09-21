@@ -8,11 +8,23 @@ import PlanterView from './PlanterView';
 
 
 function ConservatoryView( styles ) {
+  
+  const [plantGameOpen, setPlantGameOpen] = useState(false);
+  const handleGameOpen = () => {
+    console.log("handle game open")
 
+    if (plantGameOpen === false) {
+        setPlantGameOpen(true)
 
+    } else if (plantGameOpen === true) {
+      setPlantGameOpen(false)
+    }
+    console.log(plantGameOpen)
+}
 
   return (
     
+
     <ImageBackground
     source={require('./assets/Conservatory_inside.jpg')}
     style={{
@@ -20,8 +32,22 @@ function ConservatoryView( styles ) {
         height: '100%'
     }}>
 
-    <PlanterView></PlanterView>
-   
+
+  {!plantGameOpen && (<Pressable
+    onPress={() => handleGameOpen()}
+    style={{
+      position: 'absolute',
+      width: 50,
+      height: 50,
+      left: 100,
+      top: 100,
+      resizeMode: 'contain',
+    }}>
+      <Image source={require('./assets/graphics/plants/Plant4.png')}/>
+  </Pressable>)}
+
+  {plantGameOpen && (<PlanterView handleGameOpen={handleGameOpen}/>)}
+
 
     </ImageBackground>
   )

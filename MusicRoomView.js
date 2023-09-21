@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, ImageBackground, Animated, Image } from 'react-native'
 
-import { Audio } from 'expo-av';
+
 
 import OneShot from './OneShot';
 import Mixer from './Mixer';
