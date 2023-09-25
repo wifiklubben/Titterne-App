@@ -12,6 +12,7 @@ function PlanterView( props ) {
     const [sunSound, setSunSound] = useState()
     const [waterSound, setWaterSound] = useState()
     const [growSound, setGrowSound] = useState()
+    const [winSound, setWinSound] = useState()
 
     //* load music
     useEffect(() => {
@@ -21,7 +22,7 @@ function PlanterView( props ) {
             const { sound } = await Audio.Sound.createAsync( require('./assets/audio/sunSound.mp3'));
             setSunSound( sound );
           } catch (error) {
-            console.log("error in initial loadMusic of track 1", error);
+            console.log("error in initial loadSunSfx", error);
           }    
         }
 
@@ -30,7 +31,7 @@ function PlanterView( props ) {
             const { sound } = await Audio.Sound.createAsync( require('./assets/audio/waterDrop.mp3'));
             setWaterSound( sound );
           } catch (error) {
-            console.log("error in initial loadMusic of track 1", error);
+            console.log("error in initialloadWaterSfx", error);
           }    
         }
 
@@ -39,13 +40,23 @@ function PlanterView( props ) {
             const { sound } = await Audio.Sound.createAsync( require('./assets/audio/slideWhistle.mp3'));
             setGrowSound( sound );
           } catch (error) {
-            console.log("error in initial loadMusic of track 1", error);
+            console.log("error in initial loadGrowSfx", error);
           }    
+        }
+
+        async function loadWinSfx() {
+            try {
+                const { sound } = await Audio.Sound.createAsync( require('./assets/audio/yay.mp3'));
+                setWinSound( sound );
+            } catch (error) {
+                console.log("error in initial loadWinSfx" , error);
+            }
         }
 
         loadGrowSfx()
         loadSunSfx()
         loadWaterSfx()
+        loadWinSfx()
         }, [])
 
     //* play music
@@ -74,6 +85,14 @@ function PlanterView( props ) {
         }
     }
 
+    async function playWinSound() {
+        try {
+            winSound.replayAsync();
+        } catch (error) {
+            console.log("error in playWindSound: ", error);
+        }
+    }
+
 
         //* use water and sunlight to help plant grow
 
@@ -91,19 +110,27 @@ function PlanterView( props ) {
         }
 
     const plantGrowth = () => {
-        if (plantGrowthStage < 6) {
+        if (plantGrowthStage <= 5) {
+            console.log("not won yet!")
             setPlantGrowthStage(plantGrowthStage + 1)
             setTimerInterval(100)
             playGrowSound();
-        } else {
-            console.log("yay you won!");
-            setPlantGrowthStage(1)
-            setThisRound(0)
         }
     }
 
+
     useEffect(() => { 
         console.log("plant growth stage: ", plantGrowthStage);
+        if (plantGrowthStage === 6) {
+            console.log("win condition run");
+            setTimerInterval(5000)
+            playWinSound();
+            setThisRound(0)
+
+            setTimeout(() => {
+            setPlantGrowthStage(1);
+        }, 5000);
+        }
     }, [plantGrowthStage])
 
 
@@ -133,13 +160,11 @@ function PlanterView( props ) {
     
 
     useEffect(() => {
-        console.log("timer running");
 
         const intervalId = setInterval(() => {
 
         // randomly chooses either watering can or sun or nothing, can only choose one,
         let randNum = Math.floor(Math.random() * 3 +1)
-        console.log("random number: ", randNum);
         setThisRound(randNum)
 
         }, timerInterval)
@@ -154,20 +179,17 @@ function PlanterView( props ) {
         if (thisRound === 1) {
 
             playSunSound()
-            console.log("THE SUN");
             setTimerInterval(10000)
 
 
         } else if (thisRound === 2) {
 
-            console.log("THE WATER");
             playWaterSound()
             setTimerInterval(10000)
 
 
         } else if (thisRound === 3) {
 
-            console.log("Nothing to do!");
             setTimerInterval(2000)
         }
 
@@ -196,6 +218,10 @@ function PlanterView( props ) {
         left: 200,
         borderRadius: '25%',
     }}>
+
+        {plantGrowthStage === 6 && (
+             <Text style={[props.styles.h1Text, {zIndex: 100}]}>You did it!!</Text>
+        )}
 
         <Pressable onPress={() => props.handleGameOpen()}
             style={{

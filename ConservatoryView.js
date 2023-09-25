@@ -43,10 +43,10 @@ function ConservatoryView( styles ) {
       top: 100,
       resizeMode: 'contain',
     }}>
-      <Image source={require('./assets/graphics/plants/Plant4.png')}/>
+      <Image source={require('./assets/graphics/plants/Plant1.png')}/>
   </Pressable>)}
 
-  {plantGameOpen && (<PlanterView handleGameOpen={handleGameOpen}/>)}
+  {plantGameOpen && (<PlanterView handleGameOpen={handleGameOpen} styles={styles}/>)}
 
 
     </ImageBackground>
