@@ -5,6 +5,7 @@ import { View, ImageBackground, Animated, Image } from 'react-native'
 
 import OneShot from './OneShot';
 import Mixer from './Mixer';
+import Piano from './Piano';
 
 
 
@@ -24,7 +25,6 @@ const [ sfx2, setSfx2 ] = useState();
 const [ volume1, setVolume1 ] = useState(0.0);
 const [ volume2, setVolume2 ] = useState(0.0);
 const [ volume3, setVolume3 ] = useState(0.0);
-
 
 
 
@@ -287,7 +287,7 @@ const wiggleAnimation = () => {
         style={styles.fullWidthBackground}>
             
 
-         <Mixer 
+          <Mixer 
               styles={styles}    
               handleVolumeChange1={handleVolumeChange1}
               handleVolumeChange2={handleVolumeChange2}
@@ -301,6 +301,12 @@ const wiggleAnimation = () => {
               playMusic={playMusic}
               musicLoaded={musicLoaded}
               musicPlaying={musicPlaying}
+              />
+
+     
+          <Piano 
+              styles={styles}
+
               />
 
 

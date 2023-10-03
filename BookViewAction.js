@@ -21,11 +21,11 @@ function BookView(props) {
                     <ImageBackground source={require('./assets/BookOpen.png')}
                     style={{
                         position: 'absolute',
-                        width: '110%',
-                        height: '110%',
+                        width: '100%',
+                        height: '100%',
                         resizeMode: 'cover',
-                        bottom: 0,
-                        right: 10,
+                        right: 20,
+                        top: 20,
                     }}>
 
                     <Pressable onPress={() => props.handleBookClose()}
@@ -44,19 +44,6 @@ function BookView(props) {
                     }}
                     />
                     </Pressable>
-
-                    {props.currentStory.title != '' && (
-                    <Pressable onPress={() => props.handleStoryClose()}
-                    style={{
-                        position: 'absolute',
-                        right: 120,
-                        top: 500,
-                        zIndex: 100,
-                    }}>
-                        <Text style={props.styles.pText}
-                    >Choose a Different Story</Text>
-                    </Pressable>
-                    )}
 
                         {/* story not chosen aka CONTENTS PAGES */}
                         {props.currentStory.title === '' && (
@@ -112,7 +99,14 @@ function BookView(props) {
 
                         {props.currentStory.title != '' && (
                             <View style={{flex: 1}}>
+                                <PagerView 
+                                    initialPage={0}
+                                    onPageSelected={(event) => props.turnPage(event.nativeEvent.position)}
+                                    style={{flex: 1}}>
+
                                     {props.renderStoryContents()}
+
+                                    </PagerView>
                             </View>
                         )}
 
