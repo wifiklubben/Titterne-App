@@ -12,21 +12,21 @@ function BookView(props) {
   return (
 
 <View style={{
-                    width: '90%',
+                    width: '100%',
                     height: '90%',
                     position: 'absolute',
-                    left: '5%',
+                    left: 0,
                     top: '5%'
                 }}>
                     <ImageBackground source={require('./assets/BookOpen.png')}
                     style={{
                         position: 'absolute',
-                        width: '110%',
-                        height: '110%',
+                        width: '100%',
+                        height: '100%',
                         resizeMode: 'cover',
                         bottom: 0,
-                        right: 10,
                     }}>
+
 
                     <Pressable onPress={() => props.handleBookClose()}
                     style={{
@@ -44,6 +44,7 @@ function BookView(props) {
                     }}
                     />
                     </Pressable>
+
 
                     {props.currentStory.title != '' && (
                     <Pressable onPress={() => props.handleStoryClose()}
@@ -66,9 +67,9 @@ function BookView(props) {
 
                                 <View key="1" style={{
                                         justifyContent: 'center',
-                                        alignItems: 'center'
+                                        alignItems: 'center',
                                 }}>
-                                    <FlatList 
+                                    <FlatList
                                     numColumns={2}
                                     data={props.storyTitles}
                                         renderItem={({item}) => (
@@ -78,19 +79,18 @@ function BookView(props) {
                                                 
                                             style={{
                                                 width: '50%',
+                                 
                                             }}>
                                                 <View style={{
                                                     width: '100%',
-                                                    flexBasis: '40%',
-                                                    marginHorizontal: '5%',
-                                                    marginVertical: 5,
-                                                    justifyContent: 'space-around',
+                                                    marginHorizontal: '2%',
+                                                    marginVertical: 20,
                                                     alignItems: 'center',
                                                     }}>
                                                         <Image source = {item.thumbnail} style={{
-                                                        height: 150,
-                                                        width: 150,
-                                                        opacity: 0.8,
+                                                        height: 120,
+                                                        width: 120,
+                                             
                                                         }}/>
                                                     <Text style={props.styles.h2Text}>{item.title}</Text>
                                                 </View>
@@ -98,9 +98,9 @@ function BookView(props) {
                                             </Pressable>
                                         )}
                                     style={{
-                                        paddingVertical: '10%',
+                                        paddingTop: '5%',
                                         width: '100%',
-                                        height: '100%',
+                     
                                     }}
                                         keyExtractor={(item, index) => index.toString()}
                                         />
@@ -111,7 +111,9 @@ function BookView(props) {
                             {/* story IS CHOSEN, show story */}
 
                         {props.currentStory.title != '' && (
-                            <View style={{flex: 1}}>
+                            <View style={{
+                                flex: 1,
+                                width: '100%',}}>
                                     {props.renderStoryContents()}
                             </View>
                         )}

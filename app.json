@@ -18,10 +18,7 @@
     "ios": {
       "supportsTablet": true,
       "requireFullScreen": true,
-      "bundleIdentifier": "com.teatreedimitri.titterne",
-      "config": {
-        "usesNonExemptEncryption": false
-      }
+      "bundleIdentifier": "com.teatreedimitri.titterne"
     },
     "android": {
       "adaptiveIcon": {
@@ -45,6 +42,10 @@
       "eas": {
         "projectId": "e8fa652f-2c93-49c5-9355-4582bcdfeac7"
       }
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/e8fa652f-2c93-49c5-9355-4582bcdfeac7"
     }
   }
 }

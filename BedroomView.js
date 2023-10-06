@@ -27,69 +27,71 @@ const storyTitles = [
 
   {
       title: 'Hjælp Til Nattero',
-      tag: 'Natero',
+      tag: 'natero',
       thumbnail: require('./assets/StoryContents/Thumbnails/ChickenFightThumbnail.png'),
-      storyText: 'Her er en historie om en lille kylling',
       storyAudio:require('./assets/StoryContents/Speeches/Hjælp_til_nattero.mp3'),
-      storyPicture:  require('./assets/StoryContents/Pictures/ChickenFight9.png'),
   },
-
-
   {
-      title: 'Cinderella',
-      tag: 'cinderella',
+      title: 'Magisk Have',
+      tag: 'magiskHave',
       thumbnail: require('./assets/StoryContents/Thumbnails/CinderellaThumbnail.png'),
-      storyText: 'Her er en historie om en lille Cinderella',
-      storyAudio:require('./assets/StoryContents/Speeches/Hjælp_til_nattero.mp3'),
-      storyPicture:  require('./assets/StoryContents/Pictures/ChickenFight9.png'),
+      storyAudio:require('./assets/StoryContents/Speeches/Magisk_have_2.mp3'),
+  },
+  {
+      title: 'Natur',
+      tag: 'natur',
+      thumbnail: require('./assets/StoryContents/Thumbnails/RomeoJulietThumbnail.png'),
+      storyAudio:require('./assets/StoryContents/Speeches/Natur.mp3'),
+  },
+  {
+      title: 'Skattejagt',
+      tag: 'skattejagt',
+      thumbnail: require('./assets/StoryContents/Thumbnails/RomeoJulietThumbnail.png'),
+      storyAudio:require('./assets/StoryContents/Speeches/Skattejagt.mp3'),
+   
+  },
+  {
+      title: 'Tuba',
+      tag: 'tuba',
+      thumbnail: require('./assets/StoryContents/Thumbnails/RomeoJulietThumbnail.png'),
+      storyAudio:require('./assets/StoryContents/Speeches/Tuba_2.mp3'),
   },
 
-  {
-      title: 'Romeo & Juliet',
-      tag: 'romeoJuliet',
-      thumbnail: require('./assets/StoryContents/Thumbnails/RomeoJulietThumbnail.png'),
-      storyText: 'Her er en historie om en lille Romeo Juliet',
-      storyAudio:require('./assets/StoryContents/Speeches/Hjælp_til_nattero.mp3'),
-      storyPicture:  require('./assets/StoryContents/Pictures/ChickenFight9.png'),
-  }
 ];
 
     const [isBookOpen, setIsBookOpen] = useState(false);
-    const [currentSpeeches, setCurrentSpeeches] = useState([])
+    const [currentSpeeches, setCurrentSpeech] = useState()
     const [currentStory, setCurrentStory] = useState(
   {
       title: '',
       tag: '',
       thumbnail: '',
-      storyText: '',
       storyAudio: '',
-      storyPicture: '',
   }
 );
 
+console.log("currentStory: ", currentStory);
+
 const renderStoryContents = () => {
 
-          return(
-              <View
-           
-              style={{
-                  justifyContent: 'center',
-                  alignItems: 'center'
-              }}>
-                  <Image source={ currentStory.storyPicture } style={{
-                      width: '50%',
-                      height: '50%',
-                      marginBottom: 10
-                  }}/>
-                  <Text style={styles.pText}>{currentStory.storyText}</Text>
+    return(
+        <View
+        style={{
+          width: '100%',
+            top: 200,
+            justifyContent: 'center',
+            alignItems: 'center',
+        }}>
+          
+            <Text style={styles.pText}>{currentStory.title}</Text>
 
-              </View>
-                  );    
-                };
+        </View>
+    );    
+  };
         
+
+                
   // load speech sounds
-
-
   useEffect(() => {
       if (currentStory.storyAudio) {
         console.log("loading current story audio");
@@ -101,64 +103,76 @@ const renderStoryContents = () => {
 
 
   const loadSpeechSounds = async (storyAudio) => {
+
           try {
               const { sound } = await Audio.Sound.createAsync(storyAudio)
-              setCurrentSpeeches(sound)
+
+              setCurrentSpeech(sound)
           } catch (error) {
               console.log("error loading current story audio ", error);
       }
-
       console.log("current story loaded");
   };
 
+//  unload speech sounds on unmount
+
+useEffect(() =>{
+  if(currentSpeeches) {
+    return () => {
+      if (currentSpeeches) {
+        currentSpeeches.unloadAsync();
+      }
+    }
+  }
+}, [currentSpeeches])
+
+
+  // play Speech Sounds
+
   useEffect(() => {
-    async function playSpeech() {
-  
-            currentSpeeches.playAsync();
-  
-       
-    } playSpeech()
-  }, [currentSpeeches])
+    console.log("trying to play");
+    if(currentSpeeches) {
+      async function playSpeech() {
+        await currentSpeeches.playAsync();
+      } playSpeech()
+    }
+    }, [currentSpeeches])
 
 
 
+    // Close book modal
 
 async function  handleBookClose() {
-
+  currentSpeeches.stopAsync();
   setIsBookOpen(false),
   setCurrentStory({
         title: '',
         tag: '',
         thumbnail: '',
-        storyText: '',
         storyAudio: '',
-        storyPicture: '',
-    
   }),
-  setCurrentSpeeches('')
+  setCurrentSpeech('')
 };
 
+// Deselect story, back to contents page
+
 async function handleStoryClose() {
-
+console.log("story closing");
     // todo remove current story and make sure audio stops (unload the audio as audio persists and there are two playing when you choose a different story)
-
+  currentSpeeches.stopAsync();
         setCurrentStory({
             title: '',
             tag: '',
             thumbnail: '',
-            storyText: '',
             storyAudio: '',
-            storyPicture: '',
-        
       }),
-      setCurrentSpeeches('')
+      console.log("unloading sound");
     };
     
 
 
   //* sock game logic
   const [sockGameOpen, setSockGameOpen] = useState(false);
-  console.log(sockGameOpen);
 
   const handleGameOpen = () => {
     console.log("handling game open");
@@ -168,7 +182,6 @@ async function handleStoryClose() {
     } else if (sockGameOpen === true) {
       setSockGameOpen(false);
     }
-    console.log(sockGameOpen);
   };
 
   return (
