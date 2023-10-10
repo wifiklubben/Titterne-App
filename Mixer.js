@@ -14,7 +14,7 @@ function Mixer(props) {
 <Image source={require('./assets/mixer.png')}
     style={{
         position: 'absolute',
-        top: 140,
+        top: 40,
         left: 50,
         width: '40%',
         overflow: 'visible',
@@ -25,7 +25,7 @@ function Mixer(props) {
 
     <View style={{   
         position: 'absolute',
-        top: 280,
+        top: 180,
         left: 85,
     }}
         >
@@ -44,30 +44,22 @@ function Mixer(props) {
 
     <View style={props.styles.musicButtonContainer}>
 
-    <Multitrack styles={props.styles} volume={props.volume1} handleVolumeChange={props.handleVolumeChange1}
-    style={{
-        position: 'absolute',
-        left: 185,
-    }}>
+    <Multitrack styles={props.styles} volume={props.volume1} handleVolumeChange={props.handleVolumeChange1}/>
 
-        {/* { props.volume1 === 1 && <Text style={props.styles.h1Text}> Beck is playing! </Text>}
-        { props.volume1 !== 1 && <Text style={props.styles.h1Text}> Beck isn't playing!</Text>} */}
+    <Multitrack styles={props.styles} volume={props.volume2} handleVolumeChange={props.handleVolumeChange2}/>
 
-    </Multitrack>
+    <Multitrack styles={props.styles} volume={props.volume3} handleVolumeChange={props.handleVolumeChange3}/>
 
-    <Multitrack styles={props.styles} volume={props.volume2} handleVolumeChange={props.handleVolumeChange2}>
+    <Multitrack styles={props.styles} volume={props.volume4} handleVolumeChange={props.handleVolumeChange4}/>
 
-        {/* { props.volume2 === 1 && <Text style={props.styles.h1Text}> Tom Jobim is playing! </Text>}
-        { props.volume2 !== 1 && <Text style={props.styles.h1Text}> Tom Jobim isn't playing!</Text>} */}
-        
-    </Multitrack>
+    <Multitrack styles={props.styles} volume={props.volume5} handleVolumeChange={props.handleVolumeChange5}/>
 
-    <Multitrack styles={props.styles} volume={props.volume3} handleVolumeChange={props.handleVolumeChange3}>
+    <Multitrack styles={props.styles} volume={props.volume6} handleVolumeChange={props.handleVolumeChange6}/>
 
-        {/* { props.volume3 === 1 && <Text style={props.styles.h1Text}> Khruangbin is playing! </Text>}
-        { props.volume3 !== 1 && <Text style={props.styles.h1Text}> Khruangbin isn't playing!</Text>} */}
+    <Multitrack styles={props.styles} volume={props.volume7} handleVolumeChange={props.handleVolumeChange7}/>
 
-    </Multitrack>
+    <Multitrack styles={props.styles} volume={props.volume8} handleVolumeChange={props.handleVolumeChange8}/>
+
 
     </View>
 </>

@@ -70,8 +70,18 @@ export default () => {
 
 
 
-  // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(3);
+    // Room codes: 
+    // HouseView = 1, 
+    // MusicRoom = 2, 
+    // Bedroom = 3,
+    // Treehouse = 4,
+    // Conservatory = 5,
+    // Bathroom = 6, 
+    // Settings = 30,
+
+    // set page being viewed, default 1
+  const [activeView, setActiveView] = useState(2);
+
   const handleViewChange = (viewNumber) => {
     setActiveView(viewNumber);
   };
@@ -298,15 +308,15 @@ export default () => {
     musicButtonContainer: {
       transform: "90deg",
       position: "absolute",
-      top: 450,
-      left: 150,
+      top: 300,
+      left: 100,
       height: 100,
       flexDirection: "column",
       gap: 20,
     },
 
     musicSlider: {
-      width: 100,
+      width: 200,
       height: 40,
     },
 
