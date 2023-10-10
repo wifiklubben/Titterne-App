@@ -80,7 +80,7 @@ export default () => {
     // Settings = 30,
 
     // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(2);
+  const [activeView, setActiveView] = useState(3);
 
   const handleViewChange = (viewNumber) => {
     setActiveView(viewNumber);
@@ -280,6 +280,7 @@ export default () => {
       left: 0,
       height: '100%',
       width: '100%',
+      zIndex: 1,
     },
 
     animationContainer: {
@@ -303,6 +304,7 @@ export default () => {
       height: 100,
       flexDirection: "row",
       gap: 10,
+      zIndex: 100,
     },
 
     musicButtonContainer: {

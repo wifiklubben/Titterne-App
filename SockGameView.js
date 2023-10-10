@@ -210,8 +210,8 @@ function SockGameView( props ) {
             <Pressable onPress={() => [handleCardClick(item, sockId), playPopSound()]}
             style={{
                 opacity: isCardCleared ? 0 : 1,
-                marginVertical: 25,
-                marginHorizontal: 5,
+                marginVertical: 0,
+                marginHorizontal: 10,
             }}
             >
             <Image 
@@ -219,6 +219,7 @@ function SockGameView( props ) {
                 source = {image}
                 style={{
                     height: 120,
+                    width: 120,
                     resizeMode: 'contain',
                     opacity: 1,
                     shadowColor: 'white',
@@ -238,32 +239,43 @@ function SockGameView( props ) {
 
   return (
     <>
+    <ImageBackground 
+    source={ require('./assets/Bedroom/Carpet_sockgame.png')}
+    resizeMode="contain"
+    style={{
+        position: 'absolute',
+        padding: 20,
+        width: 850,
+        height: 850,
+        top: 0,
+        left: 150,
+    }}
+    >
     <View 
     justifyContent={'center'}
     alignItems={'center'}
     style={{
         position: 'absolute',
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
         padding: 20,
         width: 600,
         height: 600,
-        top: 40,
-        left: 450,
+        top: 110,
+        left: 110,
         borderRadius: '25%',
     }}>
 
     <Pressable onPress={() => props.handleGameOpen()}
                         style={{
                             position: 'absolute',
-                            right: 20,
-                            top: 20,
+                            right: 0,
+                            top: 0,
                             zIndex: 100,
                         }}
                         >
-                        <Image source={require('./assets/graphics/closeIcon.png')}
+                        <Image source={require('./assets/Global/closeIcon.png')}
                             style={{
-                                width: 80,
-                                height: 80,
+                                width: 100,
+                                height: 100,
                                 resizeMode: 'contain',
                             }}
                         />  
@@ -279,6 +291,7 @@ function SockGameView( props ) {
             style = {{
                 width: '100%',
                 height: "100%",
+
             }}>
         </FlatList>}
 
@@ -288,6 +301,7 @@ function SockGameView( props ) {
   
 
     </View>
+    </ImageBackground>
 
     {/* show different Thorden when half way! */}
 
@@ -296,7 +310,9 @@ function SockGameView( props ) {
         )}
         style={{
             position: 'absolute',
-            top: 150
+            resizeMode: 'contain',
+            height: '30%',
+            bottom: 0
         }}>
 
     </Animated.Image>}
@@ -306,7 +322,9 @@ function SockGameView( props ) {
         )}
         style={{
             position: 'absolute',
-            top: 150
+            resizeMode: 'contain',
+            height: '30%',
+            bottom: 0
         }}>
 
     </Animated.Image>}
@@ -316,7 +334,9 @@ function SockGameView( props ) {
         )}
         style={{
             position: 'absolute',
-            top: 150
+            resizeMode: 'contain',
+            height: '30%',
+            bottom: 0
         }}>
 
     </Animated.Image>}
