@@ -13,10 +13,11 @@ function BookView(props) {
 
 <View style={{
                     width: '100%',
-                    height: '90%',
+                    height: '100%',
                     position: 'absolute',
                     left: 0,
-                    top: '5%'
+                    top: 0,
+                    zIndex: '10',
                 }}>
                     <ImageBackground source={require('./assets/BookOpen.png')}
                     style={{
@@ -24,7 +25,6 @@ function BookView(props) {
                         width: '100%',
                         height: '100%',
                         resizeMode: 'cover',
-                        bottom: 0,
                     }}>
 
 
@@ -36,7 +36,7 @@ function BookView(props) {
                         zIndex: 100,
                     }}
                     >
-                    <Image source={require('./assets/graphics/closeIcon.png')}
+                    <Image source={require('./assets/Global/closeIcon.png')}
                     style={{
                         width: 80,
                         height: 80,
@@ -111,11 +111,18 @@ function BookView(props) {
                             {/* story IS CHOSEN, show story */}
 
                         {props.currentStory.title != '' && (
+                            <ImageBackground source={require('./assets/Bedroom/bedroomBGLightsOut.png')}
+                            style={{
+                                width:'100%',
+                                height: '100%',
+                            }}>
                             <View style={{
                                 flex: 1,
-                                width: '100%',}}>
+                                width: '100%',
+                                height: '100%'}}>
                                     {props.renderStoryContents()}
                             </View>
+                            </ImageBackground>
                         )}
 
                 </ImageBackground>

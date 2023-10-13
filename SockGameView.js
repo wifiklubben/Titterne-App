@@ -238,7 +238,7 @@ function SockGameView( props ) {
         );
 
   return (
-    <>
+    <View style={{zIndex: 10}}>
     <ImageBackground 
     source={ require('./assets/Bedroom/Carpet_sockgame.png')}
     resizeMode="contain"
@@ -340,7 +340,7 @@ function SockGameView( props ) {
         }}>
 
     </Animated.Image>}
-    </>
+    </View>
   )
 
   }

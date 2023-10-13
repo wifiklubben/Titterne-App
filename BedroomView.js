@@ -143,7 +143,9 @@ useEffect(() =>{
     // Close book modal
 
 async function  handleBookClose() {
-  currentSpeeches.stopAsync();
+  if(currentSpeeches) {
+    currentSpeeches.stopAsync();
+  }
   setIsBookOpen(false),
   setCurrentStory({
         title: '',
@@ -190,7 +192,7 @@ console.log("story closing");
 
   return (
     // <ImageBackground source={require("./assets/Bedroom/Titterne_bedroom_placement.png")} style={styles.fullWidthBackground}>
-      <ImageBackground source={require("./assets/Bedroom/bedroomBG.png")} style={styles.fullWidthBackground}>
+     <ImageBackground source={require("./assets/Bedroom/bedroomBG.png")} style={styles.fullWidthBackground}>
 
     
     {/* bed frame graphics */}
@@ -216,6 +218,88 @@ console.log("story closing");
       zIndex: 4,
     }}/>
 
+
+    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/dragonNotanimated.png')}
+    style={{
+      position: 'absolute',
+      height: 250,
+      width: 200,
+      top: 440,
+      left: 40,
+      zIndex: 4,
+    }}/>
+
+    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/dollNotanimated.png')}
+    style={{
+      position: 'absolute',
+      height: 170,
+      width: 140,
+      top: 455,
+      left: 260,
+      zIndex: 4,
+    }}/>
+
+    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/carNotanimated.png')}
+    style={{
+      position: 'absolute',
+      height: 120,
+      width: 240,
+      top: 620,
+      left: 200,
+      zIndex: 4,
+      overflow: 'visible',
+    }}/>
+
+    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/planeNotanimated.png')}
+    style={{
+      position: 'absolute',
+      height: 150,
+      width: 160,
+      top: 570,
+      left: 640,
+      zIndex: 4,
+
+    }}/>
+
+    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/SkyNotanimated.png')}
+    style={{
+      position: 'absolute',
+      height: 280,
+      width: 300,
+      top: 210,
+      left: 50,
+      zIndex: 2,
+    }}/>
+
+    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/TordenNotanimated.png')}
+    style={{
+      position: 'absolute',
+      height: 290,
+      width: 300,
+      top: 190,
+      left: 730,
+      zIndex: 2,
+    }}/>
+
+    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/Curtain1Notanimated.png')}
+    style={{
+      position: 'absolute',
+      height: 260,
+      width: 240,
+      top: 0,
+      left: 110,
+      zIndex: 1,
+    }}/>
+
+    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/Curtain2Notanimated.png')}
+    style={{
+      position: 'absolute',
+      height: 260,
+      width: 250,
+      top: 0,
+      left: 700,
+      zIndex: 1,
+    }}/>
     
     
     {/* Sock buttons */}
@@ -233,6 +317,7 @@ console.log("story closing");
             top: 690,
             left: 65,
             zIndex: 4,
+
             transform: [{scaleX: -1
             }]
           }}
@@ -368,19 +453,17 @@ console.log("story closing");
       <Pressable onPress={() => setIsBookOpen(true)}
       style={{
         position: 'absolute',
-        resizeMode: "contain",
         height: 220,
-        left: 200,
+        width: 220,
+        left: 420,
         top: 450,
         zIndex: 5,
       }}>
           <Image source={require('./assets/Bedroom/books.png')}
           style={{
-              position: 'absolute',
               resizeMode: "contain",
               height: 220,
-              left: 200,
-              top: 450,
+              width: 220,
               zIndex: 5,
           }}
           />
