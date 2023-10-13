@@ -11,21 +11,21 @@ function BookView(props) {
 
   return (
 
-<View style={{
+        <View style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            zIndex: '10',
+            }}>
+                <ImageBackground source={require('./assets/Bedroom/bigBook.png')}
+                style={{
+                    position: 'absolute',
                     width: '100%',
                     height: '100%',
-                    position: 'absolute',
-                    left: 0,
-                    top: 0,
-                    zIndex: '10',
+                    resizeMode: 'cover',
                 }}>
-                    <ImageBackground source={require('./assets/BookOpen.png')}
-                    style={{
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        resizeMode: 'cover',
-                    }}>
 
 
                     <Pressable onPress={() => props.handleBookClose()}
@@ -36,13 +36,14 @@ function BookView(props) {
                         zIndex: 100,
                     }}
                     >
-                    <Image source={require('./assets/Global/closeIcon.png')}
-                    style={{
-                        width: 80,
-                        height: 80,
-                        resizeMode: 'contain',
-                    }}
-                    />
+
+                        <Image source={require('./assets/Global/closeIcon.png')}
+                        style={{
+                            width: 80,
+                            height: 80,
+                            resizeMode: 'contain',
+                        }}
+                        />
                     </Pressable>
 
 
@@ -55,7 +56,8 @@ function BookView(props) {
                         zIndex: 100,
                     }}>
                         <Text style={props.styles.pText}
-                    >Choose a Different Story</Text>
+                        >Choose a Different Story
+                        </Text>
                     </Pressable>
                     )}
 

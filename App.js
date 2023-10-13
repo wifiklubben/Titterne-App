@@ -80,7 +80,7 @@ export default () => {
     // Settings = 30,
 
     // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(3);
+  const [activeView, setActiveView] = useState(2);
 
   const handleViewChange = (viewNumber) => {
     setActiveView(viewNumber);
@@ -308,17 +308,17 @@ export default () => {
     },
 
     musicButtonContainer: {
-      transform: "90deg",
+      transform: [{rotate: '270deg'}],
       position: "absolute",
-      top: 300,
-      left: 100,
-      height: 100,
+      top: 10,
+      right: 500,
       flexDirection: "column",
-      gap: 20,
+      gap: 35,
+      backgroundColor: 'black',
     },
 
     musicSlider: {
-      width: 200,
+      width: 150,
       height: 40,
     },
 

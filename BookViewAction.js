@@ -18,7 +18,7 @@ function BookView(props) {
                     left: '5%',
                     top: '5%'
                 }}>
-                    <ImageBackground source={require('./assets/BookOpen.png')}
+                    <ImageBackground source={require('./assets/Bedroom/bigBook.png')}
                     style={{
                         position: 'absolute',
                         width: '100%',
