@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, ImageBackground, Image, FlatList, Pressable, Animated, Text } from "react-native";
 
+import LottieView from "lottie-react-native";
 import { Audio } from "expo-av";
 
 import SockGameView from "./SockGameView";

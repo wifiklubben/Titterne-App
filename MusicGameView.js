@@ -26,6 +26,8 @@ export default function MusicGameView(props) {
     const [ track7, setTrack7 ] = useState();
     const [ track8, setTrack8 ] = useState();
 
+    
+
     const [ volume1, setVolume1 ] = useState(0.0);
     const [ volume2, setVolume2 ] = useState(0.0);
     const [ volume3, setVolume3 ] = useState(0.0);
@@ -34,6 +36,8 @@ export default function MusicGameView(props) {
     const [ volume6, setVolume6 ] = useState(0.0);
     const [ volume7, setVolume7 ] = useState(0.0);
     const [ volume8, setVolume8 ] = useState(0.0);
+
+    const [soundSet, setSoundSet ] = useState('Piano');
 
 
     //loading music
@@ -431,6 +435,12 @@ useEffect(() =>{
   setVolume8(newVolume);
   }
 
+  const changeSoundSet = (newSoundSet) => {
+    setSoundSet(newSoundSet)
+
+    console.log("just set new SoundSet to: ", newSoundSet);
+  }
+
 
 
   return (
@@ -444,7 +454,62 @@ useEffect(() =>{
         zIndex: 2,
     }}>
 
-        <Piano />
+      <Pressable onPress={() => changeSoundSet('Piano')}
+      style={{
+        position: 'absolute',
+        right: 40,
+        top: 100,
+        height: 120,
+        width: 120,
+
+      }}>
+        <Image source={require('./assets/graphics/socks/sockPink.png')}
+        style={{
+          height: '100%',
+          width: '100%',
+        }}/>
+      </Pressable>
+
+      <Pressable onPress={() => changeSoundSet('Farts')}
+      style={{
+        position: 'absolute',
+        right: 40,
+        top: 200,
+        height: 120,
+        width: 120,
+
+      }}>
+        <Image source={require('./assets/graphics/socks/sockGreen.png')}
+        style={{
+          height: '100%',
+          width: '100%',
+        }}/>
+      </Pressable>
+
+
+
+                          <Pressable onPress={() => props.handleMusicGameOpen()}
+                    style={{
+                        position: 'absolute',
+                        right: 20,
+                        top: 20,
+                        zIndex: 100,
+                    }}
+                    >
+
+                        <Image source={require('./assets/Global/closeIcon.png')}
+                        style={{
+                            width: 80,
+                            height: 80,
+                            resizeMode: 'contain',
+                        }}
+                        />
+                    </Pressable>
+
+        <Piano 
+        soundSet={soundSet}
+        setSoundSet={setSoundSet}
+        />
 
         <View style={{   
             position: 'absolute',

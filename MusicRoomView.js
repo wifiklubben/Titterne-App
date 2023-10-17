@@ -14,7 +14,11 @@ export default function MusicRoomView({ styles }) {
 const [ sfx1, setSfx1 ] = useState();
 const [ sfx2, setSfx2 ] = useState();
 
+
+
 const [isMusicGameOpen, setIsMusicGameOpen] = useState(false);
+
+const [isPlayignRightNow, setIsPlayingRightNow] = useState(null);
 
 
 const handleMusicGameOpen = () => {
@@ -23,7 +27,7 @@ const handleMusicGameOpen = () => {
   if (isMusicGameOpen === false) {
     setIsMusicGameOpen(true);
   } else if (isMusicGameOpen === true) {
-    setSockGameOpen(false);
+    setIsMusicGameOpen(false);
   }
 };
 
@@ -38,6 +42,7 @@ useEffect(() =>{
       console.log("error in initial loadMusic of sfx1: ", error);
     }
   }
+
   async function loadSfx2() {
     try {
       const { sound } = await Audio.Sound.createAsync( require('./assets/audio/Airhorn.mp3'));
@@ -97,7 +102,8 @@ const wiggleAnimation = () => {
 
     {isMusicGameOpen && (
       <MusicGameView 
-      styles={styles}    
+      styles={styles}  
+      handleMusicGameOpen={handleMusicGameOpen}  
       />
       )}
 
