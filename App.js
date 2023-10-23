@@ -80,7 +80,7 @@ export default () => {
     // Settings = 30,
 
     // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(2);
+  const [activeView, setActiveView] = useState(3);
 
   const handleViewChange = (viewNumber) => {
     setActiveView(viewNumber);
@@ -159,6 +159,7 @@ export default () => {
 
   const [birdsAmbientSound, setBirdsAmbientSound] = useState();
   const [treesAmbientSound, setTreesAmbientSound] = useState();
+  const [musicRoomAmbient, setMusicRoomAmbientSound] = useState();
 
   SplashScreen.preventAutoHideAsync();
 
@@ -191,39 +192,68 @@ export default () => {
       }
     }
 
+    async function loadMusicRoomAmbientSound() {
+      try {
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/MusicRoomLoop.mp3"));
+        sound.setVolumeAsync(0.5);
+        sound.setIsLoopingAsync(true);
+        setMusicRoomAmbientSound(sound);
+      } catch (error) {
+        console.log("error loading music room ambient sound: ", error);
+      }
+    }
+
     loadTreesAmbientSound();
     loadBirdsAmbientSound();
+    loadMusicRoomAmbientSound();
   }, []);
 
   // background music/sounds per room view
   useEffect(() => {
+
+console.log("activeView: ", activeView);
+
+console.log("musicRoomAmbient", musicRoomAmbient );
+
     if (activeView === 1 && birdsAmbientSound) {
       if (treesAmbientSound) {
         treesAmbientSound.stopAsync();
       }
+
+      if (musicRoomAmbient) {
+        musicRoomAmbient.stopAsync();
+      }
+      
       birdsAmbientSound.playAsync();
-    } else if (activeView === 2) {
+      
+    } else if (activeView === 2 && musicRoomAmbient) {
+
+      console.log("musicRoomAmbient playing");
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
+
+      musicRoomAmbient.playAsync()
+      
     } else if (activeView === 3) {
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
-      }
-    } else if (activeView === 6) {
-      if (birdsAmbientSound) {
-        birdsAmbientSound.stopAsync();
-      }
-    }
+        } 
 
-    if (activeView === 4 && treesAmbientSound) {
+    } else if (activeView === 4 && treesAmbientSound) {
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
 
       treesAmbientSound.playAsync();
+
+    } else if (activeView === 6) {
+      if (birdsAmbientSound) {
+        birdsAmbientSound.stopAsync();
+      }
+
     }
-  }, [activeView, birdsAmbientSound, treesAmbientSound]);
+  }, [activeView]);
 
   //splashscreen for hiding loading assets
 

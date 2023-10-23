@@ -1,29 +1,37 @@
-import React, { useEffect, useState } from "react";
-import { View, ImageBackground, Image, FlatList, Pressable, Animated, Text } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { View, ImageBackground, Image, TouchableWithoutFeedback, Pressable, Animated, Text } from "react-native";
 
-import LottieView from "lottie-react-native";
 import { Audio } from "expo-av";
 
 import SockGameView from "./SockGameView";
 import BookView from "./BookView";
 
-
+import SpriteSheet from 'rn-sprite-sheet';
 
 
 export default function BedroomView({ styles }) {
 
 
-    
+
+
+  // sprite animations
+
+  // thordenWave 
+
+const  wave = () => {
+  console.log("thorden animation triggered");
+  this.thorden.play({
+    type: "waveSleep",
+    fps: 12,
+    loops: false,
+    resetAfterFinish: true,
+  })
+}
+
 
 // * story book logic
 
-//  todo switch media to new files
-
-//  todo reduce functionality in book to single image/animation read through
-
 //  todo add play pause button
-
-
 
 const storyTitles = [
 
@@ -204,6 +212,9 @@ console.log("story closing");
         height: '100%',
         width: '100%',
         zIndex: 3,
+        borderWidth: 1,
+        borderColor: 'green',
+        pointerEvents: 'none',
       }}/>
       )}
 
@@ -272,7 +283,39 @@ console.log("story closing");
       zIndex: 2,
     }}/>
 
-    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/TordenNotanimated.png')}
+
+    <View style={{
+        position: 'absolute',
+        height: 290,
+        width: 300,
+        top: 240,
+        left: 730,
+        }}>
+          <SpriteSheet 
+            ref={ref => (this.thorden = ref)}
+            source={require('./assets/graphics/spritesheets/TordenWaveAnimSpritesheet.png')}
+            columns={11}
+            rows={4}
+            width={300}
+            frameWidth={745}
+            animations={{
+              waveSleep: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44],
+              idle: [0, 1],
+            }}
+            onLoad={() => console.log('SpriteSheet loaded')}
+            />
+        <Pressable onPress={() => wave()} style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+          zIndex: 10,
+          }}>
+        </Pressable>
+      </View>
+
+    {/* <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/TordenNotanimated.png')}
     style={{
       position: 'absolute',
       height: 290,
@@ -280,7 +323,7 @@ console.log("story closing");
       top: 190,
       left: 730,
       zIndex: 2,
-    }}/>
+    }}/> */}
 
     <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/Curtain1Notanimated.png')}
     style={{

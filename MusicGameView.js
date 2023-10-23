@@ -518,7 +518,7 @@ useEffect(() =>{
         }}>
 
             <Pressable onPress={playMusic} style={{
-                backgroundColor: 'chartreuse',
+                backgroundColor: 'gold',
             }}> 
 
 
