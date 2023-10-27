@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, ImageBackground, Image, TouchableWithoutFeedback, Pressable, Animated, Text } from "react-native";
+import { View, ImageBackground, Image, Pressable, Animated, Text } from "react-native";
 
 import { Audio } from "expo-av";
 
@@ -11,10 +11,134 @@ import SpriteSheet from 'rn-sprite-sheet';
 
 export default function BedroomView({ styles }) {
 
+  const [waveSfx, setWaveSfx] = useState()
+  const [robotSfx, setRobotSfx] = useState()
+  const [dinoSfx, setDinoSfx] = useState()
+  const [carSfx, setCarSfx] = useState()
+  const [planeSfx, setPlaneSfx] = useState()
+
+
+// sprite sfx
+
+// set all sfx
+
+useEffect(() => {
+
+
+  async function loadWaveSound() {
+    try {
+      const {sound} = await Audio.Sound.createAsync(require('./assets/audio/sfx/hello.mp3'));
+      setWaveSfx( sound );
+    } catch (error) {
+      console.log("error loading wave sfx");
+    }
+  }
+
+  async function loadRobotSound() {
+    try {
+      const {sound} = await Audio.Sound.createAsync(require('./assets/audio/sfx/Robot.mp3'));
+      setRobotSfx( sound );
+    } catch (error) {
+      console.log("error loading robot sfx");
+    }
+  }
+
+  async function loadDinoSound() {
+    try {
+      const {sound} = await Audio.Sound.createAsync(require('./assets/audio/sfx/Dino.mp3'));
+      setDinoSfx( sound );
+    } catch (error) {
+      console.log("error loading dino sfx");
+    }
+  }
+
+  async function loadCarSound() {
+    try {
+      const {sound} = await Audio.Sound.createAsync(require('./assets/audio/sfx/Bil.mp3'));
+      setCarSfx( sound );
+    } catch (error) {
+      console.log("error loading car sfx");
+    }
+  }
+  async function loadPlaneSound() {
+    try {
+      const {sound} = await Audio.Sound.createAsync(require('./assets/audio/sfx/Plane.mp3'));
+      setPlaneSfx( sound );
+    } catch (error) {
+      console.log("error loading plane sfx");
+    }
+  }
+
+  loadWaveSound()
+  loadRobotSound()
+  loadDinoSound()
+  loadCarSound()
+  loadPlaneSound()
+
+
+}, [])
+
+
+// play sfx
+  async function playWaveSound() {
+    try {
+      if (waveSfx) 
+      {
+        waveSfx.replayAsync();
+      } 
+    } catch (error) {
+      console.log("error playing wave sound", error);
+    }
+  }
+
+  async function playRobotSound() {
+    try {
+      if (robotSfx) 
+      {
+        robotSfx.replayAsync();
+      } 
+    } catch (error) {
+      console.log("error playing robot sound", error);
+    }
+  }
+
+  async function playDinoSound() {
+    try {
+      if (dinoSfx) 
+      {
+        dinoSfx.replayAsync();
+      } 
+    } catch (error) {
+      console.log("error playing dino sound", error);
+    }
+  }
+
+  async function playCarSound() {
+    try {
+      if (carSfx) 
+      {
+        carSfx.replayAsync();
+      } 
+    } catch (error) {
+      console.log("error playing car sound", error);
+    }
+  }
+
+  async function playPlaneSound() {
+    try {
+      if (planeSfx) 
+      {
+        planeSfx.replayAsync();
+      } 
+    } catch (error) {
+      console.log("error playing plane sound", error);
+    }
+  }
 
 
 
-  // sprite animations
+
+  // sprite animation and sound
 
   // thordenWave 
 
@@ -25,7 +149,33 @@ const  wave = () => {
     fps: 24,
     loops: false,
     resetAfterFinish: true,
+    
   })
+    playWaveSound()
+}
+
+const car = () => {
+  console.log("car animation triggered");
+  // animation object
+  playCarSound();
+}
+
+const dino = () => {
+  console.log("dino animation triggered");
+  //animation object
+  playDinoSound();
+}
+
+const robot = () => {
+  console.log("robot animation triggered");
+  // animation object
+  playRobotSound();
+}
+
+const plane = () => {
+  console.log("plane animation triggered");
+  // animation object goes here
+  playPlaneSound();
 }
 
 
@@ -220,26 +370,38 @@ console.log("story closing");
 
     {/* bedroom toys */}
 
-    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/RobotNotanimated.png')}
-    style={{
+<Pressable onPress={() => robot()} style={{
       position: 'absolute',
       height: 250,
       width: 200,
       top: 510,
       left: 800,
       zIndex: 4,
-    }}/>
-
-
-    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/dragonNotanimated.png')}
+    }}>
+    <Image source={require('./assets/Bedroom/BedroomGraphics/RobotNotanimated.png')}
     style={{
+      height: 250,
+      width: 200,
+      zIndex: 4,
+    }}/>
+    </Pressable>
+
+
+<Pressable onPress={() => dino()} style={{
       position: 'absolute',
       height: 250,
       width: 200,
       top: 440,
       left: 40,
       zIndex: 4,
+    }}>
+    <Image source={require('./assets/Bedroom/BedroomGraphics/dragonNotanimated.png')}
+    style={{
+      height: 250,
+      width: 200,
+      zIndex: 4,
     }}/>
+    </Pressable>
 
     <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/dollNotanimated.png')}
     style={{
@@ -251,8 +413,7 @@ console.log("story closing");
       zIndex: 4,
     }}/>
 
-    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/carNotanimated.png')}
-    style={{
+<Pressable onPress={() => car()} style={{
       position: 'absolute',
       height: 120,
       width: 240,
@@ -260,18 +421,32 @@ console.log("story closing");
       left: 200,
       zIndex: 4,
       overflow: 'visible',
-    }}/>
-
-    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/planeNotanimated.png')}
+    }}>
+    <Image source={require('./assets/Bedroom/BedroomGraphics/carNotanimated.png')}
     style={{
+      height: 120,
+      width: 240,
+      zIndex: 4,
+      overflow: 'visible',
+    }}/>
+        </Pressable>
+
+<Pressable onPress={() => plane()} style={{
       position: 'absolute',
       height: 150,
       width: 160,
       top: 570,
       left: 640,
       zIndex: 4,
-
+}}>
+    <Image source={require('./assets/Bedroom/BedroomGraphics/planeNotanimated.png')}
+    style={{
+      height: 150,
+      width: 160,
+      zIndex: 4,
     }}/>
+    </Pressable>
+
 
     <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/SkyNotanimated.png')}
     style={{
@@ -319,15 +494,6 @@ console.log("story closing");
         </Pressable>
       </View>
 
-    {/* <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/TordenNotanimated.png')}
-    style={{
-      position: 'absolute',
-      height: 290,
-      width: 300,
-      top: 190,
-      left: 730,
-      zIndex: 2,
-    }}/> */}
 
     <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/Curtain1Notanimated.png')}
     style={{
