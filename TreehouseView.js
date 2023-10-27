@@ -309,7 +309,7 @@ const handleGameOpen = () => {
    
   return (
     <>
-        <ImageBackground source={require('./assets/TreeHouse_inside.png')}
+        <ImageBackground source={require('./assets/TreeHouse/TreeHousePlacement.png')}
                 style={styles.fullWidthBackground}>
 
     
@@ -321,10 +321,11 @@ const handleGameOpen = () => {
         top: 175,
         left: 150,
     }}>
-    <Image source={require('./assets/SkyDancing.png')}
+    <Image source={require('./assets/TreeHouse/skyPlacholderforanim.png')}
     style={{
         width: 250,
-        height: 400,
+        height: 380,
+        left: -40,
     }}/>
 
     </Pressable>}

@@ -358,6 +358,7 @@ console.log("story closing");
 
     {sockGameOpen === false && (
 
+      
       <Image source={require('./assets/Bedroom/bedEndOverlay.png')} style={{
         height: '100%',
         width: '100%',
@@ -440,58 +441,59 @@ console.log("story closing");
       zIndex: 4,
 }}>
     <Image source={require('./assets/Bedroom/BedroomGraphics/planeNotanimated.png')}
-    style={{
-      height: 150,
-      width: 160,
-      zIndex: 4,
-    }}/>
+      style={{
+        height: 150,
+        width: 160,
+        zIndex: 4,
+      }}/>
     </Pressable>
 
 
     <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/SkyNotanimated.png')}
-    style={{
-      position: 'absolute',
-      height: 280,
-      width: 300,
-      top: 210,
-      left: 50,
-      zIndex: 2,
-    }}/>
+      style={{
+        position: 'absolute',
+        height: 280,
+        width: 300,
+        top: 210,
+        left: 50,
+        zIndex: 2,
+      }}/>
 
 
     <View style={{
-        position: 'absolute',
-        height: 540,
-        width: 300,
-        top: 240,
-        left: 730,
+      position: 'absolute',
+      height: 200,
+      width: 330,
+      top: 240,
+      left: 730,
+      flex: 1,
+      alignItems: 'flex-end',
+      }}>
 
-        }}>
-          <SpriteSheet 
-            ref={ref => (this.thorden = ref)}
-            source={require('./assets/graphics/spritesheets/ThordenBed.png')}
-            style={{
-              position: 'absolute',
-              left: 100,
-            }}
-            columns={9}
-            rows={7}
-            width={300}
-            frameWidth={733}
-            animations={{
-              waveSleep: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62],
-              idle: [0],
-            }}
-            onLoad={() => console.log('SpriteSheet loaded')}
-            />
-        <Pressable onPress={() => wave()} style={{
-            position: 'absolute',
-            top: '10%',
-            height: '50%',
-            left: '25%',
-            width: '30%',
-            }}>
-        </Pressable>
+      <SpriteSheet 
+        ref={ref => (this.thorden = ref)}
+        source={require('./assets/graphics/spritesheets/ThordenBed.png')}
+        imageStyle={{
+          marginBottom: 0,
+        }}
+        columns={9}
+        rows={7}
+        width={330}
+        animations={{
+          waveSleep: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62]
+        }}
+        onLoad={() => console.log('SpriteSheet loaded')}
+        />
+
+      <Pressable onPress={() => wave()} style={{
+          position: 'absolute',
+          top: '10%',
+          height: '50%',
+          left: '25%',
+          width: '30%',
+          }}>
+      </Pressable>
+
       </View>
 
 
