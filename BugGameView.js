@@ -78,27 +78,27 @@ function BugGameView(props) {
     const unqiqueBugsArray = [
         {
             name: 'ant',
-            image: require('./assets/graphics/bugs/Ant.png')
+            image: require('./assets/graphics/bugs/Memorygamecat.png')
         },
         {
             name: 'beetle',
-            image: require('./assets/graphics/bugs/Beetle.png')
+            image: require('./assets/graphics/bugs/Memorygamechicken.png')
         },
         {
             name: 'caterpillar',
-            image: require('./assets/graphics/bugs/Caterpillar.png')
+            image: require('./assets/graphics/bugs/Memorygamedog.png')
         },
         {
             name: 'ladybird',
-            image: require('./assets/graphics/bugs/Ladybird.png')
+            image: require('./assets/graphics/bugs/Memorygameowl.png')
         },
         {
             name: 'snail',
-            image: require('./assets/graphics/bugs/Snail.png')
+            image: require('./assets/graphics/bugs/Memorygamepig.png')
         },
         {
             name: 'worm',
-            image: require('./assets/graphics/bugs/Worm.png')
+            image: require('./assets/graphics/bugs/Memorygamesheep.png')
         },
     ]
 
@@ -159,21 +159,23 @@ function BugGameView(props) {
 
         <View style={{flex: 1}}>
             <Animated.View style={{
-                opacity: isCleared ? 0 : interpolatedOpacity,
+                height: 150,
+                width: 150,
+                opacity: isCleared ? 1 : interpolatedOpacity,
                 transform: [
                     {
                     rotateY: interpolatedRotation
                     },
                 ]}}>
-                        <Image
-                        source={image}
-                        style={{
-                            height: 120,
-                            resizeMode: 'contain',
-                            opacity: 1,
-                            overflow: 'visible',
-                        }}
-                        />
+                    <Image
+                    source={image}
+                    style={{
+                        height: '100%',
+                        width: '100%',
+                        resizeMode: 'contain',
+                        opacity: 1,
+                    }}
+                    />
             </Animated.View>
             <Animated.View
             style={{
@@ -183,9 +185,10 @@ function BugGameView(props) {
                 opacity: isOpen ? 0 : 1
             }}>
                         <Image
-                        source={require('./assets/graphics/bugs/QMark.png')}
+                        source={require('./assets/graphics/bugs/Memorygamecardfront.png')}
                         style={{
-                            height: 120,
+                            height: 150,
+                            width: 150,
                             resizeMode: 'contain',
                             opacity: 1,
                             overflow: 'visible',
@@ -269,15 +272,17 @@ function BugGameView(props) {
 
         return (
 
+        <Pressable onPress={() => [handleCardClick(item, bugId), playPopSound()]}
+            style={{
+                opacity: isCardCleared ? 0 : 1,
+                marginVertical: 5,
+                width: '25%',
+                height: '100%',
+                
+            }}>
+            <CardView isOpen={isCardOpen} isCleared={isCardCleared} image={image} />
+        </Pressable>
 
-            <Pressable onPress={() => [handleCardClick(item, bugId), playPopSound()]}
-                style={{
-                    opacity: isCardCleared ? 0 : 1,
-                    marginVertical: 15,
-                    marginHorizontal: -20,
-                }}>
-                <CardView isOpen={isCardOpen} isCleared={isCardCleared} image={image} />
-            </Pressable>
         )
     }
 
@@ -292,42 +297,44 @@ function BugGameView(props) {
   return (
     <>
 
-<Image source={
-        require('./assets/bushBG.png')
-    }
+    <View
     style={{
         position: 'absolute',
-        height: '130%',
-        width: '120%',
-        top: '-15%',
-        left: '-10%',
+        backgroundColor: 'rgba(255, 255, 255, 0.4)',
+        width: '100%',
+        height: '100%',
     }}/>
-
     <View
     justifyContent={'center'}
     alignItems={'center'}
     style={{
         position: 'absolute',
-        backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        padding: 20,
-        width: 800,
-        height: 600,
-        top: 40,
-        left: 150,
-        borderRadius: '25%',
+        width: '100%',
+        height: '100%',
     }}>
+        <Image source={
+                require('./assets/graphics/bugs/CarpetGame.png')
+            }
+            style={{
+                position: 'absolute',
+                height: '90%',
+                width: '90%',
+                top: '5%',
+                left: '5%',
+        
+            }}/>
         <Pressable onPress={() => props.handleGameOpen()}
                         style={{
                             position: 'absolute',
-                            right: 20,
-                            top: 20,
+                            right: 100,
+                            top: 30,
                             zIndex: 100,
                         }}
                         >
-                        <Image source={require('./assets/graphics/closeIcon.png')}
+                        <Image source={require('./assets/Global/closeIcon.png')}
                             style={{
-                                width: 80,
-                                height: 80,
+                                width: 100,
+                                height: 100,
                                 resizeMode: 'contain',
                             }}
                         />  
@@ -341,8 +348,8 @@ function BugGameView(props) {
             justifyContent= {'space-around'}
             alignItems = {'center'}
             style = {{
-                width: '100%',
-                height: "100%",
+                width: '60%',
+                height: "20%",
             }}>
         </FlatList>}
 
@@ -351,7 +358,7 @@ function BugGameView(props) {
         <Text style={{
             fontSize: 60, 
             fontFamily: 'Bubblegum',
-            color: 'white',
+            color: 'black',
           }}>You did it in only {moves} moves! GOOD JOB!</Text>}
     </View>
 

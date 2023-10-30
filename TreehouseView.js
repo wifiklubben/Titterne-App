@@ -288,10 +288,6 @@ const storyTitles = [
   }
   
 
-
-
-
-
     const [bugGameOpen, setBugGameOpen] = useState(false)
 
 const handleGameOpen = () => {
