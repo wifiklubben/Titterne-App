@@ -305,7 +305,7 @@ const handleGameOpen = () => {
    
   return (
     <>
-        <ImageBackground source={require('./assets/TreeHouse/TreeHousePlacement.png')}
+        <ImageBackground source={require('./assets/TreeHouse/TreeHouseBG.png')}
                 style={styles.fullWidthBackground}>
 
     

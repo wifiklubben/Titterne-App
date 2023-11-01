@@ -84,23 +84,109 @@ const wiggleAnimation = () => {
 
   return (
 
-<ImageBackground source = {require('./assets/Music_room_inside.png')}
+<ImageBackground source = {require('./assets/MusicRoom/musicRoomPlacement.png')}
         style={styles.fullWidthBackground}>
 
 
-    <Pressable onPress={() => handleMusicGameOpen()}>
-        <Image source={require('./assets/Bedroom/BedroomGraphics/RobotNotanimated.png')}
-        style={{
-          height: 250,
-          width: 200,
-          top: 500,
-          left: 100
-        }}/>
+    <Pressable onPress={() => handleMusicGameOpen()}
+    style={{
+      position: 'absolute',      
+      height: 90,
+      width: 290,
+      top: 615,
+      left: 300,
+      borderWidth: 3,
+      borderColor: 'red',
+      transform: 'rotateZ(-17deg)'
+    }}>
+      <Image source={require('./assets/MusicRoom/MusicRoomAssets/Keyboard.png')} 
+      style={{
+      height: '145%',
+      width: '145%',
+      transform: [{rotateZ: '17deg'}],
+      overflow: 'visible',
+      left: -70,      }}/>
+
+    </Pressable>
+
+    <Pressable style={{
+      position: 'absolute',
+      height: 150,
+      width: 85,
+      top: 650,
+      left: 200,
+      borderWidth: 3,
+      borderColor: 'green',
+    }}>
+      {/* insert maracas spritesheet here */}
+    </Pressable>
+            
+    <Pressable style={{
+      position: 'absolute',
+      height: 100,
+      width: 130,
+      top: 605,
+      left: 70,
+      borderWidth: 3,
+      borderColor: 'brown',
+    }}>
+      {/* insert tambourine spritesheet here */}
+    </Pressable>
+            
+    <Pressable style={{
+      position: 'absolute',
+      height: 285,
+      width: 135,
+      top: 340,
+      left: 840,
+      borderWidth: 3,
+      borderColor: 'orange',
+    }}>
+      {/* insert guitar spritesheet here */}
+    </Pressable>
+            
+            
+    <Pressable style={{
+      position: 'absolute',
+      height: 85,
+      width: 190,
+      top: 360,
+      left: 640,
+      borderWidth: 3,
+      borderColor: 'gold',
+    }}>
+      {/* insert trumpet spritesheet here */}
+    </Pressable>
+            
+            
+    <Pressable style={{
+      position: 'absolute',
+      height: 50,
+      width: 175,
+      top: 740,
+      left: 360,
+      borderWidth: 3,
+      borderColor: 'lime',
+      transform: 'rotateZ(-18deg)'
+    }}>
+      {/* insert flute spritesheet here */}
+    </Pressable>
+            
+    <Pressable style={{
+      position: 'absolute',
+      height: 130,
+      width: 190,
+      top: 500,
+      left: 6300,
+      borderWidth: 3,
+      borderColor: 'gray',
+    }}>
+      {/* insert record player spritesheet here */}
     </Pressable>
             
 
 
-    {isMusicGameOpen && (
+    {/* {isMusicGameOpen && (
       <MusicGameView 
       styles={styles}  
       handleMusicGameOpen={handleMusicGameOpen}  
@@ -142,7 +228,7 @@ const wiggleAnimation = () => {
               
             </View>
 
-            
+             */}
     </ImageBackground>
 
   )
