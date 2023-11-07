@@ -328,10 +328,6 @@ function Piano( props ) {
         }
     })
 
-
-
-
-
     return (
         <View style={{
             borderWidth: 10,

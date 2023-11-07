@@ -25,31 +25,76 @@ function ConservatoryView( styles ) {
   return (
     
 
+    <>
     <ImageBackground
-    source={require('./assets/Conservatory_inside.jpg')}
+    source={require('./assets/ConservatoryRoom/Conservatory_Bg.png')}
     style={{
         width: '100%',
         height: '100%'
     }}>
 
+    <Image source={require('./assets/ConservatoryRoom/Conservatory_Placeholder_Sky.png')}
+      style={{
+        position: 'absolute',
+        right: 0,
+        top: 130,
+        width: 220,
+        height: 300,
+        resizeMode: 'contain',
+        borderWidth: 3,
+        borderColor: 'pink'
+      }}/>
 
-  {!plantGameOpen && (<Pressable
+    <Image source={require('./assets/ConservatoryRoom/Conservatory_Placeholder_Torden.png')}
+      style={{
+        position: 'absolute',
+        left: 15,
+        top: 265,
+        width: 250,
+        height: 300,
+        resizeMode: 'contain',
+        borderWidth: 3,
+        borderColor: 'cyan'
+      }}/>
+
+
+  {!plantGameOpen && (
+  <>
+  <Pressable
     onPress={() => handleGameOpen()}
     style={{
       position: 'absolute',
-      width: 50,
-      height: 50,
-      left: 100,
-      top: 100,
-      resizeMode: 'contain',
+      width: 190,
+      height: 400,
+      left: 450,
+      top: 150,
+      borderWidth: 3,
+      borderColor: 'red',
     }}>
-      <Image source={require('./assets/graphics/plants/Plant1.png')}/>
-  </Pressable>)}
+      <Image source={require('./assets/graphics/plants/ConservatoryPlant_06.png')}
+      style={{
+        height: '105%',
+        width: '105%',
+        bottom: '5%',
+      }}/>
+  </Pressable>
+
+  </>)}
 
   {plantGameOpen && (<PlanterView handleGameOpen={handleGameOpen} styles={styles}/>)}
 
-
+    
+  <Image
+    pointerEvents="none"
+    source={require('./assets/ConservatoryRoom/Conservatory_Fg.png')}
+    style={{
+        width: '100%',
+        height: '100%',
+    }}/>
     </ImageBackground>
+
+    
+  </>
   )
 }
 

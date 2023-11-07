@@ -365,8 +365,8 @@ console.log("story closing");
         zIndex: 3,
         borderWidth: 1,
         borderColor: 'green',
-        pointerEvents: 'none',
-      }}/>
+      }}
+      pointerEvents="none"/>
       )}
 
     {/* bedroom toys */}

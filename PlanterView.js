@@ -210,24 +210,16 @@ function PlanterView( props ) {
     alignItems={'center'}
     style={{
         position: 'absolute',
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-        padding: 20,
-        width: 600,
-        height: 700,
-        bottom: 10,
-        left: 200,
-        borderRadius: '25%',
+        backgroundColor: 'rgba(255, 255, 255, 0.4)',
+        width: '100%',
+        height: '100%',
     }}>
-
-        {plantGrowthStage === 6 && (
-             <Text style={[props.styles.h1Text, {zIndex: 100}]}>You did it!!</Text>
-        )}
 
         <Pressable onPress={() => props.handleGameOpen()}
             style={{
                 position: 'absolute',
-                right: 20,
-                top: 20,
+                right: 250,
+                top: 130,
                 zIndex: 100,
             }}>
             <Image source={require('./assets/graphics/closeIcon.png')}
@@ -241,10 +233,10 @@ function PlanterView( props ) {
         <Pressable onPress={() => addWater()}
             style={{
                 position: 'absolute',
-                right: 120,
-                top: 50,                    
-                width: 180,
-                height: 180,
+                right: 217,
+                top: 325,                    
+                width: 230,
+                height: 230,
             }}>
                   {thisRound === 2 && (
             <Animated.Image
@@ -258,11 +250,11 @@ function PlanterView( props ) {
                 resizeMode: 'contain',
             }}/>
             )}
-            <Image source={require('./assets/graphics/plants/waterCan.png')}
+            <Image source={require('./assets/graphics/plants/ConservatoryWaterringCan.png')}
                 style={{
                     position: 'absolute',
-                    height: 180,
-                    width: 180,
+                    height: '100%',
+                    width: '100%',
                     resizeMode: 'contain',
                 }}/>  
         </Pressable>
@@ -270,10 +262,10 @@ function PlanterView( props ) {
         <Pressable onPress={() => addSun()}
         style={{
             position: 'absolute',
-            left: 80,
-            top: 50,
-            width: 180,
-            height: 180,
+            left: 280,
+            top: 350,
+            width: 230,
+            height: 230,
         }}>
             {thisRound === 1 && (
             <Animated.Image
@@ -282,17 +274,16 @@ function PlanterView( props ) {
                 position: 'absolute',
                 left: -50,
                 top: -50,
-                height: 250,
-                width: 250,
-                resizeMode: 'contain',
+                height: '120%',
+                width: '120%',
             }}/>
             )}
 
-            <Image source={require('./assets/graphics/plants/sunShine.png')}
+            <Image source={require('./assets/graphics/plants/ConservatorySun.png')}
             style={{
                 position: 'absolute',
-                height: 150,
-                width: 150,
+                height: '80%',
+                width: '80%',
                 resizeMode: 'contain',
             }} />
         </Pressable>
@@ -302,93 +293,76 @@ function PlanterView( props ) {
             source={require('./assets/graphics/plants/glowStar.png')}
             style={{
                 position: 'absolute',
-                height: 500,
-                width: 500,
-                bottom:80,
+                height: 700,
+                width: 700,
+                bottom: 80,
                 resizeMode: 'contain',
             }}/>
             )}
 
-        <Image source={require('./assets/graphics/plants/flowerpotBack.png')}
-        style={{
-            position: 'absolute',
-            width: 150,
-            height: 150,
-            bottom: 40,
-            resizeMode: 'contain',
-        }}/>
-
         {plantGrowthStage === 1 && (
-        <Image source={require('./assets/graphics/plants/Plant1.png')}
+        <Image source={require('./assets/graphics/plants/ConservatoryPlant_01.png')}
         style={{
             position: 'absolute',
             width: 150,
-            height: 200,
+            height: 300,
             bottom: 90,
         }}/>
         )}
 
         {plantGrowthStage === 2 && (
-        <Image source={require('./assets/graphics/plants/Plant2.png')}
+        <Image source={require('./assets/graphics/plants/ConservatoryPlant_02.png')}
         style={{
             position: 'absolute',
             width: 150,
-            height: 220,
+            height: 320,
             bottom: 90,
         }}/>
         )}
 
 
         {plantGrowthStage === 3 && (
-        <Image source={require('./assets/graphics/plants/Plant3.png')}
+        <Image source={require('./assets/graphics/plants/ConservatoryPlant_03.png')}
         style={{
             position: 'absolute',
-            width: 150,
-            height: 220,
+            width: 225,
+            height: 350,
             bottom: 90,
         }}/>
         )}
 
 
         {plantGrowthStage === 4 && (
-        <Image source={require('./assets/graphics/plants/Plant4.png')}
+        <Image source={require('./assets/graphics/plants/ConservatoryPlant_04.png')}
         style={{
             position: 'absolute',
-            width: 150,
-            height: 250,
+            width: 250,
+            height: 400,
             bottom: 90,
         }}/>
         )}
 
 
         {plantGrowthStage === 5 && (
-        <Image source={require('./assets/graphics/plants/Plant5.png')}
+        <Image source={require('./assets/graphics/plants/ConservatoryPlant_05.png')}
         style={{
             position: 'absolute',
-            width: 200,
-            height: 300,
+            width: 275,
+            height: 550,
             bottom: 60,
         }}/>
         )}
 
         {plantGrowthStage === 6 && (
-        <Image source={require('./assets/graphics/plants/Plant6.png')}
+        <Image source={require('./assets/graphics/plants/ConservatoryPlant_06.png')}
         style={{
             position: 'absolute',
-            width: 200,
-            height: 400,
-            bottom: 30,
+            width: 300,
+            height: 650,
+            bottom: 40,
         }}/>
         )}
 
-<Image source={require('./assets/graphics/plants/flowerpotFront.png')}
-        style={{
-            position: 'absolute',
-            width: 150,
-            height: 150,
-            bottom: 40,
-            resizeMode: 'contain',
-        }}/>
 
     </View>
     )
