@@ -79,6 +79,16 @@ function ConservatoryView( styles ) {
       }}/>
   </Pressable>
 
+  <Image source={require('./assets/ConservatoryRoom/Hose.png')}
+  style={{
+    position: 'absolute',
+    width: 460,
+    height: 280,
+    bottom: 0,
+    left: 120,
+    resizeMode: 'contain',
+  }}/>
+
   </>)}
 
   {plantGameOpen && (<PlanterView handleGameOpen={handleGameOpen} styles={styles}/>)}

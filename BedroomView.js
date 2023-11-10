@@ -12,18 +12,16 @@ import SpriteSheet from 'rn-sprite-sheet';
 export default function BedroomView({ styles }) {
 
   const [waveSfx, setWaveSfx] = useState()
+  const [curtainSfx, setCurtainSfx] = useState()
   const [robotSfx, setRobotSfx] = useState()
-  const [dinoSfx, setDinoSfx] = useState()
+  const [dragonSfx, setDragonSfx] = useState()
   const [carSfx, setCarSfx] = useState()
   const [planeSfx, setPlaneSfx] = useState()
 
 
-// sprite sfx
-
 // set all sfx
 
 useEffect(() => {
-
 
   async function loadWaveSound() {
     try {
@@ -34,6 +32,15 @@ useEffect(() => {
     }
   }
 
+  // async function loadCurtainSound() {
+  //   try {
+  //     const {sound} = await Audio.Sound.createAsync(require('./assets/audio/sfx/curtain.mp3'));
+  //     setCurtainSfx( sound );
+  //   } catch(error) {
+  //     console.log("error loading curtain sfx");
+  //   }
+  // }
+
   async function loadRobotSound() {
     try {
       const {sound} = await Audio.Sound.createAsync(require('./assets/audio/sfx/Robot.mp3'));
@@ -43,12 +50,12 @@ useEffect(() => {
     }
   }
 
-  async function loadDinoSound() {
+  async function loadDragonSound() {
     try {
       const {sound} = await Audio.Sound.createAsync(require('./assets/audio/sfx/Dino.mp3'));
-      setDinoSfx( sound );
+      setDragonSfx( sound );
     } catch (error) {
-      console.log("error loading dino sfx");
+      console.log("error loading dragon sfx");
     }
   }
 
@@ -70,11 +77,11 @@ useEffect(() => {
   }
 
   loadWaveSound()
+  // loadCurtainSound()
   loadRobotSound()
-  loadDinoSound()
+  loadDragonSound()
   loadCarSound()
   loadPlaneSound()
-
 
 }, [])
 
@@ -102,14 +109,25 @@ useEffect(() => {
     }
   }
 
-  async function playDinoSound() {
+  async function playDragonSound() {
     try {
-      if (dinoSfx) 
+      if (dragonSfx) 
       {
-        dinoSfx.replayAsync();
+        dragonSfx.replayAsync();
       } 
     } catch (error) {
-      console.log("error playing dino sound", error);
+      console.log("error playing dragon sound", error);
+    }
+  }
+
+  async function playCurtainSound() {
+    try {
+      if (curtainSfx)
+      {
+        curtainSfx.replayAync();
+      }
+    } catch (error) {
+      console.log("error playing curtain sound", error);
     }
   }
 
@@ -143,7 +161,6 @@ useEffect(() => {
   // thordenWave 
 
 const  wave = () => {
-  console.log("thorden animation triggered");
   this.thorden.play({
     type: "waveSleep",
     fps: 24,
@@ -154,27 +171,70 @@ const  wave = () => {
     playWaveSound()
 }
 
+const blink = () => {
+  this.sky.play({
+    type: "skyBlink",
+    fps: 24,
+    loops: false,
+    resetAfterFinish: true,
+  })
+  // play sound function here if/when it exists
+}
+
 const car = () => {
   console.log("car animation triggered");
-  // animation object
+  this.car.play({
+    type: 'carDriving',
+    fps: 24,
+    loops: false,
+    resetAfterFinish: true,
+  })
   playCarSound();
 }
 
-const dino = () => {
-  console.log("dino animation triggered");
-  //animation object
-  playDinoSound();
+const dragon = () => {
+  this.dragon.play({
+    type: "roar",
+    fps: 24,
+    loops: false,
+    resetAfterFinish: true
+  })
+  
+  playDragonSound();
+}
+
+const curtain = () => {
+  this.curtain.play({
+    type: "curtainClose",
+    fps: 24,
+    loops: false,
+    resetAfterFinish: true,
+  })
+
+  playCurtainSound();
 }
 
 const robot = () => {
   console.log("robot animation triggered");
-  // animation object
+  this.robot.play({
+    type: "robotDance",
+    fps: 24,
+    loops: false,
+    resetAfterFinish: true,
+  })
+
   playRobotSound();
 }
 
 const plane = () => {
   console.log("plane animation triggered");
-  // animation object goes here
+  this.plane.play({
+    type: "planeFly",
+    fps: 24,
+    loops: false,
+    resetAfterFinish: true,
+  })
+
   playPlaneSound();
 }
 
@@ -371,7 +431,8 @@ console.log("story closing");
 
     {/* bedroom toys */}
 
-<Pressable onPress={() => robot()} style={{
+    <View 
+    style={{
       position: 'absolute',
       height: 250,
       width: 200,
@@ -379,16 +440,27 @@ console.log("story closing");
       left: 800,
       zIndex: 4,
     }}>
-    <Image source={require('./assets/Bedroom/BedroomGraphics/RobotNotanimated.png')}
-    style={{
-      height: 250,
-      width: 200,
-      zIndex: 4,
-    }}/>
-    </Pressable>
+      <SpriteSheet
+      ref={ref => (this.robot = ref) } 
+      source={require('./assets/graphics/spritesheets/RobotAnim.png')}
+      columns={9}
+      rows={3}
+      width={200}
+      animations={{
+        robotDance: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26]
+      }}
+      onLoad={() => console.log('robot spritesheet loaded')}
+      />
+      <Pressable onPress={() => robot()}
+      style={{
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+      }} />
+    </View>
 
 
-<Pressable onPress={() => dino()} style={{
+    <View style={{
       position: 'absolute',
       height: 250,
       width: 200,
@@ -396,13 +468,25 @@ console.log("story closing");
       left: 40,
       zIndex: 4,
     }}>
-    <Image source={require('./assets/Bedroom/BedroomGraphics/dragonNotanimated.png')}
-    style={{
-      height: 250,
-      width: 200,
-      zIndex: 4,
-    }}/>
-    </Pressable>
+      <SpriteSheet 
+        ref={ref=> (this.dragon = ref)}
+        source={require('./assets/graphics/spritesheets/DragonAnim.png')}
+        columns={8}
+        rows={4}
+        width={300}
+        animations={{
+          roar: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+        }}
+        onLoad={() => console.log('dragon spritesheet loaded')}
+      />
+      <Pressable onPress={() => dragon()} 
+      style={{
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+      }}/>
+
+    </View>
 
     <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/dollNotanimated.png')}
     style={{
@@ -414,50 +498,96 @@ console.log("story closing");
       zIndex: 4,
     }}/>
 
-<Pressable onPress={() => car()} style={{
-      position: 'absolute',
-      height: 120,
-      width: 240,
-      top: 620,
-      left: 200,
-      zIndex: 4,
-      overflow: 'visible',
+    <View style={{
+        position: 'absolute',
+        height: 120,
+        width: 240,
+        top: 620,
+        left: 200,
+        zIndex: 4,
+        overflow: 'visible',
     }}>
-    <Image source={require('./assets/Bedroom/BedroomGraphics/carNotanimated.png')}
-    style={{
-      height: 120,
-      width: 240,
-      zIndex: 4,
-      overflow: 'visible',
-    }}/>
-        </Pressable>
 
-<Pressable onPress={() => plane()} style={{
+      <SpriteSheet
+        ref={ref => (this.car = ref)}
+        source={require('./assets/graphics/spritesheets/CarDriving.png')}
+        width={240}
+        columns={7}
+        rows={3}
+        animations={{
+          carDriving: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+        }}
+        onLoad={() => console.log('car spritesheet loaded')}
+        />
+
+      <Pressable onPress={() => car()} style={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        borderWith: 3,
+        borderColor: 'green'
+      }}/>
+    </View>
+
+    <View style={{
       position: 'absolute',
       height: 150,
       width: 160,
       top: 570,
       left: 640,
       zIndex: 4,
-}}>
-    <Image source={require('./assets/Bedroom/BedroomGraphics/planeNotanimated.png')}
-      style={{
-        height: 150,
-        width: 160,
-        zIndex: 4,
+    }}>
+      <SpriteSheet 
+        ref={ref => (this.plane = ref)}
+        source={require('./assets/graphics/spritesheets/PlaneFlying.png')}
+          width={140}
+          columns={3}
+          rows={3}
+          animations={{
+            planeFly: [0,1,2,3,4,5,6,7,8,9,]
+          }}
+          onLoad={() => console.log('plane spritesheet loaded')}
+      />
+      <Pressable onPress={() => plane()} style={{
+         position: 'absolute',
+         height: '100%',
+         width: '100%',
+         borderWith: 3,
+         borderColor: 'brown',
       }}/>
-    </Pressable>
+
+    </View>
 
 
-    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/SkyNotanimated.png')}
+    <View source={require('./assets/Bedroom/BedroomGraphics/SkyNotanimated.png')}
       style={{
         position: 'absolute',
         height: 280,
         width: 300,
         top: 210,
         left: 50,
+        flex: 1,
         zIndex: 2,
-      }}/>
+        alignItems: 'flex-end'
+      }}>
+        <SpriteSheet
+        ref={ref=> (this.sky = ref)}
+        source={require('./assets/graphics/spritesheets/SkyAnim.png')}
+        columns={9}
+        rows={7}
+        width={300}
+        animations={{
+          skyBlink: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62]
+        }}
+        onLoad={() => console.log("sprintesheet loaded")}
+        />
+
+        <Pressable onPress={() => blink()} style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+        }}/>
+      </View>
 
 
     <View style={{
@@ -491,31 +621,55 @@ console.log("story closing");
           height: '50%',
           left: '25%',
           width: '30%',
-          }}>
-      </Pressable>
+          }}/>
 
       </View>
 
 
-    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/Curtain1Notanimated.png')}
-    style={{
-      position: 'absolute',
-      height: 260,
-      width: 240,
-      top: 0,
-      left: 110,
-      zIndex: 1,
-    }}/>
+      <Image source={require('./assets/Bedroom/BedroomGraphics/Curtain1Notanimated.png')}
+      style={{
+        position: 'absolute',
+        height: 260,
+        width: 240,
+        top: 0,
+        left: 110,
+        zIndex: 1,
+      }}/>
 
-    <Animated.Image source={require('./assets/Bedroom/BedroomGraphics/Curtain2Notanimated.png')}
-    style={{
-      position: 'absolute',
-      height: 260,
-      width: 250,
-      top: 0,
-      left: 700,
-      zIndex: 1,
-    }}/>
+      <View style={{
+        position: 'absolute',
+        height: 260,
+        width: 250,
+        top: 0,
+        left: 700,
+        zIndex: 1,
+      }}>
+
+        <SpriteSheet
+          ref={ref => (this.curtain = ref)} 
+          source={require('./assets/graphics/spritesheets/curtainAnim.png')}
+          columns={8}
+          rows={6}
+          width={340}
+          imageStyle={{
+            left: -50,
+            top: 0,
+          }}
+          animations={{
+            curtainClose: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 41, 42, 43, 44, 45, 46, 47,]
+          }}
+          onLoad={() => console.log("curtain spritesheet loaded")}
+        />
+
+        <Pressable onPress={() => curtain()}
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+        }}/>
+        
+      </View>
+
     
     
     {/* Sock buttons */}

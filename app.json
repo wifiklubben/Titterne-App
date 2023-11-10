@@ -3,7 +3,7 @@
     "name": "titterne",
     "slug": "titterne",
     "owner": "wifiklubben",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "orientation": "landscape",
     "icon": "./assets/TitterneIcon.png",
     "userInterfaceStyle": "light",
