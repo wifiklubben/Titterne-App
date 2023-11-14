@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { StyleSheet, View, ImageBackground, Animated, Pressable } from 'react-native'
+import { StyleSheet, View, ImageBackground, Animated, Pressable, Image } from 'react-native'
 
 import { Audio } from 'expo-av';
 
@@ -329,12 +329,23 @@ function Piano( props ) {
     })
 
     return (
+      <>
+      <Image
+      source={require('./assets/MusicRoom/KeyboardAssets/KeyboardClean.png')}
+      style={{
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: 1100,
+        height: 830,
+        resizeMode: 'contain',
+      }}/>
         <View style={{
             borderWidth: 10,
             borderRadius: 20,
             borderColor: 'red',
-            left: 100,
-            top: 450,
+            left: 350,
+            top: 420,
             width: 684,
             height: 250,
         }}>
@@ -387,6 +398,7 @@ function Piano( props ) {
             </View>
         
         </View>
+        </>
     )
 }
 

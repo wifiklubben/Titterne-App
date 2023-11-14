@@ -1,6 +1,6 @@
 
-import React, {useEffect, useState} from 'react'
-import { View, ImageBackground, Image, FlatList, Pressable, Animated, Text } from 'react-native';
+import React, { useState} from 'react'
+import { View, ImageBackground, Image, Pressable } from 'react-native';
 
 import { Audio } from 'expo-av'
 

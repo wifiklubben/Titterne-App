@@ -358,7 +358,6 @@ useEffect(() =>{
     }, [currentSpeeches])
 
 
-
     // Close book modal
 
 async function  handleBookClose() {
@@ -468,6 +467,7 @@ console.log("story closing");
       left: 40,
       zIndex: 4,
     }}>
+
       <SpriteSheet 
         ref={ref=> (this.dragon = ref)}
         source={require('./assets/graphics/spritesheets/DragonAnim.png')}
@@ -479,6 +479,7 @@ console.log("story closing");
         }}
         onLoad={() => console.log('dragon spritesheet loaded')}
       />
+      
       <Pressable onPress={() => dragon()} 
       style={{
         position: 'absolute',

@@ -22,7 +22,7 @@ const [isPlayignRightNow, setIsPlayingRightNow] = useState(null);
 
 
 const handleMusicGameOpen = () => {
-  console.log("opening music room game");
+  console.log("opening music room game", "music game is open: ", isMusicGameOpen);
 
   if (isMusicGameOpen === false) {
     setIsMusicGameOpen(true);
@@ -186,14 +186,14 @@ const wiggleAnimation = () => {
             
 
 
-    {/* {isMusicGameOpen && (
+    {isMusicGameOpen && (
       <MusicGameView 
       styles={styles}  
       handleMusicGameOpen={handleMusicGameOpen}  
       />
       )}
 
-        <View style={{
+        {/* <View style={{
             position:'absolute',
             top: 300,
             right: 150,
@@ -203,32 +203,32 @@ const wiggleAnimation = () => {
           <OneShot soundToPlay={sfx1} styles={styles}>
 
             <Animated.Image source={require('./assets/ThordenBass.png')}
-                      styles={[
-                        styles.speakerButton
-                      ]}
-                      onPress={wiggleAnimation}
-                      />
-                      
+              styles={[
+                styles.speakerButton
+              ]}
+              onPress={wiggleAnimation}
+            />
+              
           </OneShot>
 
-            </View>
+        </View>
 
-            <View style={{
-                position:'absolute',
-                top: 100,
-                right: 350,
-                }}>
+        <View style={{
+            position:'absolute',
+            top: 100,
+            right: 350,
+            }}>
 
-              <OneShot  soundToPlay={sfx2} styles={styles}>
+          <OneShot  soundToPlay={sfx2} styles={styles}>
 
-                <Image source={require('./assets/speakerR.png')}
-                styles={styles.speakerButton}/>
+          <Image source={require('./assets/speakerR.png')}
+          styles={styles.speakerButton}/>
 
-              </OneShot>
-              
-            </View>
+          </OneShot>
+          
+        </View> */}
 
-             */}
+            
     </ImageBackground>
 
   )

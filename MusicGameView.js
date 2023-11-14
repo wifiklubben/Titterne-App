@@ -4,9 +4,6 @@ import { View, ImageBackground, Pressable, Text, Image } from 'react-native'
 
 import { Audio } from 'expo-av';
 
-import PlayIcon from './assets/graphics/playIcon.svg';
-import PauseIcon from './assets/graphics/pauseIcon.svg';
-
 import Multitrack from './Multitrack';
 import Piano from './Piano';
 
@@ -445,7 +442,7 @@ useEffect(() =>{
 
   return (
 
-    <ImageBackground source={require('./assets/MusicRoom/Music_room_inside.png')} style={{
+    <ImageBackground source={require('./assets/MusicRoom/MusicRoomAssets/musicRoomBG.png')} style={{
         width: '100%',
         height: '100%',
         position: 'absolute',
@@ -461,9 +458,9 @@ useEffect(() =>{
         top: 100,
         height: 120,
         width: 120,
-
+        zIndex: 10,
       }}>
-        <Image source={require('./assets/graphics/socks/sockPink.png')}
+        <Image source={require('./assets/MusicRoom/KeyboardAssets/PianoButton.png')}
         style={{
           height: '100%',
           width: '100%',
@@ -477,9 +474,9 @@ useEffect(() =>{
         top: 200,
         height: 120,
         width: 120,
-
+        zIndex: 10,
       }}>
-        <Image source={require('./assets/graphics/socks/sockGreen.png')}
+        <Image source={require('./assets/MusicRoom/KeyboardAssets/FartButton.png')}
         style={{
           height: '100%',
           width: '100%',
@@ -488,23 +485,23 @@ useEffect(() =>{
 
 
 
-                          <Pressable onPress={() => props.handleMusicGameOpen()}
-                    style={{
-                        position: 'absolute',
-                        right: 20,
-                        top: 20,
-                        zIndex: 100,
-                    }}
-                    >
 
-                        <Image source={require('./assets/Global/closeIcon.png')}
-                        style={{
-                            width: 80,
-                            height: 80,
-                            resizeMode: 'contain',
-                        }}
-                        />
-                    </Pressable>
+      <Pressable onPress={() => props.handleMusicGameOpen()}
+      style={{
+          position: 'absolute',
+          right: 20,
+          top: 20,
+          zIndex: 100,
+      }}
+      >
+        <Image source={require('./assets/Global/closeIcon.png')}
+        style={{
+            width: 80,
+            height: 80,
+            resizeMode: 'contain',
+        }}
+        />
+      </Pressable>
 
         <Piano 
         soundSet={soundSet}
@@ -515,17 +512,27 @@ useEffect(() =>{
             position: 'absolute',
             top: 180,
             left: 85,
+            borderWidth: 3,
+            borderColor: 'blue',
+
         }}>
 
-            <Pressable onPress={playMusic} style={{
-                backgroundColor: 'gold',
-            }}> 
+            <Pressable onPress={playMusic}>
 
+              { !musicPlaying && 
+              <Image 
+              source={require('./assets/MusicRoom/KeyboardAssets/PlayButton.png')}
+              style={{
+                width: 100,
+                height: 100,
+              }}/> }  
 
-            { !musicPlaying && <PlayIcon width={72} height={60}/> }  
-
-            { musicPlaying &&  <PauseIcon width={50} height={50} top={7} left={7}/> }   
-
+              { musicPlaying &&     <Image 
+              source={require('./assets/MusicRoom/KeyboardAssets/PauseButton.png')}
+              style={{
+                width: 100,
+                height: 100,
+              }}/> }   
 
             </Pressable>
 
