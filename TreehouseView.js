@@ -65,6 +65,17 @@ function TreehouseView({ styles }) {
     });
   };
 
+  // Torden blinking
+
+  const tordenBlink = () => {
+    this.tordenBlink.play({
+      type: "blink",
+      fps: 24,
+      loops: false,
+      resetAfterFinish: true,
+    });
+  };
+
   // Boombox animation
 
   const boomBox = () => {
@@ -267,7 +278,32 @@ function TreehouseView({ styles }) {
             height: 300,
             width: 260,
           }}
-        ></View>
+        >
+          <SpriteSheet
+            ref={(ref) => (this.tordenBlink = ref)}
+            source={require("./assets/graphics/spritesheets/TordenBlink.png")}
+            columns={4}
+            rows={2}
+            frameHeight={1690}
+            width={300}
+            imageStyle={{
+              position: "absolute",
+              top: -30,
+              left: -20,
+            }}
+            animations={{
+              blink: [0, 4, 1, 5, 2, 6, 3],
+            }}
+          ></SpriteSheet>
+          <Pressable
+            onPress={() => tordenBlink()}
+            style={{
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+            }}
+          />
+        </View>
 
         {bugGameOpen === true && (
           <BugGameView styles={styles} handleGameOpen={handleGameOpen} />
