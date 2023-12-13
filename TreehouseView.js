@@ -65,6 +65,17 @@ function TreehouseView({ styles }) {
     });
   };
 
+  // Boombox animation
+
+  const boomBox = () => {
+    this.boomBox.play({
+      type: "bounce",
+      fps: 24,
+      loops: false,
+      resetAfterFinish: true,
+    });
+  };
+
   const handleGameOpen = () => {
     console.log("handle game open");
 
@@ -176,13 +187,36 @@ function TreehouseView({ styles }) {
             position: "absolute",
             borderWidth: 3,
             borderColor: "yellow",
-            width: 160,
-            height: 180,
+            width: 200,
+            height: 300,
             left: 0,
-            top: 520,
+            top: 420,
           }}
         >
-          {/* boombox sprite placeholder */}
+          <SpriteSheet
+            ref={(ref) => (this.boomBox = ref)}
+            source={require("./assets/graphics/spritesheets/BoomboxAnim.png")}
+            columns={4}
+            rows={4}
+            frameHeight={735}
+            width={350}
+            imageStyle={{
+              position: "absolute",
+              top: -10,
+              left: -60,
+            }}
+            animations={{
+              bounce: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+            }}
+          ></SpriteSheet>
+          <Pressable
+            onPress={() => boomBox()}
+            style={{
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+            }}
+          />
         </View>
 
         <View
