@@ -177,6 +177,16 @@ function TreehouseView({ styles }) {
           }}
         >
           {/* cola cans placeholder */}
+          <Image
+            source={require("./assets/TreeHouse/cola.png")}
+            style={{
+              position: "absolute",
+              // right: 200,
+              top: -80,
+              width: "100%",
+              resizeMode: "contain",
+            }}
+          />
         </View>
 
         <View
@@ -191,6 +201,17 @@ function TreehouseView({ styles }) {
           }}
         >
           {/* popcorn placeholder */}
+          <Image
+            source={require("./assets/TreeHouse/popcorn.png")}
+            style={{
+              position: "absolute",
+              // right: 200,
+              left: -30,
+              top: -160,
+              width: 250,
+              resizeMode: "contain",
+            }}
+          />
         </View>
 
         <View
