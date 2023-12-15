@@ -10,7 +10,7 @@ import BookViewAction from "./BookViewAction";
 
 function TreehouseView({ styles }) {
   const [bugGameOpen, setBugGameOpen] = useState(false);
-
+  const [isBlinking, setIsBlinking] = useState(false);
   const [birdSfx, setBirdSfx] = useState();
 
   //set all sfx
@@ -26,6 +26,20 @@ function TreehouseView({ styles }) {
     // }
     // more SFX loading here
     //     loadBirdSound()
+  }, []);
+
+  //set Skyblinking timer
+  useEffect(() => {
+    // Start the blink animation every 3 seconds
+    const blinkTimer = setInterval(() => {
+      skyBlink(); // Trigger the blink animation
+      setTimeout(() => {
+        setIsBlinking(false);
+      }, 2000); // Assuming blink animation duration is 2000 milliseconds
+    }, 3000);
+
+    // Clean up the timer when the component is unmounted
+    return () => clearInterval(blinkTimer);
   }, []);
 
   // play all sfx
@@ -57,12 +71,25 @@ function TreehouseView({ styles }) {
   // sky blinking
 
   const skyBlink = () => {
-    this.skyBlink.play({
+    this.skyWave.play({
       type: "blink",
       fps: 24,
       loops: false,
       resetAfterFinish: true,
     });
+  };
+
+  // sky waving
+
+  const skyWave = () => {
+    if (!isBlinking) {
+      this.skyWave.play({
+        type: "wave",
+        fps: 24,
+        loops: false,
+        resetAfterFinish: true,
+      });
+    }
   };
 
   // Torden blinking
@@ -100,10 +127,7 @@ function TreehouseView({ styles }) {
 
   return (
     <>
-      <ImageBackground
-        source={require("./assets/TreeHouse/TreeHouseBG.png")}
-        style={styles.fullWidthBackground}
-      >
+      <ImageBackground source={require("./assets/TreeHouse/TreeHouseBG.png")} style={styles.fullWidthBackground}>
         {bugGameOpen === false && (
           <Pressable
             onPress={() => handleGameOpen()}
@@ -147,11 +171,7 @@ function TreehouseView({ styles }) {
             frameHeight={150}
             frameWidth={150}
             animations={{
-              squawk: [
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-                18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-                34, 35, 36, 37, 38, 39, 40, 41, 42,
-              ],
+              squawk: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42],
             }}
           ></SpriteSheet>
 
@@ -264,24 +284,26 @@ function TreehouseView({ styles }) {
         >
           {/* Sky placeholder */}
           <SpriteSheet
-            ref={(ref) => (this.skyBlink = ref)}
-            source={require("./assets/graphics/spritesheets/SkyBlink.png")}
-            columns={5}
-            rows={3}
-            frameHeight={3318}
+            ref={(ref) => (this.skyWave = ref)}
+            source={require("./assets/graphics/spritesheets/SkyWave.png")}
+            columns={8}
+            rows={8}
+            frameHeight={7496}
             width={370}
             imageStyle={{
               position: "absolute",
               top: -70,
-              left: -60,
+              left: -45,
+              zIndex: 0,
             }}
             animations={{
-              // blink: [0, 6, 11, 2, 7, 12, 3, 8, 13, 4, 9, 14, 5, 10],
-              blink: [0, 5, 10, 1, 6, 11, 2, 7, 12, 3, 8, 13, 4, 9],
+              wave: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57],
+              blink: [0, 1, 2, 3, 4, 5, 6, 7, 8],
             }}
           ></SpriteSheet>
+
           <Pressable
-            onPress={() => skyBlink()}
+            onPress={() => skyWave()}
             style={{
               position: "absolute",
               height: "100%",
@@ -327,9 +349,7 @@ function TreehouseView({ styles }) {
           />
         </View>
 
-        {bugGameOpen === true && (
-          <BugGameView styles={styles} handleGameOpen={handleGameOpen} />
-        )}
+        {bugGameOpen === true && <BugGameView styles={styles} handleGameOpen={handleGameOpen} />}
 
         {/* story book component
 
