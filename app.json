@@ -3,7 +3,7 @@
     "name": "titterne",
     "slug": "titterne",
     "owner": "wifiklubben",
-    "version": "1.2.6",
+    "version": "1.2.7",
     "orientation": "landscape",
     "icon": "./assets/TitterneIcon.png",
     "userInterfaceStyle": "light",
@@ -12,9 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#8AC1DF"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "requireFullScreen": true,
