@@ -16,6 +16,11 @@ import { Audio } from "expo-av";
 export default function MusicRoomView({ styles }) {
   const [sfx1, setSfx1] = useState();
   const [sfx2, setSfx2] = useState();
+  const [guitarAudio, setGuitarAudio] = useState();
+  const [fluteAudio, setFluteAudio] = useState();
+  const [maracasAudio, setMaracasAudio] = useState();
+  const [tambourineAudio, setTambourineAudio] = useState();
+  const [trumpetAudio, setTrumpetAudio] = useState();
 
   const [isMusicGameOpen, setIsMusicGameOpen] = useState(false);
 
@@ -47,6 +52,61 @@ export default function MusicRoomView({ styles }) {
       }
     }
 
+    async function loadGuitarAudio() {
+      try {
+        const { sound } = await Audio.Sound.createAsync(
+          require("./assets/audio/musicRoom/guitar.mp3")
+        );
+        setGuitarAudio(sound);
+      } catch (error) {
+        console.log("error in initial loadMusic of guitar audio: ", error);
+      }
+    }
+
+    async function loadFluteAudio() {
+      try {
+        const { sound } = await Audio.Sound.createAsync(
+          require("./assets/audio/musicRoom/flute.mp3")
+        );
+        setFluteAudio(sound);
+      } catch (error) {
+        console.log("error in initial loadMusic of flute audio: ", error);
+      }
+    }
+
+    async function loadMaracasAudio() {
+      try {
+        const { sound } = await Audio.Sound.createAsync(
+          require("./assets/audio/musicRoom/maracas.mp3")
+        );
+        setMaracasAudio(sound);
+      } catch (error) {
+        console.log("error in initial loadMusic of maracas audio: ", error);
+      }
+    }
+
+    async function loadTambourineAudio() {
+      try {
+        const { sound } = await Audio.Sound.createAsync(
+          require("./assets/audio/musicRoom/tambourine.mp3")
+        );
+        setTambourineAudio(sound);
+      } catch (error) {
+        console.log("error in initial loadMusic of tambourine audio: ", error);
+      }
+    }
+
+    async function loadTrumpetAudio() {
+      try {
+        const { sound } = await Audio.Sound.createAsync(
+          require("./assets/audio/musicRoom/trumpet.mp3")
+        );
+        setTrumpetAudio(sound);
+      } catch (error) {
+        console.log("error in initial loadMusic of trumpet audio: ", error);
+      }
+    }
+
     async function loadSfx2() {
       try {
         const { sound } = await Audio.Sound.createAsync(
@@ -60,19 +120,37 @@ export default function MusicRoomView({ styles }) {
 
     loadSfx1();
     loadSfx2();
+    loadGuitarAudio();
+    loadFluteAudio();
+    loadMaracasAudio();
+    loadTambourineAudio();
+    loadTrumpetAudio();
   }, []);
+
+  // Audio
+
+  async function playAudio(audio) {
+    try {
+      if (audio) {
+        audio.replayAsync();
+      }
+    } catch (error) {
+      console.log("error playing audio", error);
+    }
+  }
 
   //   sprite animations
 
-  // Caracas animation
+  // Maracas animation
 
-  const caracasShake = () => {
-    this.caracasShake.play({
+  const maracasShake = () => {
+    this.maracasShake.play({
       type: "shake",
       fps: 24,
-      loops: false,
+      loop: false,
       resetAfterFinish: true,
     });
+    playAudio(maracasAudio);
   };
 
   // Guitar animation
@@ -84,6 +162,7 @@ export default function MusicRoomView({ styles }) {
       loops: false,
       resetAfterFinish: true,
     });
+    playAudio(guitarAudio);
   };
 
   // Flute animation
@@ -95,6 +174,7 @@ export default function MusicRoomView({ styles }) {
       loops: false,
       resetAfterFinish: true,
     });
+    playAudio(fluteAudio);
   };
 
   // Tambourine animation
@@ -106,12 +186,36 @@ export default function MusicRoomView({ styles }) {
       loops: false,
       resetAfterFinish: true,
     });
+    playAudio(tambourineAudio);
   };
 
   // Trumpet animation
 
   const trumpetPlay = () => {
     this.trumpetPlay.play({
+      type: "play",
+      fps: 24,
+      loops: false,
+      resetAfterFinish: true,
+    });
+    playAudio(trumpetAudio);
+  };
+
+  // Record player animation
+
+  const recordSpin = () => {
+    this.recordSpin.play({
+      type: "spin",
+      fps: 24,
+      loops: false,
+      resetAfterFinish: true,
+    });
+  };
+
+  // Drums animation
+
+  const drumPlay = () => {
+    this.drumPlay.play({
       type: "play",
       fps: 24,
       loops: false,
@@ -146,6 +250,7 @@ export default function MusicRoomView({ styles }) {
     <ImageBackground
       // source={require("./assets/MusicRoom/musicRoomPlacement.png")}
       source={require("./assets/MusicRoom/MusicRoomAssets/musicRoomBG.png")}
+      // source={require("./assets/MusicRoom/musicRoomCharacterPlacement.png")}
       style={styles.fullWidthBackground}
     >
       <Pressable
@@ -159,6 +264,7 @@ export default function MusicRoomView({ styles }) {
           borderWidth: 3,
           borderColor: "red",
           transform: "rotateZ(-17deg)",
+          zIndex: 3,
         }}
       >
         <Image
@@ -174,7 +280,7 @@ export default function MusicRoomView({ styles }) {
       </Pressable>
 
       <Pressable
-        onPress={() => caracasShake()}
+        onPress={() => maracasShake()}
         style={{
           position: "absolute",
           height: 150,
@@ -183,12 +289,13 @@ export default function MusicRoomView({ styles }) {
           left: 200,
           borderWidth: 3,
           borderColor: "green",
+          zIndex: 4,
         }}
       >
         {/* insert maracas spritesheet here */}
         <SpriteSheet
-          ref={(ref) => (this.caracasShake = ref)}
-          source={require("./assets/graphics/spritesheets/caracasShake.png")}
+          ref={(ref) => (this.maracasShake = ref)}
+          source={require("./assets/graphics/spritesheets/maracasShake.png")}
           columns={3}
           rows={3}
           height={150}
@@ -201,7 +308,11 @@ export default function MusicRoomView({ styles }) {
             left: -12,
           }}
           animations={{
-            shake: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            shake: [
+              0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3,
+              4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7,
+              8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8,
+            ],
           }}
         ></SpriteSheet>
       </Pressable>
@@ -216,6 +327,7 @@ export default function MusicRoomView({ styles }) {
           left: 70,
           borderWidth: 3,
           borderColor: "brown",
+          zIndex: 3,
         }}
       >
         {/* insert tambourine spritesheet here */}
@@ -234,7 +346,12 @@ export default function MusicRoomView({ styles }) {
             left: -13,
           }}
           animations={{
-            shake: [0, 1, 2, 3, 4, 5, 6, 7],
+            shake: [
+              0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5,
+              6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3,
+              4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1,
+              2, 3, 4, 5, 6, 7,
+            ],
           }}
         ></SpriteSheet>
       </Pressable>
@@ -249,6 +366,7 @@ export default function MusicRoomView({ styles }) {
           left: 840,
           borderWidth: 3,
           borderColor: "orange",
+          zIndex: 4,
         }}
       >
         {/* insert guitar spritesheet here */}
@@ -267,7 +385,10 @@ export default function MusicRoomView({ styles }) {
             left: -4,
           }}
           animations={{
-            play: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            play: [
+              0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3,
+              4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8,
+            ],
           }}
         ></SpriteSheet>
       </Pressable>
@@ -278,10 +399,11 @@ export default function MusicRoomView({ styles }) {
           position: "absolute",
           height: 130,
           width: 190,
-          top: 340,
-          left: 640,
+          top: 355,
+          left: 625,
           borderWidth: 3,
           borderColor: "gold",
+          zIndex: 3,
         }}
       >
         {/* insert trumpet spritesheet here */}
@@ -334,24 +456,109 @@ export default function MusicRoomView({ styles }) {
             left: 5,
           }}
           animations={{
-            play: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+            play: [
+              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 0, 1, 2,
+              3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 0, 1, 2, 3, 4, 5,
+              6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+            ],
           }}
         ></SpriteSheet>
       </Pressable>
 
       <Pressable
+        onPress={() => recordSpin()}
         style={{
           position: "absolute",
-          height: 130,
-          width: 190,
-          top: 500,
-          left: 6300,
+          height: 215,
+          width: 250,
+          top: 480,
+          left: 590,
           borderWidth: 3,
           borderColor: "gray",
+          zIndex: 3,
         }}
       >
         {/* insert record player spritesheet here */}
+        <SpriteSheet
+          ref={(ref) => (this.recordSpin = ref)}
+          source={require("./assets/graphics/spritesheets/recordSpin.png")}
+          columns={3}
+          rows={4}
+          height={100}
+          frameHeight={1872}
+          frameWidth={150}
+          width={430}
+          imageStyle={{
+            position: "absolute",
+            top: -50,
+            left: -30,
+          }}
+          animations={{
+            spin: [
+              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8,
+              9, 10, 11,
+            ],
+          }}
+        ></SpriteSheet>
       </Pressable>
+
+      <Pressable
+        onPress={() => drumPlay()}
+        style={{
+          position: "absolute",
+          height: 380,
+          width: 350,
+          top: 200,
+          left: 20,
+          borderWidth: 3,
+          borderColor: "black",
+          resizeMode: "contain",
+        }}
+      >
+        {/* insert drums spritesheet here */}
+        <SpriteSheet
+          ref={(ref) => (this.drumPlay = ref)}
+          source={require("./assets/graphics/spritesheets/drumPlay.png")}
+          columns={4}
+          rows={3}
+          height={200}
+          frameHeight={1872}
+          frameWidth={150}
+          width={800}
+          imageStyle={{
+            position: "absolute",
+            top: -25,
+            left: -200,
+          }}
+          animations={{
+            play: [
+              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+              10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            ],
+          }}
+        ></SpriteSheet>
+      </Pressable>
+
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          borderWidth: 3,
+          height: 380,
+          width: 250,
+          borderColor: "purple",
+        }}
+      >
+        <Image
+          pointerEvents="none"
+          source={require("./assets/MusicRoom/MusicRoomAssets/pillows.png")}
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+        />
+      </View>
 
       {isMusicGameOpen && (
         <MusicGameView
