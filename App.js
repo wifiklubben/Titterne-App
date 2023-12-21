@@ -82,7 +82,7 @@ export default () => {
   // Settings = 30,
 
   // set page being viewed, default 1
-  const [activeView, setActiveView] = useState(4);
+  const [activeView, setActiveView] = useState(2);
 
   const handleViewChange = (viewNumber) => {
     setActiveView(viewNumber);
