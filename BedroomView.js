@@ -1,12 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  View,
-  ImageBackground,
-  Image,
-  Pressable,
-  Animated,
-  Text,
-} from "react-native";
+import { View, ImageBackground, Image, Pressable, Animated, Text } from "react-native";
 
 import { Audio } from "expo-av";
 
@@ -22,35 +15,33 @@ export default function BedroomView({ styles }) {
   const [dragonSfx, setDragonSfx] = useState();
   const [carSfx, setCarSfx] = useState();
   const [planeSfx, setPlaneSfx] = useState();
+  const [animation] = useState(new Animated.Value(0));
+  const [driveAnimation] = useState(new Animated.Value(0));
 
   // set all sfx
 
   useEffect(() => {
     async function loadWaveSound() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/sfx/hello.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/hello.mp3"));
         setWaveSfx(sound);
       } catch (error) {
         console.log("error loading wave sfx");
       }
     }
 
-    // async function loadCurtainSound() {
-    //   try {
-    //     const {sound} = await Audio.Sound.createAsync(require('./assets/audio/sfx/curtain.mp3'));
-    //     setCurtainSfx( sound );
-    //   } catch(error) {
-    //     console.log("error loading curtain sfx");
-    //   }
-    // }
+    async function loadCurtainSound() {
+      try {
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/Curtain.mp3"));
+        setCurtainSfx(sound);
+      } catch (error) {
+        console.log("error loading curtain sfx");
+      }
+    }
 
     async function loadRobotSound() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/sfx/Robot.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/Robot.mp3"));
         setRobotSfx(sound);
       } catch (error) {
         console.log("error loading robot sfx");
@@ -59,9 +50,7 @@ export default function BedroomView({ styles }) {
 
     async function loadDragonSound() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/sfx/Dino.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/Dino.mp3"));
         setDragonSfx(sound);
       } catch (error) {
         console.log("error loading dragon sfx");
@@ -70,9 +59,7 @@ export default function BedroomView({ styles }) {
 
     async function loadCarSound() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/sfx/Bil.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/Bil.mp3"));
         setCarSfx(sound);
       } catch (error) {
         console.log("error loading car sfx");
@@ -80,9 +67,7 @@ export default function BedroomView({ styles }) {
     }
     async function loadPlaneSound() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/sfx/Plane.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/Plane.mp3"));
         setPlaneSfx(sound);
       } catch (error) {
         console.log("error loading plane sfx");
@@ -90,7 +75,7 @@ export default function BedroomView({ styles }) {
     }
 
     loadWaveSound();
-    // loadCurtainSound()
+    loadCurtainSound();
     loadRobotSound();
     loadDragonSound();
     loadCarSound();
@@ -131,7 +116,7 @@ export default function BedroomView({ styles }) {
   async function playCurtainSound() {
     try {
       if (curtainSfx) {
-        curtainSfx.replayAync();
+        curtainSfx.replayAsync();
       }
     } catch (error) {
       console.log("error playing curtain sound", error);
@@ -196,7 +181,7 @@ export default function BedroomView({ styles }) {
   const dragon = () => {
     this.dragon.play({
       type: "roar",
-      fps: 24,
+      fps: 21,
       loops: false,
       resetAfterFinish: true,
     });
@@ -225,6 +210,39 @@ export default function BedroomView({ styles }) {
     });
 
     playRobotSound();
+  };
+  const robotAnimation = () => {
+    Animated.sequence([
+      Animated.timing(animation, {
+        toValue: -55,
+        duration: 1000,
+        useNativeDriver: false,
+      }),
+      Animated.timing(animation, {
+        toValue: -0,
+        duration: 1000,
+        useNativeDriver: false,
+      }),
+    ]).start();
+  };
+  const DriveAnimation = () => {
+    Animated.sequence([
+      Animated.timing(driveAnimation, {
+        toValue: 1000,
+        duration: 1500,
+        useNativeDriver: false,
+      }),
+      Animated.timing(driveAnimation, {
+        toValue: -300,
+        duration: 0,
+        useNativeDriver: false,
+      }),
+      Animated.timing(driveAnimation, {
+        toValue: 0,
+        duration: 700,
+        useNativeDriver: false,
+      }),
+    ]).start();
   };
 
   const plane = () => {
@@ -394,10 +412,7 @@ export default function BedroomView({ styles }) {
 
   return (
     // <ImageBackground source={require("./assets/Bedroom/Titterne_bedroom_placement.png")} style={styles.fullWidthBackground}>
-    <ImageBackground
-      source={require("./assets/Bedroom/bedroomBG.png")}
-      style={styles.fullWidthBackground}
-    >
+    <ImageBackground source={require("./assets/Bedroom/bedroomBG.png")} style={styles.fullWidthBackground}>
       {/* bed frame graphics */}
 
       {sockGameOpen === false && (
@@ -416,14 +431,15 @@ export default function BedroomView({ styles }) {
 
       {/* bedroom toys */}
 
-      <View
+      <Animated.View
         style={{
           position: "absolute",
           height: 250,
           width: 200,
-          top: 510,
+          top: 410,
           left: 800,
           zIndex: 4,
+          transform: [{ translateX: animation }],
         }}
       >
         <SpriteSheet
@@ -433,22 +449,22 @@ export default function BedroomView({ styles }) {
           rows={3}
           width={200}
           animations={{
-            robotDance: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-              19, 20, 21, 22, 23, 24,
-            ],
+            robotDance: [0, 9, 18, 1, 10, 19, 2, 11, 20, 3, 12, 21, 4, 13, 22, 5, 14, 23, 6, 15, 24, 7, 16, 25, 8, 0, 9, 18, 1, 10, 19, 2, 11, 20, 3, 12, 21, 4, 13, 22, 5, 14, 23, 6, 15, 24, 7, 16, 25, 8],
           }}
           onLoad={() => console.log("robot spritesheet loaded")}
         />
         <Pressable
-          onPress={() => robot()}
+          onPress={() => {
+            robotAnimation();
+            robot();
+          }}
           style={{
             position: "absolute",
             height: "100%",
             width: "100%",
           }}
         />
-      </View>
+      </Animated.View>
 
       <View
         style={{
@@ -467,10 +483,7 @@ export default function BedroomView({ styles }) {
           rows={4}
           width={300}
           animations={{
-            roar: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-              19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-            ],
+            roar: [0, 8, 16, 24, 1, 9, 17, 25, 2, 10, 18, 26, 3, 11, 19, 27, 4, 12, 20, 28, 5, 6, 7, 13, 21, 29, 14, 15, 22, 30, 23, 31],
           }}
           onLoad={() => console.log("dragon spritesheet loaded")}
         />
@@ -493,19 +506,20 @@ export default function BedroomView({ styles }) {
           width: 140,
           top: 455,
           left: 260,
-          zIndex: 4,
+          zIndex: 3,
         }}
       />
 
-      <View
+      <Animated.View
         style={{
           position: "absolute",
           height: 120,
           width: 240,
           top: 620,
           left: 200,
-          zIndex: 4,
+          zIndex: 6,
           overflow: "visible",
+          transform: [{ translateX: driveAnimation }],
         }}
       >
         <SpriteSheet
@@ -515,15 +529,16 @@ export default function BedroomView({ styles }) {
           columns={7}
           rows={3}
           animations={{
-            carDriving: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-            ],
+            carDriving: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 18],
           }}
           onLoad={() => console.log("car spritesheet loaded")}
         />
 
         <Pressable
-          onPress={() => car()}
+          onPress={() => {
+            car();
+            DriveAnimation();
+          }}
           style={{
             position: "absolute",
             width: "100%",
@@ -532,7 +547,7 @@ export default function BedroomView({ styles }) {
             borderColor: "green",
           }}
         />
-      </View>
+      </Animated.View>
 
       <View
         style={{
@@ -588,10 +603,8 @@ export default function BedroomView({ styles }) {
           width={320}
           animations={{
             skyBlink: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-              19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-              35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-              51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61,
+              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+              61,
             ],
           }}
           onLoad={() => console.log("sprintesheet loaded")}
@@ -612,8 +625,8 @@ export default function BedroomView({ styles }) {
           position: "absolute",
           height: 200,
           width: 330,
-          top: 240,
-          left: 730,
+          top: 218,
+          left: 715,
           flex: 1,
           zIndex: 2,
           alignItems: "flex-end",
@@ -621,19 +634,17 @@ export default function BedroomView({ styles }) {
       >
         <SpriteSheet
           ref={(ref) => (this.thorden = ref)}
-          source={require("./assets/graphics/spritesheets/ThordenBed.png")}
+          source={require("./assets/graphics/spritesheets/TordenBedroomAnimWave.png")}
           imageStyle={{
             marginBottom: 0,
           }}
-          columns={9}
-          rows={7}
+          columns={8}
+          rows={8}
           width={300}
           animations={{
             waveSleep: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-              19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-              35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-              51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62,
+              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+              61, 62,
             ],
           }}
           onLoad={() => console.log("SpriteSheet loaded")}
@@ -644,9 +655,9 @@ export default function BedroomView({ styles }) {
           style={{
             position: "absolute",
             top: "10%",
-            height: "50%",
-            left: "25%",
-            width: "30%",
+            height: "100%",
+            left: "15%",
+            width: "60%",
           }}
         />
       </View>
@@ -666,11 +677,12 @@ export default function BedroomView({ styles }) {
       <View
         style={{
           position: "absolute",
-          height: 260,
+          height: 270,
           width: 250,
           top: 0,
           left: 700,
           zIndex: 1,
+          overflow: "hidden",
         }}
       >
         <SpriteSheet
@@ -681,14 +693,11 @@ export default function BedroomView({ styles }) {
           width={340}
           imageStyle={{
             left: -50,
-            top: 0,
+            top: -90,
           }}
           animations={{
-            curtainClose: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-              19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-              35, 36, 37, 38, 39, 41, 42, 43, 44, 45, 46, 47,
-            ],
+            curtainClose: [0, 8, 16, 24, 32, 40, 46, 1, 9, 17, 25, 33, 41, 2, 10, 18, 26, 34, 42, 3, 11, 19, 27, 35, 43, 5, 13, 21, 29, 37, 45, 6, 14, 22, 30, 38, 46, 7, 15, 23, 31],
+            //possibly remove 45, 6, 14, 22, 30, 38, 46, 7, 15, 23, 31 for smoother animation?
           }}
           onLoad={() => console.log("curtain spritesheet loaded")}
         />

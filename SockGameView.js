@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  ImageBackground,
-  Image,
-  FlatList,
-  Pressable,
-  Animated,
-  Text,
-} from "react-native";
+import { View, ImageBackground, Image, FlatList, Pressable, Animated, Text } from "react-native";
 import { Emitter } from "react-native-particles";
 
 import { Audio } from "expo-av";
@@ -34,9 +26,7 @@ function SockGameView(props) {
   useEffect(() => {
     async function loadPop() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/pop.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sockSelect.mp3"));
         setPopSound(sound);
       } catch (error) {
         console.log("error loading sound: ", error);
@@ -48,9 +38,7 @@ function SockGameView(props) {
   useEffect(() => {
     async function loadFart() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/fart.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sockSelectWrong.mp3"));
         setFartSound(sound);
       } catch (error) {
         console.log("error loading sound: ", error);
@@ -62,9 +50,7 @@ function SockGameView(props) {
   useEffect(() => {
     async function loadYay() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/yay.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sockSelectCorrect.mp3"));
         setYaySound(sound);
       } catch (error) {
         console.log("error loading sound: ", error);
@@ -158,10 +144,7 @@ function SockGameView(props) {
   useEffect(() => {
     if (openCards.length === 2) {
       if (areSocksMatched(openCards[0], openCards[1])) {
-        setClearedcards((prevClearedCards) => [
-          ...prevClearedCards,
-          ...openCards,
-        ]);
+        setClearedcards((prevClearedCards) => [...prevClearedCards, ...openCards]);
         playYaySound();
       } else {
         playFartSound();
@@ -193,9 +176,7 @@ function SockGameView(props) {
     const sockId = index;
 
     const isCardOpen = openCards.some((card) => card.id === sockId);
-    const isCardCleared = clearedCards.some(
-      (card) => card.sock.color === item.color
-    );
+    const isCardCleared = clearedCards.some((card) => card.sock.color === item.color);
 
     return (
       <Pressable
@@ -224,9 +205,7 @@ function SockGameView(props) {
     );
   };
 
-  const [cards, setCards] = useState(() =>
-    shuffleSocks(uniqueSocksArray.concat(uniqueSocksArray))
-  );
+  const [cards, setCards] = useState(() => shuffleSocks(uniqueSocksArray.concat(uniqueSocksArray)));
 
   return (
     <View style={{ zIndex: 10 }}>
@@ -290,21 +269,8 @@ function SockGameView(props) {
 
           {clearedCards.length === 12 && (
             // <Text style={[props.styles.h1Text]}>You did it!!</Text>
-            <Emitter
-              numberOfParticles={100}
-              emissionRate={10}
-              interval={200}
-              particleLife={1000}
-              direction={0}
-              spread={200}
-              speed={100}
-              width={300}
-              fromPosition={{ x: 300, y: 300 }}
-            >
-              <Image
-                source={require("./assets/graphics/socks/sockBlue.png")}
-                style={{ resizeMode: "contain", height: 90, width: 90 }}
-              />
+            <Emitter numberOfParticles={100} emissionRate={10} interval={200} particleLife={1000} direction={0} spread={200} speed={100} width={300} fromPosition={{ x: 300, y: 300 }}>
+              <Image source={require("./assets/graphics/socks/sockBlue.png")} style={{ resizeMode: "contain", height: 90, width: 90 }} />
             </Emitter>
           )}
         </View>
