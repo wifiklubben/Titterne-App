@@ -223,6 +223,28 @@ export default function MusicRoomView({ styles }) {
     });
   };
 
+  // Torden animation
+
+  const tordenWave = () => {
+    this.tordenWave.play({
+      type: "wave",
+      fps: 24,
+      loops: false,
+      resetAfterFinish: true,
+    });
+  };
+
+  // Sky animation
+
+  const skyDance = () => {
+    this.skyDance.play({
+      type: "dance",
+      fps: 24,
+      loops: false,
+      resetAfterFinish: true,
+    });
+  };
+
   // animation functions
 
   const wiggleAnimation = () => {
@@ -277,6 +299,78 @@ export default function MusicRoomView({ styles }) {
             left: -70,
           }}
         />
+      </Pressable>
+
+      <Pressable
+        onPress={() => tordenWave()}
+        style={{
+          position: "absolute",
+          height: 300,
+          width: 200,
+          top: 100,
+          right: 125,
+          borderWidth: 3,
+          borderColor: "blue",
+          zIndex: 4,
+        }}
+      >
+        {/* insert torden spritesheet here */}
+        <SpriteSheet
+          ref={(ref) => (this.tordenWave = ref)}
+          source={require("./assets/graphics/spritesheets/tordenWaveMusicRoom.png")}
+          columns={4}
+          rows={8}
+          frameHeight={6264}
+          frameWidth={3040}
+          width={300}
+          imageStyle={{
+            position: "absolute",
+            top: 12,
+            left: -48,
+          }}
+          animations={{
+            wave: [
+              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+              19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+            ],
+          }}
+        ></SpriteSheet>
+      </Pressable>
+
+      <Pressable
+        onPress={() => skyDance()}
+        style={{
+          position: "absolute",
+          height: 300,
+          width: 200,
+          top: 300,
+          left: 255,
+          borderWidth: 3,
+          borderColor: "pink",
+          zIndex: 2,
+        }}
+      >
+        {/* insert torden spritesheet here */}
+        <SpriteSheet
+          ref={(ref) => (this.skyDance = ref)}
+          source={require("./assets/graphics/spritesheets/skyDanceMusicRoom.png")}
+          columns={4}
+          rows={4}
+          frameHeight={150}
+          frameWidth={150}
+          width={400}
+          imageStyle={{
+            position: "absolute",
+            top: -40,
+            left: -80,
+          }}
+          animations={{
+            dance: [
+              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3,
+              4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+            ],
+          }}
+        ></SpriteSheet>
       </Pressable>
 
       <Pressable
@@ -496,7 +590,7 @@ export default function MusicRoomView({ styles }) {
           animations={{
             spin: [
               0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8,
-              9, 10, 11,
+              9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
             ],
           }}
         ></SpriteSheet>
