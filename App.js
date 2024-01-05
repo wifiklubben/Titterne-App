@@ -152,6 +152,7 @@ export default () => {
   const [birdsAmbientSound, setBirdsAmbientSound] = useState();
   const [treesAmbientSound, setTreesAmbientSound] = useState();
   const [musicRoomAmbient, setMusicRoomAmbientSound] = useState();
+  const [treeHouseAmbient, setTreeHouseAmbient] = useState();
 
   SplashScreen.preventAutoHideAsync();
 
@@ -187,6 +188,19 @@ export default () => {
       }
     }
 
+    async function loadTreehouseAmbientSound() {
+      try {
+        const { sound } = await Audio.Sound.createAsync(
+          require("./assets/audio/treeHouse/Treehouse-background.mp3")
+        );
+        sound.setVolumeAsync(0.5);
+        sound.setIsLoopingAsync(true);
+        setTreeHouseAmbient(sound);
+      } catch (error) {
+        console.log("error loading treehouse ambient sound: ", error);
+      }
+    }
+
     async function loadMusicRoomAmbientSound() {
       try {
         const { sound } = await Audio.Sound.createAsync(
@@ -203,6 +217,7 @@ export default () => {
     loadTreesAmbientSound();
     loadBirdsAmbientSound();
     loadMusicRoomAmbientSound();
+    loadTreehouseAmbientSound();
   }, []);
 
   // background music/sounds per room view
@@ -210,8 +225,8 @@ export default () => {
     console.log("activeView: ", activeView);
 
     if (activeView === 1 && birdsAmbientSound) {
-      if (treesAmbientSound) {
-        treesAmbientSound.stopAsync();
+      if (treeHouseAmbient) {
+        treeHouseAmbient.stopAsync();
       }
 
       if (musicRoomAmbient) {
@@ -230,12 +245,12 @@ export default () => {
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
-    } else if (activeView === 4 && treesAmbientSound) {
+    } else if (activeView === 4 && treeHouseAmbient) {
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
 
-      treesAmbientSound.playAsync();
+      treeHouseAmbient.playAsync();
     } else if (activeView === 6) {
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
