@@ -318,8 +318,8 @@ export default function MusicRoomView({ styles }) {
         <SpriteSheet
           ref={(ref) => (this.tordenWave = ref)}
           source={require("./assets/graphics/spritesheets/tordenWaveMusicRoom.png")}
-          columns={4}
-          rows={8}
+          columns={5}
+          rows={9}
           frameHeight={6264}
           frameWidth={3040}
           width={300}
@@ -331,7 +331,8 @@ export default function MusicRoomView({ styles }) {
           animations={{
             wave: [
               0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-              19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+              19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+              35, 36, 37, 38, 39, 40, 41, 42,
             ],
           }}
         ></SpriteSheet>
