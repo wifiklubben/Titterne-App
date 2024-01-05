@@ -249,7 +249,7 @@ export default function BedroomView({ styles }) {
     console.log("plane animation triggered");
     this.plane.play({
       type: "planeFly",
-      fps: 24,
+      fps: 4,
       loops: false,
       resetAfterFinish: true,
     });
@@ -263,33 +263,32 @@ export default function BedroomView({ styles }) {
 
   const storyTitles = [
     {
-      title: "Hjælp Til Nattero",
-      tag: "natero",
-      thumbnail: require("./assets/StoryContents/Thumbnails/ChickenFightThumbnail.png"),
+      // tag: "natero",
+      thumbnail: require("./assets/StoryContents/Thumbnails/illustorybookNattero.png"),
       storyAudio: require("./assets/StoryContents/Speeches/Hjælp_til_nattero.mp3"),
     },
     {
-      title: "Magisk Have",
+      // title: "Magisk Have",
       tag: "magiskHave",
-      thumbnail: require("./assets/StoryContents/Thumbnails/CinderellaThumbnail.png"),
+      thumbnail: require("./assets/StoryContents/Thumbnails/illustorybookRergnbueHaven.png"),
       storyAudio: require("./assets/StoryContents/Speeches/Magisk_have_2.mp3"),
     },
     {
-      title: "Natur",
+      // title: "Natur",
       tag: "natur",
-      thumbnail: require("./assets/StoryContents/Thumbnails/RomeoJulietThumbnail.png"),
+      thumbnail: require("./assets/StoryContents/Thumbnails/illustorybookNaturdrøm.png"),
       storyAudio: require("./assets/StoryContents/Speeches/Natur.mp3"),
     },
     {
-      title: "Skattejagt",
+      // title: "Skattejagt",
       tag: "skattejagt",
-      thumbnail: require("./assets/StoryContents/Thumbnails/RomeoJulietThumbnail.png"),
+      thumbnail: require("./assets/StoryContents/Thumbnails/illustorybookSkatten.png"),
       storyAudio: require("./assets/StoryContents/Speeches/Skattejagt.mp3"),
     },
     {
-      title: "Tuba",
+      // title: "Tuba",
       tag: "tuba",
-      thumbnail: require("./assets/StoryContents/Thumbnails/RomeoJulietThumbnail.png"),
+      thumbnail: require("./assets/StoryContents/Thumbnails/illustorybookTuba.png"),
       storyAudio: require("./assets/StoryContents/Speeches/Tuba_2.mp3"),
     },
   ];
@@ -313,7 +312,7 @@ export default function BedroomView({ styles }) {
           alignItems: "center",
         }}
       >
-        <Text style={styles.pText}>{currentStory.title}</Text>
+        {/* <Text style={styles.pText}>{currentStory.title}</Text> */}
       </View>
     );
   };
@@ -549,38 +548,35 @@ export default function BedroomView({ styles }) {
         />
       </Animated.View>
 
-      <View
+      <Pressable
+        onPress={() => plane()}
         style={{
           position: "absolute",
-          height: 150,
-          width: 160,
-          top: 570,
+          height: 130,
+          width: 180,
+          top: 550,
           left: 640,
           zIndex: 4,
+          borderWidth: 1,
         }}
       >
         <SpriteSheet
           ref={(ref) => (this.plane = ref)}
-          source={require("./assets/graphics/spritesheets/PlaneFlying.png")}
-          width={140}
+          source={require("./assets/graphics/spritesheets/PlaneAnim.png")}
+          imageStyle={{
+            marginBottom: 0,
+            top: -50,
+            right: 10,
+          }}
+          width={240}
           columns={3}
-          rows={3}
+          rows={4}
           animations={{
-            planeFly: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            planeFly: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           }}
           onLoad={() => console.log("plane spritesheet loaded")}
         />
-        <Pressable
-          onPress={() => plane()}
-          style={{
-            position: "absolute",
-            height: "100%",
-            width: "100%",
-            borderWith: 3,
-            borderColor: "brown",
-          }}
-        />
-      </View>
+      </Pressable>
 
       <View
         source={require("./assets/Bedroom/BedroomGraphics/SkyNotanimated.png")}
@@ -687,7 +683,7 @@ export default function BedroomView({ styles }) {
       >
         <SpriteSheet
           ref={(ref) => (this.curtain = ref)}
-          source={require("./assets/graphics/spritesheets/curtainAnim.png")}
+          source={require("./assets/graphics/spritesheets/curtainnAnimFix.png")}
           columns={8}
           rows={6}
           width={340}
@@ -696,8 +692,7 @@ export default function BedroomView({ styles }) {
             top: -90,
           }}
           animations={{
-            curtainClose: [0, 8, 16, 24, 32, 40, 46, 1, 9, 17, 25, 33, 41, 2, 10, 18, 26, 34, 42, 3, 11, 19, 27, 35, 43, 5, 13, 21, 29, 37, 45, 6, 14, 22, 30, 38, 46, 7, 15, 23, 31],
-            //possibly remove 45, 6, 14, 22, 30, 38, 46, 7, 15, 23, 31 for smoother animation?
+            curtainClose: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45],
           }}
           onLoad={() => console.log("curtain spritesheet loaded")}
         />
