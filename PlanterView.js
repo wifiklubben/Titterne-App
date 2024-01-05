@@ -201,7 +201,7 @@ function PlanterView(props) {
         }}
       >
         <Image
-          source={require("./assets/graphics/closeIcon.png")}
+          source={require("./assets/Global/closeIcon.png")}
           style={{
             width: 80,
             height: 80,
