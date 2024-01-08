@@ -94,7 +94,7 @@ function ConservatoryView(styles) {
         >
           <SpriteSheet
             ref={(ref) => (this.sky = ref)}
-            source={require("./assets/graphics/spritesheets/SkyWaveConservatory.png")}
+            source={require("./assets/graphics/spritesheets/SkyConservatoryWaveBlink.png")}
             imageStyle={{
               marginBottom: 0,
 
@@ -102,12 +102,17 @@ function ConservatoryView(styles) {
               right: 40,
               height: "100%",
             }}
-            columns={8}
+            columns={9}
             rows={7}
             width={300}
             initialFrame={10}
             animations={{
-              wave: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54],
+              wave: [
+                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+                18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+                34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+                50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61,
+              ],
             }}
             onLoad={() => console.log("SpriteSheet loaded")}
           />
@@ -133,7 +138,12 @@ function ConservatoryView(styles) {
             rows={12}
             width={289}
             animations={{
-              wave: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
+              wave: [
+                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+                18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+                34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+                50, 51, 52, 53, 54, 55, 56, 57, 58,
+              ],
               blink: [0, 1, 2, 3, 5, 6],
             }}
             onLoad={() => console.log("SpriteSheet loaded")}
@@ -208,7 +218,11 @@ function ConservatoryView(styles) {
                 rows={10}
                 width={695}
                 animations={{
-                  dance: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
+                  dance: [
+                    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+                    17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+                    32, 33, 34, 35, 36, 37, 38,
+                  ],
                 }}
                 onLoad={() => console.log("SpriteSheet loaded")}
               />
@@ -216,7 +230,9 @@ function ConservatoryView(styles) {
           </>
         )}
 
-        {plantGameOpen && <PlanterView handleGameOpen={handleGameOpen} styles={styles} />}
+        {plantGameOpen && (
+          <PlanterView handleGameOpen={handleGameOpen} styles={styles} />
+        )}
 
         <Image
           pointerEvents="none"
