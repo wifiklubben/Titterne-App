@@ -6,6 +6,7 @@ import {
   ImageBackground,
   Dimensions,
   Pressable,
+  Image,
 } from "react-native";
 
 import { useFonts } from "expo-font";
@@ -18,7 +19,10 @@ import moment from "moment";
 import { create } from "zustand";
 
 import HomeIcon from "./assets/graphics/homeIcon.svg";
+import HomeIconGreen from "./assets/graphics/homeIconGreen.png";
+
 import SettingsIcon from "./assets/graphics/settingsIcon";
+import SettingsIconGreen from "./assets/graphics/settingsIconGreen.png";
 
 import HomeView from "./HomeView";
 import MusicRoomView from "./MusicRoomView";
@@ -356,7 +360,7 @@ export default () => {
     },
 
     roundButton: {
-      backgroundColor: "white",
+      backgroundColor: "#79D333",
       width: 100,
       height: 100,
       borderRadius: 100,
@@ -541,7 +545,11 @@ export default () => {
               style={styles.roundButton}
               onPress={() => handleViewChange(1)}
             >
-              <HomeIcon width={72} height={72} />
+              {/* <HomeIcon width={72} height={72} /> */}
+              <Image
+                source={HomeIconGreen}
+                style={{ width: 110, height: 110 }}
+              />
             </Pressable>
           )}
 
@@ -550,7 +558,11 @@ export default () => {
               style={styles.roundButton}
               onPress={() => handleViewChange(30)}
             >
-              <SettingsIcon width={72} height={72} />
+              {/* <SettingsIcon width={72} height={72} /> */}
+              <Image
+                source={SettingsIconGreen}
+                style={{ width: 110, height: 110 }}
+              />
             </Pressable>
           )}
         </View>
