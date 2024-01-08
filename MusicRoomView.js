@@ -356,7 +356,7 @@ export default function MusicRoomView({ styles }) {
           ref={(ref) => (this.skyDance = ref)}
           source={require("./assets/graphics/spritesheets/skyDanceMusicRoom.png")}
           columns={4}
-          rows={4}
+          rows={9}
           frameHeight={150}
           frameWidth={150}
           width={400}
@@ -368,7 +368,8 @@ export default function MusicRoomView({ styles }) {
           animations={{
             dance: [
               0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3,
-              4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+              4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+              22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
             ],
           }}
         ></SpriteSheet>
