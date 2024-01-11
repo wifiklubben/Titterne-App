@@ -50,12 +50,31 @@ function BookView(props) {
             onPress={() => props.handleStoryClose()}
             style={{
               position: "absolute",
-              right: 120,
+              right: 379,
               top: 500,
               zIndex: 100,
+              backgroundColor: "#c7dbf4",
+              padding: 20,
+              borderRadius: 30,
             }}
           >
-            <Text style={props.styles.pText}>Choose a Different Story</Text>
+            <Text style={{ ...props.styles.pText, color: "#a14f8c" }}>Vælg en anden historie</Text>
+          </Pressable>
+        )}
+        {props.currentStory.title != "" && (
+          <Pressable
+            onPress={() => props.pausePlayStory()}
+            style={{
+              position: "absolute",
+              right: 379,
+              top: 600,
+              zIndex: 100,
+              backgroundColor: "#c7dbf4",
+              padding: 20,
+              borderRadius: 30,
+            }}
+          >
+            <Text style={{ ...props.styles.pText, color: "#a14f8c" }}>Play/pause</Text>
           </Pressable>
         )}
 

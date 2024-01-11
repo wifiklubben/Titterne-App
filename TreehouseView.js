@@ -33,9 +33,7 @@ function TreehouseView({ styles }) {
 
     async function loadBoomboxAudio() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/treeHouse/Boombox.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/treeHouse/Boombox.mp3"));
         setBoomboxAudio(sound);
       } catch (error) {
         console.log("error in initial loadMusic of Boombox audio: ", error);
@@ -44,9 +42,7 @@ function TreehouseView({ styles }) {
 
     async function loadCrowAudio() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/treeHouse/Crow.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/treeHouse/Crow.mp3"));
         setCrowAudio(sound);
       } catch (error) {
         console.log("error in initial loadMusic of Crow audio: ", error);
@@ -55,9 +51,7 @@ function TreehouseView({ styles }) {
 
     async function loadCansAudio() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/treeHouse/Cans.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/treeHouse/Cans.mp3"));
         setCansAudio(sound);
       } catch (error) {
         console.log("error in initial loadMusic of Cans audio: ", error);
@@ -66,9 +60,7 @@ function TreehouseView({ styles }) {
 
     async function loadPopcornAudio() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/treeHouse/Popcorn.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/treeHouse/Popcorn.mp3"));
         setPopcornAudio(sound);
       } catch (error) {
         console.log("error in initial loadMusic of Popcorn audio: ", error);
@@ -215,8 +207,7 @@ function TreehouseView({ styles }) {
               left: 290,
               width: 200,
               height: 200,
-              borderWidth: 3,
-              borderColor: "green",
+
               zIndex: 2,
             }}
           >
@@ -251,11 +242,7 @@ function TreehouseView({ styles }) {
             frameHeight={150}
             frameWidth={150}
             animations={{
-              squawk: [
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-                18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-                34, 35, 36, 37, 38, 39, 40, 41, 42,
-              ],
+              squawk: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42],
             }}
           ></SpriteSheet>
 
@@ -272,8 +259,7 @@ function TreehouseView({ styles }) {
         <View
           style={{
             position: "absolute",
-            borderWidth: 2,
-            borderColor: "orange",
+
             height: 85,
             width: 100,
             top: 500,
@@ -305,8 +291,7 @@ function TreehouseView({ styles }) {
         <View
           style={{
             position: "absolute",
-            borderWidth: 3,
-            borderColor: "purple",
+
             height: 160,
             width: 180,
             top: 540,
@@ -339,8 +324,7 @@ function TreehouseView({ styles }) {
         <View
           style={{
             position: "absolute",
-            borderWidth: 3,
-            borderColor: "yellow",
+
             width: 200,
             height: 300,
             left: 0,
@@ -361,11 +345,7 @@ function TreehouseView({ styles }) {
               left: -60,
             }}
             animations={{
-              bounce: [
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2,
-                3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5,
-                6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-              ],
+              bounce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
             }}
           ></SpriteSheet>
           <Pressable
@@ -381,8 +361,7 @@ function TreehouseView({ styles }) {
         <View
           style={{
             position: "absolute",
-            borderWidth: 3,
-            borderColor: "pink",
+
             left: 100,
             top: 210,
             width: 260,
@@ -405,12 +384,7 @@ function TreehouseView({ styles }) {
               zIndex: 0,
             }}
             animations={{
-              wave: [
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-                18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-                34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
-                50, 51, 52, 53, 54, 55, 56, 57,
-              ],
+              wave: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57],
               // blink: [0, 1, 2, 3, 4, 5, 6, 7, 8],
             }}
           ></SpriteSheet>
@@ -428,8 +402,7 @@ function TreehouseView({ styles }) {
         <View
           style={{
             position: "absolute",
-            borderWidth: 3,
-            borderColor: "blue",
+
             top: 220,
             left: 730,
             height: 300,
@@ -450,11 +423,7 @@ function TreehouseView({ styles }) {
               left: -20,
             }}
             animations={{
-              wave: [
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-                18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-                34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
-              ],
+              wave: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49],
             }}
           ></SpriteSheet>
           <Pressable
@@ -482,8 +451,6 @@ function TreehouseView({ styles }) {
         <Image
           source={require("./assets/TreeHouse/TreeHouseFG.png")}
           style={{
-            borderWidth: 3,
-            borderColor: "red",
             width: "100%",
             height: "100%",
             position: "absolute",
@@ -491,9 +458,7 @@ function TreehouseView({ styles }) {
         />
         {/* </View> */}
 
-        {bugGameOpen === true && (
-          <BugGameView styles={styles} handleGameOpen={handleGameOpen} />
-        )}
+        {bugGameOpen === true && <BugGameView styles={styles} handleGameOpen={handleGameOpen} />}
 
         {/* story book component
 

@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  ImageBackground,
-  Animated,
-  Image,
-  Pressable,
-} from "react-native";
+import { View, ImageBackground, Animated, Image, Pressable } from "react-native";
 
 import OneShot from "./OneShot";
 import MusicGameView from "./MusicGameView";
@@ -27,11 +21,7 @@ export default function MusicRoomView({ styles }) {
   const [isPlayignRightNow, setIsPlayingRightNow] = useState(null);
 
   const handleMusicGameOpen = () => {
-    console.log(
-      "opening music room game",
-      "music game is open: ",
-      isMusicGameOpen
-    );
+    console.log("opening music room game", "music game is open: ", isMusicGameOpen);
 
     if (isMusicGameOpen === false) {
       setIsMusicGameOpen(true);
@@ -43,9 +33,7 @@ export default function MusicRoomView({ styles }) {
   useEffect(() => {
     async function loadSfx1() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/guitarLick.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/guitarLick.mp3"));
         setSfx1(sound);
       } catch (error) {
         console.log("error in initial loadMusic of sfx1: ", error);
@@ -54,9 +42,7 @@ export default function MusicRoomView({ styles }) {
 
     async function loadGuitarAudio() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/musicRoom/guitar.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/musicRoom/guitar.mp3"));
         setGuitarAudio(sound);
       } catch (error) {
         console.log("error in initial loadMusic of guitar audio: ", error);
@@ -65,9 +51,7 @@ export default function MusicRoomView({ styles }) {
 
     async function loadFluteAudio() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/musicRoom/flute.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/musicRoom/flute.mp3"));
         setFluteAudio(sound);
       } catch (error) {
         console.log("error in initial loadMusic of flute audio: ", error);
@@ -76,9 +60,7 @@ export default function MusicRoomView({ styles }) {
 
     async function loadMaracasAudio() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/musicRoom/maracas.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/musicRoom/maracas.mp3"));
         setMaracasAudio(sound);
       } catch (error) {
         console.log("error in initial loadMusic of maracas audio: ", error);
@@ -87,9 +69,7 @@ export default function MusicRoomView({ styles }) {
 
     async function loadTambourineAudio() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/musicRoom/tambourine.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/musicRoom/tambourine.mp3"));
         setTambourineAudio(sound);
       } catch (error) {
         console.log("error in initial loadMusic of tambourine audio: ", error);
@@ -98,9 +78,7 @@ export default function MusicRoomView({ styles }) {
 
     async function loadTrumpetAudio() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/musicRoom/trumpet.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/musicRoom/trumpet.mp3"));
         setTrumpetAudio(sound);
       } catch (error) {
         console.log("error in initial loadMusic of trumpet audio: ", error);
@@ -109,9 +87,7 @@ export default function MusicRoomView({ styles }) {
 
     async function loadSfx2() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/Airhorn.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/Airhorn.mp3"));
         setSfx2(sound);
       } catch (error) {
         console.log("error in initial loadMusic of sfx2: ", error);
@@ -283,8 +259,7 @@ export default function MusicRoomView({ styles }) {
           width: 290,
           top: 615,
           left: 300,
-          borderWidth: 3,
-          borderColor: "red",
+
           transform: "rotateZ(-17deg)",
           zIndex: 3,
         }}
@@ -309,8 +284,7 @@ export default function MusicRoomView({ styles }) {
           width: 200,
           top: 100,
           right: 125,
-          borderWidth: 3,
-          borderColor: "blue",
+
           zIndex: 4,
         }}
       >
@@ -329,11 +303,7 @@ export default function MusicRoomView({ styles }) {
             left: -48,
           }}
           animations={{
-            wave: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-              19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-              35, 36, 37, 38, 39, 40, 41, 42,
-            ],
+            wave: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42],
           }}
         ></SpriteSheet>
       </Pressable>
@@ -346,8 +316,7 @@ export default function MusicRoomView({ styles }) {
           width: 200,
           top: 300,
           left: 255,
-          borderWidth: 3,
-          borderColor: "pink",
+
           zIndex: 2,
         }}
       >
@@ -366,11 +335,7 @@ export default function MusicRoomView({ styles }) {
             left: -80,
           }}
           animations={{
-            dance: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3,
-              4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-              22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-            ],
+            dance: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33],
           }}
         ></SpriteSheet>
       </Pressable>
@@ -383,8 +348,7 @@ export default function MusicRoomView({ styles }) {
           width: 85,
           top: 650,
           left: 200,
-          borderWidth: 3,
-          borderColor: "green",
+
           zIndex: 4,
         }}
       >
@@ -404,11 +368,7 @@ export default function MusicRoomView({ styles }) {
             left: -12,
           }}
           animations={{
-            shake: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3,
-              4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7,
-              8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8,
-            ],
+            shake: [0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8],
           }}
         ></SpriteSheet>
       </Pressable>
@@ -421,8 +381,7 @@ export default function MusicRoomView({ styles }) {
           width: 130,
           top: 605,
           left: 70,
-          borderWidth: 3,
-          borderColor: "brown",
+
           zIndex: 3,
         }}
       >
@@ -442,12 +401,7 @@ export default function MusicRoomView({ styles }) {
             left: -13,
           }}
           animations={{
-            shake: [
-              0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5,
-              6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3,
-              4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1,
-              2, 3, 4, 5, 6, 7,
-            ],
+            shake: [0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7],
           }}
         ></SpriteSheet>
       </Pressable>
@@ -460,8 +414,7 @@ export default function MusicRoomView({ styles }) {
           width: 135,
           top: 340,
           left: 840,
-          borderWidth: 3,
-          borderColor: "orange",
+
           zIndex: 4,
         }}
       >
@@ -481,10 +434,7 @@ export default function MusicRoomView({ styles }) {
             left: -4,
           }}
           animations={{
-            play: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3,
-              4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8,
-            ],
+            play: [0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8],
           }}
         ></SpriteSheet>
       </Pressable>
@@ -497,8 +447,7 @@ export default function MusicRoomView({ styles }) {
           width: 190,
           top: 355,
           left: 625,
-          borderWidth: 3,
-          borderColor: "gold",
+
           zIndex: 3,
         }}
       >
@@ -531,8 +480,7 @@ export default function MusicRoomView({ styles }) {
           width: 175,
           top: 710,
           left: 360,
-          borderWidth: 3,
-          borderColor: "lime",
+
           // transform: "rotateZ(-40deg)",
         }}
       >
@@ -552,11 +500,7 @@ export default function MusicRoomView({ styles }) {
             left: 5,
           }}
           animations={{
-            play: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 0, 1, 2,
-              3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 0, 1, 2, 3, 4, 5,
-              6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-            ],
+            play: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
           }}
         ></SpriteSheet>
       </Pressable>
@@ -569,8 +513,7 @@ export default function MusicRoomView({ styles }) {
           width: 250,
           top: 480,
           left: 590,
-          borderWidth: 3,
-          borderColor: "gray",
+
           zIndex: 3,
         }}
       >
@@ -590,10 +533,7 @@ export default function MusicRoomView({ styles }) {
             left: -30,
           }}
           animations={{
-            spin: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8,
-              9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-            ],
+            spin: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
           }}
         ></SpriteSheet>
       </Pressable>
@@ -606,8 +546,7 @@ export default function MusicRoomView({ styles }) {
           width: 350,
           top: 200,
           left: 20,
-          borderWidth: 3,
-          borderColor: "black",
+
           resizeMode: "contain",
         }}
       >
@@ -627,10 +566,7 @@ export default function MusicRoomView({ styles }) {
             left: -200,
           }}
           animations={{
-            play: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-              10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            ],
+            play: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           }}
         ></SpriteSheet>
       </Pressable>
@@ -640,7 +576,7 @@ export default function MusicRoomView({ styles }) {
           position: "absolute",
           bottom: 0,
           left: 0,
-          borderWidth: 3,
+
           height: 380,
           width: 250,
           borderColor: "purple",
@@ -656,12 +592,7 @@ export default function MusicRoomView({ styles }) {
         />
       </View>
 
-      {isMusicGameOpen && (
-        <MusicGameView
-          styles={styles}
-          handleMusicGameOpen={handleMusicGameOpen}
-        />
-      )}
+      {isMusicGameOpen && <MusicGameView styles={styles} handleMusicGameOpen={handleMusicGameOpen} />}
 
       {/* <View style={{
             position:'absolute',

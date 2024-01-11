@@ -17,7 +17,7 @@ export default function BedroomView({ styles }) {
   const [planeSfx, setPlaneSfx] = useState();
   const [animation] = useState(new Animated.Value(0));
   const [driveAnimation] = useState(new Animated.Value(0));
-
+  const [flyAnim] = useState(new Animated.Value(0));
   // set all sfx
 
   useEffect(() => {
@@ -166,9 +166,8 @@ export default function BedroomView({ styles }) {
     });
     // play sound function here if/when it exists
   };
-
+  //animations
   const car = () => {
-    console.log("car animation triggered");
     this.car.play({
       type: "carDriving",
       fps: 24,
@@ -201,7 +200,6 @@ export default function BedroomView({ styles }) {
   };
 
   const robot = () => {
-    console.log("robot animation triggered");
     this.robot.play({
       type: "robotDance",
       fps: 24,
@@ -249,7 +247,7 @@ export default function BedroomView({ styles }) {
     console.log("plane animation triggered");
     this.plane.play({
       type: "planeFly",
-      fps: 4,
+      fps: 24,
       loops: false,
       resetAfterFinish: true,
     });
@@ -311,9 +309,7 @@ export default function BedroomView({ styles }) {
           justifyContent: "center",
           alignItems: "center",
         }}
-      >
-        {/* <Text style={styles.pText}>{currentStory.title}</Text> */}
-      </View>
+      ></View>
     );
   };
 
@@ -393,6 +389,10 @@ export default function BedroomView({ styles }) {
       console.log("unloading sound");
   }
 
+  async function pausePlayStory() {
+    currentSpeeches.stopAsync();
+  }
+
   //* sock game logic
   const [sockGameOpen, setSockGameOpen] = useState(false);
 
@@ -421,8 +421,6 @@ export default function BedroomView({ styles }) {
             height: "100%",
             width: "100%",
             zIndex: 3,
-            borderWidth: 1,
-            borderColor: "green",
           }}
           pointerEvents="none"
         />
@@ -542,14 +540,13 @@ export default function BedroomView({ styles }) {
             position: "absolute",
             width: "100%",
             height: "100%",
-            borderWith: 3,
-            borderColor: "green",
           }}
         />
       </Animated.View>
-
       <Pressable
-        onPress={() => plane()}
+        onPress={() => {
+          plane();
+        }}
         style={{
           position: "absolute",
           height: 130,
@@ -557,12 +554,11 @@ export default function BedroomView({ styles }) {
           top: 550,
           left: 640,
           zIndex: 4,
-          borderWidth: 1,
         }}
       >
         <SpriteSheet
           ref={(ref) => (this.plane = ref)}
-          source={require("./assets/graphics/spritesheets/PlaneAnim.png")}
+          source={require("./assets/graphics/spritesheets/Plananim.png")}
           imageStyle={{
             marginBottom: 0,
             top: -50,
@@ -572,7 +568,7 @@ export default function BedroomView({ styles }) {
           columns={3}
           rows={4}
           animations={{
-            planeFly: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            planeFly: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           }}
           onLoad={() => console.log("plane spritesheet loaded")}
         />
@@ -884,6 +880,7 @@ export default function BedroomView({ styles }) {
       {isBookOpen === true && (
         <BookView
           //   todo remove unnecessary props
+          pausePlayStory={pausePlayStory}
           currentStory={currentStory}
           setCurrentStory={setCurrentStory}
           storyTitles={storyTitles}

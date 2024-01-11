@@ -36,9 +36,7 @@ export default function MusicGameView(props) {
   useEffect(() => {
     async function loadMusic1() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/piano/Multitracks/Titel_Stem_bas.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_bas.mp3"));
         setTrack1(sound);
         console.log("track one set");
       } catch (error) {
@@ -47,9 +45,7 @@ export default function MusicGameView(props) {
     }
     async function loadMusic2() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/piano/Multitracks/Titel_Stem_Grin.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_Grin.mp3"));
         setTrack2(sound);
       } catch (error) {
         console.log("error in initial loadMusic of track 2: ", error);
@@ -57,9 +53,7 @@ export default function MusicGameView(props) {
     }
     async function loadMusic3() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/piano/Multitracks/Titel_Stem_Guitar.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_Guitar.mp3"));
         setTrack3(sound);
       } catch (error) {
         console.log("error in initial loadMusic of track 3: ", error);
@@ -67,9 +61,7 @@ export default function MusicGameView(props) {
     }
     async function loadMusic4() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/piano/Multitracks/Titel_Stem_Orgel.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_Orgel.mp3"));
         setTrack4(sound);
       } catch (error) {
         console.log("error in initial loadMusic of track 4: ", error);
@@ -77,9 +69,7 @@ export default function MusicGameView(props) {
     }
     async function loadMusic5() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/piano/Multitracks/Titel_Stem_perc1.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_perc1.mp3"));
         setTrack5(sound);
       } catch (error) {
         console.log("error in initial loadMusic of track 5: ", error);
@@ -87,9 +77,7 @@ export default function MusicGameView(props) {
     }
     async function loadMusic6() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/piano/Multitracks/Titel_Stem_perc2.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_perc2.mp3"));
         setTrack6(sound);
       } catch (error) {
         console.log("error in initial loadMusic of track 6: ", error);
@@ -97,9 +85,7 @@ export default function MusicGameView(props) {
     }
     async function loadMusic7() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/piano/Multitracks/Titel_Stem_Tema.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_Tema.mp3"));
         setTrack7(sound);
       } catch (error) {
         console.log("error in initial loadMusic of track 7: ", error);
@@ -107,9 +93,7 @@ export default function MusicGameView(props) {
     }
     async function loadMusic8() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/piano/Multitracks/Titel_Stem_Vibrafon.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_Vibrafon.mp3"));
         setTrack8(sound);
       } catch (error) {
         console.log("error in initial loadMusic of track 8: ", error);
@@ -505,8 +489,6 @@ export default function MusicGameView(props) {
           position: "absolute",
           top: 180,
           left: 85,
-          borderWidth: 3,
-          borderColor: "blue",
         }}
       >
         <Pressable onPress={playMusic}>
@@ -533,53 +515,21 @@ export default function MusicGameView(props) {
       </View>
 
       <View style={props.styles.musicButtonContainer}>
-        <Multitrack
-          styles={props.styles}
-          volume={volume1}
-          handleVolumeChange={handleVolumeChange1}
-        />
+        <Multitrack styles={props.styles} volume={volume1} handleVolumeChange={handleVolumeChange1} />
 
-        <Multitrack
-          styles={props.styles}
-          volume={volume2}
-          handleVolumeChange={handleVolumeChange2}
-        />
+        <Multitrack styles={props.styles} volume={volume2} handleVolumeChange={handleVolumeChange2} />
 
-        <Multitrack
-          styles={props.styles}
-          volume={volume3}
-          handleVolumeChange={handleVolumeChange3}
-        />
+        <Multitrack styles={props.styles} volume={volume3} handleVolumeChange={handleVolumeChange3} />
 
-        <Multitrack
-          styles={props.styles}
-          volume={volume4}
-          handleVolumeChange={handleVolumeChange4}
-        />
+        <Multitrack styles={props.styles} volume={volume4} handleVolumeChange={handleVolumeChange4} />
 
-        <Multitrack
-          styles={props.styles}
-          volume={volume5}
-          handleVolumeChange={handleVolumeChange5}
-        />
+        <Multitrack styles={props.styles} volume={volume5} handleVolumeChange={handleVolumeChange5} />
 
-        <Multitrack
-          styles={props.styles}
-          volume={volume6}
-          handleVolumeChange={handleVolumeChange6}
-        />
+        <Multitrack styles={props.styles} volume={volume6} handleVolumeChange={handleVolumeChange6} />
 
-        <Multitrack
-          styles={props.styles}
-          volume={volume7}
-          handleVolumeChange={handleVolumeChange7}
-        />
+        <Multitrack styles={props.styles} volume={volume7} handleVolumeChange={handleVolumeChange7} />
 
-        <Multitrack
-          styles={props.styles}
-          volume={volume8}
-          handleVolumeChange={handleVolumeChange8}
-        />
+        <Multitrack styles={props.styles} volume={volume8} handleVolumeChange={handleVolumeChange8} />
       </View>
     </ImageBackground>
   );
