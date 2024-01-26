@@ -31,7 +31,8 @@
         {
           "initialOrientation": "LANDSCAPE"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "web": {
       "favicon": "./assets/favicon.png"

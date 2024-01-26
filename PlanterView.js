@@ -5,19 +5,20 @@ import { Audio } from "expo-av";
 
 function PlanterView(props) {
   const [thisRound, setThisRound] = useState(0);
-  const [timerInterval, setTimerInterval] = useState(1000);
+  const [timerInterval, setTimerInterval] = useState(2000);
   const [plantGrowthStage, setPlantGrowthStage] = useState(1);
 
   const [sunSound, setSunSound] = useState();
   const [waterSound, setWaterSound] = useState();
   const [growSound, setGrowSound] = useState();
   const [winSound, setWinSound] = useState();
+  const [showGlowstar, setShowGlowstar] = useState(true);
 
   //* load music
   useEffect(() => {
     async function loadSunSfx() {
       try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sunSound.mp3"));
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/Sunshine_notification.mp3"));
         setSunSound(sound);
       } catch (error) {
         console.log("error in initial loadSunSfx", error);
@@ -26,7 +27,7 @@ function PlanterView(props) {
 
     async function loadWaterSfx() {
       try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/waterDrop.mp3"));
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/Watering_notification.mp3"));
         setWaterSound(sound);
       } catch (error) {
         console.log("error in initialloadWaterSfx", error);
@@ -35,7 +36,7 @@ function PlanterView(props) {
 
     async function loadGrowSfx() {
       try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/slideWhistle.mp3"));
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/Growing_plant.mp3"));
         setGrowSound(sound);
       } catch (error) {
         console.log("error in initial loadGrowSfx", error);
@@ -44,7 +45,7 @@ function PlanterView(props) {
 
     async function loadWinSfx() {
       try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/yay.mp3"));
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/Sunshining_plant.mp3"));
         setWinSound(sound);
       } catch (error) {
         console.log("error in initial loadWinSfx", error);
@@ -82,6 +83,13 @@ function PlanterView(props) {
       console.log("error inm playing SFX: ", error);
     }
   }
+  async function stopGrowSound() {
+    try {
+      growSound.stopAsync();
+    } catch (error) {
+      console.log("error inm playing SFX: ", error);
+    }
+  }
 
   async function playWinSound() {
     try {
@@ -109,8 +117,12 @@ function PlanterView(props) {
     if (plantGrowthStage <= 5) {
       console.log("not won yet!");
       setPlantGrowthStage(plantGrowthStage + 1);
-      setTimerInterval(100);
+      setTimerInterval(4800);
       playGrowSound();
+    } else if (plantGrowthStage === 6) {
+      console.log("win condition run");
+      stopGrowSound();
+      setThisRound(0);
     }
   };
 
@@ -118,13 +130,13 @@ function PlanterView(props) {
     console.log("plant growth stage: ", plantGrowthStage);
     if (plantGrowthStage === 6) {
       console.log("win condition run");
-      setTimerInterval(5000);
+      setTimerInterval(20000);
       playWinSound();
       setThisRound(0);
-
+      stopGrowSound();
       setTimeout(() => {
         setPlantGrowthStage(1);
-      }, 5000);
+      }, 20000);
     }
   }, [plantGrowthStage]);
 
@@ -155,8 +167,10 @@ function PlanterView(props) {
   useEffect(() => {
     const intervalId = setInterval(() => {
       // randomly chooses either watering can or sun or nothing, can only choose one,
-      let randNum = Math.floor(Math.random() * 3 + 1);
+      let randNum = Math.floor(Math.random() * 2 + 1);
       setThisRound(randNum);
+      console.log("round is", randNum);
+      setShowGlowstar(true);
     }, timerInterval);
     return () => {
       clearInterval(intervalId);
@@ -167,13 +181,14 @@ function PlanterView(props) {
     // when either can or sun is highlighted, sound also plays
     if (thisRound === 1) {
       playSunSound();
-      setTimerInterval(10000);
+      setTimerInterval(20000);
     } else if (thisRound === 2) {
       playWaterSound();
-      setTimerInterval(10000);
-    } else if (thisRound === 3) {
-      setTimerInterval(2000);
+      setTimerInterval(15000);
     }
+    // else if (thisRound === 3) {
+    //   setTimerInterval(2000);
+    // }
   }, [thisRound]);
 
   // if correct pressable is pressed... plant grows to next stage
@@ -211,7 +226,10 @@ function PlanterView(props) {
       </Pressable>
 
       <Pressable
-        onPress={() => addWater()}
+        onPress={() => {
+          addWater();
+          setShowGlowstar(false);
+        }}
         style={{
           position: "absolute",
           right: 217,
@@ -220,7 +238,7 @@ function PlanterView(props) {
           height: 230,
         }}
       >
-        {thisRound === 2 && (
+        {thisRound === 2 && showGlowstar && (
           <Animated.Image
             source={require("./assets/graphics/plants/glowStar.png")}
             style={{
@@ -245,7 +263,10 @@ function PlanterView(props) {
       </Pressable>
 
       <Pressable
-        onPress={() => addSun()}
+        onPress={() => {
+          addSun();
+          setShowGlowstar(false);
+        }}
         style={{
           position: "absolute",
           left: 280,
@@ -254,7 +275,7 @@ function PlanterView(props) {
           height: 230,
         }}
       >
-        {thisRound === 1 && (
+        {thisRound === 1 && showGlowstar && (
           <Animated.Image
             source={require("./assets/graphics/plants/glowStar.png")}
             style={{

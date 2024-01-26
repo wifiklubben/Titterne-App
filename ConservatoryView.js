@@ -5,29 +5,37 @@ import { Audio } from "expo-av";
 
 import PlanterView from "./PlanterView";
 
-function ConservatoryView(styles) {
+function ConservatoryView({ styles, startConservatoryBackgroundSound, stopConservatoryBackgroundSound }) {
   const [plantGameOpen, setPlantGameOpen] = useState(false);
-  const [isBlinking, setIsBlinking] = useState(false);
+  const [tordenisBlinking, setTordenIsBlinking] = useState(false);
+  const [tordenIsWaving, setTordenisWaving] = useState(false);
+  const [skyisBlinking, setSkyisBlinking] = useState(false);
+  const [skyisWaving, setSkyisWaving] = useState(false);
+
   const handleGameOpen = () => {
     console.log("handle game open");
-
     if (plantGameOpen === false) {
       setPlantGameOpen(true);
+      stopConservatoryBackgroundSound();
     } else if (plantGameOpen === true) {
       setPlantGameOpen(false);
+      startConservatoryBackgroundSound();
     }
-    console.log(plantGameOpen);
+    console.log("is plant game open?", plantGameOpen);
   };
 
   //Animations
   //tordenWave
   const wave = () => {
-    if (!isBlinking) {
+    if (!tordenisBlinking && !tordenIsWaving) {
       this.torden.play({
         type: "wave",
         fps: 24,
         loops: false,
         resetAfterFinish: true,
+        onFinish: () => {
+          setTordenisWaving(false);
+        },
       });
     }
   };
@@ -38,17 +46,47 @@ function ConservatoryView(styles) {
       fps: 24,
       loops: false,
       resetAfterFinish: true,
+      onFinish: () => {
+        setTordenIsBlinking(false);
+      },
     });
   };
   // skyWave
   const skyWave = () => {
+    if (!skyisBlinking && !skyisWaving) {
+      this.sky.play({
+        type: "wave",
+        fps: 24,
+        loops: false,
+        resetAfterFinish: true,
+        onFinish: () => {
+          setSkyisWaving(false);
+        },
+      });
+    }
+  };
+  //skyblink
+  const skyBlink = () => {
     this.sky.play({
-      type: "wave",
+      type: "blink",
       fps: 24,
       loops: false,
       resetAfterFinish: true,
+      onFinish: () => {
+        setSkyisBlinking(false);
+      },
     });
   };
+  useEffect(() => {
+    if (!skyisWaving) {
+      const blinkTimer = setInterval(() => {
+        setSkyisBlinking(true);
+        skyBlink();
+      }, 4500);
+      return () => clearInterval(blinkTimer);
+    }
+  }, [skyisWaving]);
+
   // hoseDance
   const hoseDance = () => {
     this.hose.play({
@@ -60,17 +98,14 @@ function ConservatoryView(styles) {
   };
   // tordenBlink timer
   useEffect(() => {
-    // Start the blink animation every 5 seconds
-    const blinkTimer = setInterval(() => {
-      tordenBlink(); // Trigger the blink animation
-      setTimeout(() => {
-        setIsBlinking(false);
-      }, 3000); // Assuming blink animation duration is 3000 milliseconds
-    }, 5000);
-
-    // Clean up the timer when the component is unmounted
-    return () => clearInterval(blinkTimer);
-  }, []);
+    if (!tordenIsWaving) {
+      const torBlinkTimer = setInterval(() => {
+        setTordenIsBlinking(true);
+        tordenBlink();
+      }, 5000);
+      return () => clearInterval(torBlinkTimer);
+    }
+  }, [tordenIsWaving]);
 
   return (
     <>
@@ -82,7 +117,10 @@ function ConservatoryView(styles) {
         }}
       >
         <Pressable
-          onPress={() => skyWave()}
+          onPress={() => {
+            skyWave();
+            setSkyisWaving(true);
+          }}
           style={{
             position: "absolute",
             right: 10,
@@ -107,10 +145,8 @@ function ConservatoryView(styles) {
             width={300}
             initialFrame={10}
             animations={{
-              wave: [
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
-                61,
-              ],
+              wave: [0, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61],
+              blink: [0, 1, 2, 3, 4, 5],
             }}
             onLoad={() => console.log("SpriteSheet loaded")}
           />
@@ -136,14 +172,18 @@ function ConservatoryView(styles) {
             rows={12}
             width={289}
             animations={{
-              wave: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
+              wave: [0, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
               blink: [0, 1, 2, 3, 5, 6],
             }}
             onLoad={() => console.log("SpriteSheet loaded")}
           />
 
           <Pressable
-            onPress={() => wave()}
+            onPress={() => {
+              wave();
+              setTordenisWaving(true);
+              console.log(tordenIsWaving);
+            }}
             style={{
               position: "absolute",
               height: "100%",
@@ -219,7 +259,7 @@ function ConservatoryView(styles) {
           </>
         )}
 
-        {plantGameOpen && <PlanterView handleGameOpen={handleGameOpen} styles={styles} />}
+        {plantGameOpen && <PlanterView plantGameOpen={plantGameOpen} handleGameOpen={handleGameOpen} styles={styles} />}
 
         <Image
           pointerEvents="none"

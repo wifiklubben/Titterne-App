@@ -28,7 +28,6 @@ import BathroomView from "./rooms/bathroom/BathroomView";
 const useStore = create((set) => ({
   showTutorial: false,
   //todo set to true once user has seen it
-
   sleepControlActive: false,
   toggleSleepControlActive: () => set((state) => ({ sleepControlActive: !state.sleepControlActive })),
   sleepControlMorning: new Date(),
@@ -39,31 +38,22 @@ const useStore = create((set) => ({
 
 export default () => {
   // ********* VARIABLES *******************
-
   // define screen dimensions
   const fullWidth = Dimensions.get("window").width;
   const fullHeight = Dimensions.get("window").height;
-
   //load Bubblegum font
   const [fontLoaded] = useFonts({
     // Bubblegum: require("./assets/fonts/BubblegumSans-Regular.ttf"),
     Bubblegum: require("./assets/fonts/Peachykeen.otf"),
   });
-
   // ********* STATES ************
-
   // parental controls states
-
   // const [sleepControlActive, setSleepControlActive] = useState(false)
   const [isNightTime, setIsNightTime] = useState(false);
-
   const [elapsedTime, setElapsedTime] = useState(0);
-
   const [appOpenTime, setAppOpenTime] = useState(new Date().getTime());
-
   const [timeLimitActive, setTimeLimitActive] = useState(false);
   const [timeLimitAmount, setTimeLimitAmount] = useState(0);
-
   const sleepControlNight = useStore((state) => state.sleepControlNight);
   const sleepControlMorning = useStore((state) => state.sleepControlMorning);
   const sleepControlActive = useStore((state) => state.sleepControlActive);
@@ -83,14 +73,10 @@ export default () => {
   const handleViewChange = (viewNumber) => {
     setActiveView(viewNumber);
   };
-
   const [showIntroAnimation, setShowIntroAnimation] = useState(true);
-
   // is content cached yet?
   const [isLoaded, setIsLoaded] = useState(false);
-
   // Parental control
-
   let timeLimitFlag;
   let bedTimeFlag;
 
@@ -144,11 +130,12 @@ export default () => {
   }, [activeView]);
 
   // music
-
   const [birdsAmbientSound, setBirdsAmbientSound] = useState();
   const [treesAmbientSound, setTreesAmbientSound] = useState();
   const [musicRoomAmbient, setMusicRoomAmbientSound] = useState();
   const [treeHouseAmbient, setTreeHouseAmbient] = useState();
+  const [bedroomAmbientSound, setBedroomAmbientSound] = useState();
+  const [conservatoryBackgroundSound, setConsevratoryBackgroundSound] = useState();
 
   SplashScreen.preventAutoHideAsync();
 
@@ -203,11 +190,59 @@ export default () => {
       }
     }
 
+    async function loadBedroomAmbientSound() {
+      try {
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/bedroomBackground.mp3"));
+        sound.setVolumeAsync(0.5);
+        sound.setIsLoopingAsync(true);
+        setBedroomAmbientSound(sound);
+      } catch (error) {
+        console.log("error loading music room ambient sound: ", error);
+      }
+    }
+    async function loadConservatoryBackgroundSound() {
+      try {
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/Conservatory_background_1.mp3"));
+        sound.setVolumeAsync(0.5);
+        sound.setIsLoopingAsync(true);
+        setConsevratoryBackgroundSound(sound);
+      } catch (error) {
+        console.log("error loading conservatory backround sound;", error);
+      }
+    }
+    loadBedroomAmbientSound();
     loadTreesAmbientSound();
     loadBirdsAmbientSound();
     loadMusicRoomAmbientSound();
     loadTreehouseAmbientSound();
+    loadConservatoryBackgroundSound();
   }, []);
+
+  //start and stop sounds functions for use in other rooms
+  const stopBedroomAmbientSound = () => {
+    bedroomAmbientSound.stopAsync();
+  };
+  const startBedroomAmbientSound = () => {
+    bedroomAmbientSound.playAsync();
+  };
+  const stopTreehouseSound = () => {
+    treeHouseAmbient.stopAsync();
+  };
+  const startTreehouseSound = () => {
+    treeHouseAmbient.playAsync();
+  };
+  const stopConservatoryBackgroundSound = () => {
+    conservatoryBackgroundSound.stopAsync();
+  };
+  const startConservatoryBackgroundSound = () => {
+    conservatoryBackgroundSound.playAsync();
+  };
+  const stopMusicRoomBackgroundSound = () => {
+    musicRoomAmbient.stopAsync();
+  };
+  const startMusicRoomBackgroundSound = () => {
+    musicRoomAmbient.playAsync();
+  };
 
   // background music/sounds per room view
   useEffect(() => {
@@ -217,9 +252,14 @@ export default () => {
       if (treeHouseAmbient) {
         treeHouseAmbient.stopAsync();
       }
-
       if (musicRoomAmbient) {
         musicRoomAmbient.stopAsync();
+      }
+      if (bedroomAmbientSound) {
+        bedroomAmbientSound.stopAsync();
+      }
+      if (conservatoryBackgroundSound) {
+        stopConservatoryBackgroundSound();
       }
       birdsAmbientSound.playAsync();
     } else if (activeView === 2 && musicRoomAmbient) {
@@ -227,22 +267,22 @@ export default () => {
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
-
       musicRoomAmbient.playAsync();
     } else if (activeView === 3) {
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
+      bedroomAmbientSound.playAsync();
     } else if (activeView === 4 && treeHouseAmbient) {
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
-
       treeHouseAmbient.playAsync();
-    } else if (activeView === 5) {
+    } else if (activeView === 5 && conservatoryBackgroundSound) {
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
+      startConservatoryBackgroundSound();
     } else if (activeView === 6) {
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
@@ -427,29 +467,8 @@ export default () => {
 
           <Pressable onPress={() => handleViewChange(3)} style={styles.BedroomButton}></Pressable>
 
-          <ImageBackground
-            source={require("./assets/SkyDancing.png")}
-            style={{
-              position: "absolute",
-              height: 70,
-              width: 70,
-              left: fullWidth / 2 + 245,
-              top: fullHeight / 2 - 62,
-              overflow: "visible",
-            }}
-          />
           <Pressable onPress={() => handleViewChange(4)} style={styles.TreehouseButton} />
 
-          <ImageBackground
-            source={require("./assets/SkyDancing.png")}
-            style={{
-              position: "absolute",
-              height: 100,
-              width: 100,
-              left: fullWidth / 2 - 300,
-              top: fullHeight / 2 + 70,
-            }}
-          />
           <Pressable onPress={() => handleViewChange(5)} style={styles.ConservatoryButton} />
 
           {/* <ImageBackground
@@ -467,16 +486,16 @@ export default () => {
       )}
 
       {/* Music Room View */}
-      {activeView === 2 && <MusicRoomView styles={styles} activeView={activeView} />}
+      {activeView === 2 && <MusicRoomView styles={styles} activeView={activeView} stopMusicRoomBackgroundSound={stopMusicRoomBackgroundSound} startMusicRoomBackgroundSound={startMusicRoomBackgroundSound} />}
 
       {/* Bedroom View */}
-      {activeView === 3 && <BedroomView styles={styles} activeView={activeView} />}
+      {activeView === 3 && <BedroomView styles={styles} activeView={activeView} stopBedroomAmbientSound={stopBedroomAmbientSound} startBedroomAmbientSound={startBedroomAmbientSound} />}
 
       {/* Treehouse View */}
-      {activeView === 4 && <TreehouseView styles={styles} activeView={activeView} />}
+      {activeView === 4 && <TreehouseView styles={styles} activeView={activeView} stopTreehouseSound={stopTreehouseSound} startTreehouseSound={startTreehouseSound} />}
 
       {/* Conservartory View */}
-      {activeView === 5 && <ConservatoryView styles={styles} activeView={activeView} />}
+      {activeView === 5 && <ConservatoryView styles={styles} activeView={activeView} startConservatoryBackgroundSound={startConservatoryBackgroundSound} stopConservatoryBackgroundSound={stopConservatoryBackgroundSound} />}
 
       {/* Bathroom View */}
       {activeView === 6 && <BathroomView styles={styles} activeView={activeView} />}

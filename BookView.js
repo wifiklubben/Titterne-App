@@ -15,15 +15,17 @@ function BookView(props) {
         left: 0,
         top: 0,
         zIndex: "10",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <ImageBackground
-        source={require("./assets/Bedroom/bigBook.png")}
+        // source={require("./assets/Bedroom/bigBook.png")}
         style={{
           position: "absolute",
           width: "100%",
           height: "100%",
-          resizeMode: "cover",
+          backgroundColor: "#FFFFff70",
         }}
       >
         <Pressable
@@ -50,15 +52,15 @@ function BookView(props) {
             onPress={() => props.handleStoryClose()}
             style={{
               position: "absolute",
-              right: 379,
-              top: 500,
-              zIndex: 100,
-              backgroundColor: "#c7dbf4",
-              padding: 20,
-              borderRadius: 30,
+              right: "37%",
+              top: 306,
+              zIndex: 200,
+              // width: 150,
+              height: "30%",
+              width: "27%",
             }}
           >
-            <Text style={{ ...props.styles.pText, color: "#a14f8c" }}>Vælg en anden historie</Text>
+            <Image source={require("./assets/Bedroom/Backbuttonwithbook.png")} style={{ height: "100%", width: "105%" }} />
           </Pressable>
         )}
         {props.currentStory.title != "" && (
@@ -66,69 +68,94 @@ function BookView(props) {
             onPress={() => props.pausePlayStory()}
             style={{
               position: "absolute",
-              right: 379,
-              top: 600,
-              zIndex: 100,
-              backgroundColor: "#c7dbf4",
-              padding: 20,
-              borderRadius: 30,
+              right: 418,
+              top: 554,
+              zIndex: 200,
+              height: 100,
+              width: 110,
             }}
           >
-            <Text style={{ ...props.styles.pText, color: "#a14f8c" }}>Play/pause</Text>
+            <Image source={require("./assets/Bedroom/Pausebutton.png")} style={{ height: 110, width: 110 }} />
+          </Pressable>
+        )}
+        {props.currentStory.title != "" && (
+          <Pressable
+            onPress={() => props.pausePlayStory()}
+            style={{
+              position: "absolute",
+              right: 548,
+              top: 554,
+              zIndex: 200,
+              height: 100,
+              width: 110,
+            }}
+          >
+            <Image source={require("./assets/Bedroom/Playbutton.png")} style={{ height: 110, width: 110 }} />
           </Pressable>
         )}
 
         {/* story not chosen aka CONTENTS PAGES */}
         {props.currentStory.title === "" && (
-          <PagerView initialPage={0} style={{ flex: 1 }}>
-            <View
-              key="1"
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                paddingLeft: "15%",
-                paddingTop: "5%",
-              }}
-            >
-              <FlatList
-                numColumns={2}
-                data={props.storyTitles}
-                renderItem={({ item }) => (
-                  <Pressable
-                    onPress={() => {
-                      props.setCurrentStory(item);
-                    }}
-                    style={{
-                      width: "40%",
-                    }}
-                  >
-                    <View
-                      style={{
-                        width: "100%",
-                        marginHorizontal: "2%",
-                        marginVertical: 0,
-                        alignItems: "center",
-                      }}
-                    >
-                      <Image
-                        source={item.thumbnail}
-                        style={{
-                          height: 155,
-                          width: 300,
-                        }}
-                      />
-                      <Text style={props.styles.h2Text}>{item.title}</Text>
-                    </View>
-                  </Pressable>
-                )}
+          <ImageBackground
+            source={require("./assets/Bedroom/bigBook.png")}
+            style={{
+              position: "absolute",
+              width: "88%",
+              height: "88%",
+              top: 100,
+              right: 0,
+            }}
+          >
+            <PagerView initialPage={0} style={{ flex: 1 }}>
+              <View
+                key="1"
                 style={{
-                  paddingTop: "5%",
+                  marginLeft: "1%",
                   width: "100%",
                 }}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            </View>
-          </PagerView>
+              >
+                <FlatList
+                  columnWrapperStyle={{ gap: -60, width: "90%" }}
+                  numColumns={2}
+                  data={props.storyTitles}
+                  renderItem={({ item }) => (
+                    <Pressable
+                      onPress={() => {
+                        props.setCurrentStory(item);
+                      }}
+                      style={{
+                        width: "40%",
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: "100%",
+                          height: 160,
+                          marginHorizontal: "27%",
+                          marginVertical: "-2%",
+                          alignItems: "center",
+                          transform: item.tag === "magiskHave" || item.tag === "skattejagt" ? [{ translateY: 50 }] : [{ translateY: 0 }],
+                        }}
+                      >
+                        <Image
+                          source={item.thumbnail}
+                          style={{
+                            width: 284,
+                            height: item.tag === "natero" ? "125%" : "100%",
+                          }}
+                        />
+                      </View>
+                    </Pressable>
+                  )}
+                  style={{
+                    paddingTop: "5%",
+                    width: "100%",
+                  }}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
+            </PagerView>
+          </ImageBackground>
         )}
 
         {/* story IS CHOSEN, show story */}

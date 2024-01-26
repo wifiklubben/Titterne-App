@@ -7,7 +7,7 @@ import SpriteSheet from "rn-sprite-sheet";
 
 import { Audio } from "expo-av";
 
-export default function MusicRoomView({ styles }) {
+export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, stopMusicRoomBackgroundSound }) {
   const [sfx1, setSfx1] = useState();
   const [sfx2, setSfx2] = useState();
   const [guitarAudio, setGuitarAudio] = useState();
@@ -15,7 +15,8 @@ export default function MusicRoomView({ styles }) {
   const [maracasAudio, setMaracasAudio] = useState();
   const [tambourineAudio, setTambourineAudio] = useState();
   const [trumpetAudio, setTrumpetAudio] = useState();
-
+  const [skyIsPressed, setSkyIsPresssed] = useState(false);
+  const [skyIsDancing, setSkyIsDancing] = useState(false);
   const [isMusicGameOpen, setIsMusicGameOpen] = useState(false);
 
   const [isPlayignRightNow, setIsPlayingRightNow] = useState(null);
@@ -25,8 +26,14 @@ export default function MusicRoomView({ styles }) {
 
     if (isMusicGameOpen === false) {
       setIsMusicGameOpen(true);
+      {
+        stopMusicRoomBackgroundSound();
+      }
     } else if (isMusicGameOpen === true) {
       setIsMusicGameOpen(false);
+      {
+        startMusicRoomBackgroundSound();
+      }
     }
   };
 
@@ -200,7 +207,6 @@ export default function MusicRoomView({ styles }) {
   };
 
   // Torden animation
-
   const tordenWave = () => {
     this.tordenWave.play({
       type: "wave",
@@ -210,16 +216,41 @@ export default function MusicRoomView({ styles }) {
     });
   };
 
-  // Sky animation
-
+  // Sky dance
   const skyDance = () => {
+    if (!skyIsDancing) {
+      this.skyDance.play({
+        type: "dance",
+        fps: 24,
+        loops: false,
+        resetAfterFinish: true,
+        onFinish: () => {
+          setSkyIsPresssed(false);
+        },
+      });
+    }
+  };
+  // sky idle dance
+  const skyIdle = () => {
     this.skyDance.play({
-      type: "dance",
+      type: "idle",
       fps: 24,
       loops: false,
       resetAfterFinish: true,
+      onFinish: () => {
+        setSkyIsDancing(false);
+      },
     });
   };
+  useEffect(() => {
+    if (!skyIsPressed) {
+      const danceTimer = setInterval(() => {
+        setSkyIsDancing(true);
+        skyIdle();
+      }, 5000);
+      return () => clearInterval(danceTimer);
+    }
+  }, [skyIsPressed]);
 
   // animation functions
 
@@ -259,7 +290,6 @@ export default function MusicRoomView({ styles }) {
           width: 290,
           top: 615,
           left: 300,
-
           transform: "rotateZ(-17deg)",
           zIndex: 3,
         }}
@@ -277,7 +307,9 @@ export default function MusicRoomView({ styles }) {
       </Pressable>
 
       <Pressable
-        onPress={() => tordenWave()}
+        onPress={() => {
+          tordenWave();
+        }}
         style={{
           position: "absolute",
           height: 300,
@@ -303,13 +335,17 @@ export default function MusicRoomView({ styles }) {
             left: -48,
           }}
           animations={{
-            wave: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42],
+            wave: [0, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42],
+            blink: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           }}
         ></SpriteSheet>
       </Pressable>
 
       <Pressable
-        onPress={() => skyDance()}
+        onPress={() => {
+          skyDance();
+          setSkyIsPresssed(true);
+        }}
         style={{
           position: "absolute",
           height: 300,
@@ -335,7 +371,8 @@ export default function MusicRoomView({ styles }) {
             left: -80,
           }}
           animations={{
-            dance: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33],
+            dance: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33],
+            idle: [0, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33],
           }}
         ></SpriteSheet>
       </Pressable>
