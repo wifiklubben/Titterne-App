@@ -8,7 +8,7 @@ import BookView from "./BookView";
 
 import SpriteSheet from "rn-sprite-sheet";
 
-export default function BedroomView({ styles }) {
+export default function BedroomView({ styles, stopBedroomAmbientSound, startBedroomAmbientSound }) {
   const [waveSfx, setWaveSfx] = useState();
   const [curtainSfx, setCurtainSfx] = useState();
   const [robotSfx, setRobotSfx] = useState();
@@ -17,7 +17,7 @@ export default function BedroomView({ styles }) {
   const [planeSfx, setPlaneSfx] = useState();
   const [animation] = useState(new Animated.Value(0));
   const [driveAnimation] = useState(new Animated.Value(0));
-
+  const [flyAnim] = useState(new Animated.Value(0));
   // set all sfx
 
   useEffect(() => {
@@ -166,9 +166,8 @@ export default function BedroomView({ styles }) {
     });
     // play sound function here if/when it exists
   };
-
+  //animations
   const car = () => {
-    console.log("car animation triggered");
     this.car.play({
       type: "carDriving",
       fps: 24,
@@ -201,7 +200,6 @@ export default function BedroomView({ styles }) {
   };
 
   const robot = () => {
-    console.log("robot animation triggered");
     this.robot.play({
       type: "robotDance",
       fps: 24,
@@ -246,10 +244,9 @@ export default function BedroomView({ styles }) {
   };
 
   const plane = () => {
-    console.log("plane animation triggered");
     this.plane.play({
       type: "planeFly",
-      fps: 4,
+      fps: 24,
       loops: false,
       resetAfterFinish: true,
     });
@@ -259,40 +256,39 @@ export default function BedroomView({ styles }) {
 
   // * story book logic
 
-  //  todo add play pause button
-
   const storyTitles = [
     {
-      // tag: "natero",
+      title: "Natero",
+      tag: "natero",
       thumbnail: require("./assets/StoryContents/Thumbnails/illustorybookNattero.png"),
       storyAudio: require("./assets/StoryContents/Speeches/Hjælp_til_nattero.mp3"),
     },
     {
-      // title: "Magisk Have",
+      title: "Magisk Have",
       tag: "magiskHave",
       thumbnail: require("./assets/StoryContents/Thumbnails/illustorybookRergnbueHaven.png"),
       storyAudio: require("./assets/StoryContents/Speeches/Magisk_have_2.mp3"),
     },
     {
-      // title: "Natur",
+      title: "Natur",
       tag: "natur",
       thumbnail: require("./assets/StoryContents/Thumbnails/illustorybookNaturdrøm.png"),
       storyAudio: require("./assets/StoryContents/Speeches/Natur.mp3"),
     },
     {
-      // title: "Skattejagt",
+      title: "Skattejagt",
       tag: "skattejagt",
       thumbnail: require("./assets/StoryContents/Thumbnails/illustorybookSkatten.png"),
       storyAudio: require("./assets/StoryContents/Speeches/Skattejagt.mp3"),
     },
     {
-      // title: "Tuba",
+      title: "Tuba",
       tag: "tuba",
       thumbnail: require("./assets/StoryContents/Thumbnails/illustorybookTuba.png"),
       storyAudio: require("./assets/StoryContents/Speeches/Tuba_2.mp3"),
     },
   ];
-
+  const [storyIsPaused, setStoryIsPaused] = useState(false);
   const [isBookOpen, setIsBookOpen] = useState(false);
   const [currentSpeeches, setCurrentSpeech] = useState();
   const [currentStory, setCurrentStory] = useState({
@@ -311,9 +307,7 @@ export default function BedroomView({ styles }) {
           justifyContent: "center",
           alignItems: "center",
         }}
-      >
-        {/* <Text style={styles.pText}>{currentStory.title}</Text> */}
-      </View>
+      ></View>
     );
   };
 
@@ -359,6 +353,7 @@ export default function BedroomView({ styles }) {
         await currentSpeeches.playAsync();
       }
       playSpeech();
+      console.log(currentStory);
     }
   }, [currentSpeeches]);
 
@@ -376,6 +371,7 @@ export default function BedroomView({ styles }) {
         storyAudio: "",
       }),
       setCurrentSpeech("");
+    startBedroomAmbientSound();
   }
 
   // Deselect story, back to contents page
@@ -390,7 +386,18 @@ export default function BedroomView({ styles }) {
       thumbnail: "",
       storyAudio: "",
     }),
-      console.log("unloading sound");
+      setCurrentSpeech("");
+    console.log("unloading sound");
+  }
+
+  async function pausePlayStory() {
+    if (storyIsPaused === false) {
+      currentSpeeches.pauseAsync();
+      setStoryIsPaused(true);
+    } else if (currentSpeeches && storyIsPaused === true) {
+      currentSpeeches.playAsync();
+      setStoryIsPaused(false);
+    }
   }
 
   //* sock game logic
@@ -406,9 +413,6 @@ export default function BedroomView({ styles }) {
     }
   };
 
-  console.log("sock Game Open? ", sockGameOpen);
-  console.log("is book Open? ", isBookOpen);
-
   return (
     // <ImageBackground source={require("./assets/Bedroom/Titterne_bedroom_placement.png")} style={styles.fullWidthBackground}>
     <ImageBackground source={require("./assets/Bedroom/bedroomBG.png")} style={styles.fullWidthBackground}>
@@ -421,8 +425,6 @@ export default function BedroomView({ styles }) {
             height: "100%",
             width: "100%",
             zIndex: 3,
-            borderWidth: 1,
-            borderColor: "green",
           }}
           pointerEvents="none"
         />
@@ -450,7 +452,6 @@ export default function BedroomView({ styles }) {
           animations={{
             robotDance: [0, 9, 18, 1, 10, 19, 2, 11, 20, 3, 12, 21, 4, 13, 22, 5, 14, 23, 6, 15, 24, 7, 16, 25, 8, 0, 9, 18, 1, 10, 19, 2, 11, 20, 3, 12, 21, 4, 13, 22, 5, 14, 23, 6, 15, 24, 7, 16, 25, 8],
           }}
-          onLoad={() => console.log("robot spritesheet loaded")}
         />
         <Pressable
           onPress={() => {
@@ -484,7 +485,6 @@ export default function BedroomView({ styles }) {
           animations={{
             roar: [0, 8, 16, 24, 1, 9, 17, 25, 2, 10, 18, 26, 3, 11, 19, 27, 4, 12, 20, 28, 5, 6, 7, 13, 21, 29, 14, 15, 22, 30, 23, 31],
           }}
-          onLoad={() => console.log("dragon spritesheet loaded")}
         />
 
         <Pressable
@@ -530,7 +530,6 @@ export default function BedroomView({ styles }) {
           animations={{
             carDriving: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 18],
           }}
-          onLoad={() => console.log("car spritesheet loaded")}
         />
 
         <Pressable
@@ -542,14 +541,13 @@ export default function BedroomView({ styles }) {
             position: "absolute",
             width: "100%",
             height: "100%",
-            borderWith: 3,
-            borderColor: "green",
           }}
         />
       </Animated.View>
-
       <Pressable
-        onPress={() => plane()}
+        onPress={() => {
+          plane();
+        }}
         style={{
           position: "absolute",
           height: 130,
@@ -557,12 +555,11 @@ export default function BedroomView({ styles }) {
           top: 550,
           left: 640,
           zIndex: 4,
-          borderWidth: 1,
         }}
       >
         <SpriteSheet
           ref={(ref) => (this.plane = ref)}
-          source={require("./assets/graphics/spritesheets/PlaneAnim.png")}
+          source={require("./assets/graphics/spritesheets/Plananim.png")}
           imageStyle={{
             marginBottom: 0,
             top: -50,
@@ -572,9 +569,8 @@ export default function BedroomView({ styles }) {
           columns={3}
           rows={4}
           animations={{
-            planeFly: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            planeFly: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           }}
-          onLoad={() => console.log("plane spritesheet loaded")}
         />
       </Pressable>
 
@@ -603,7 +599,6 @@ export default function BedroomView({ styles }) {
               61,
             ],
           }}
-          onLoad={() => console.log("sprintesheet loaded")}
         />
 
         <Pressable
@@ -643,7 +638,6 @@ export default function BedroomView({ styles }) {
               61, 62,
             ],
           }}
-          onLoad={() => console.log("SpriteSheet loaded")}
         />
 
         <Pressable
@@ -694,7 +688,6 @@ export default function BedroomView({ styles }) {
           animations={{
             curtainClose: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45],
           }}
-          onLoad={() => console.log("curtain spritesheet loaded")}
         />
 
         <Pressable
@@ -859,7 +852,12 @@ export default function BedroomView({ styles }) {
 
       {isBookOpen === false && (
         <Pressable
-          onPress={() => setIsBookOpen(true)}
+          onPress={() => {
+            setIsBookOpen(true);
+            {
+              stopBedroomAmbientSound();
+            }
+          }}
           style={{
             position: "absolute",
             height: 220,
@@ -884,6 +882,8 @@ export default function BedroomView({ styles }) {
       {isBookOpen === true && (
         <BookView
           //   todo remove unnecessary props
+          storyIsPaused={storyIsPaused}
+          pausePlayStory={pausePlayStory}
           currentStory={currentStory}
           setCurrentStory={setCurrentStory}
           storyTitles={storyTitles}

@@ -8,7 +8,7 @@ import SpriteSheet from "rn-sprite-sheet";
 import BugGameView from "./BugGameView";
 import BookViewAction from "./BookViewAction";
 
-function TreehouseView({ styles }) {
+function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
   const [bugGameOpen, setBugGameOpen] = useState(false);
   const [isBlinking, setIsBlinking] = useState(false);
   const [birdSfx, setBirdSfx] = useState();
@@ -16,6 +16,9 @@ function TreehouseView({ styles }) {
   const [crowAudio, setCrowAudio] = useState();
   const [cansAudio, setCansAudio] = useState();
   const [popcornAudio, setPopcornAudio] = useState();
+  const [isWaving, setIsWaving] = useState(false);
+  const [skyisBlinking, setSkyisBlinking] = useState(false);
+  const [skyisWaving, setSkyisWaving] = useState(false);
 
   //set all sfx
 
@@ -33,9 +36,7 @@ function TreehouseView({ styles }) {
 
     async function loadBoomboxAudio() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/treeHouse/Boombox.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/treeHouse/Boombox.mp3"));
         setBoomboxAudio(sound);
       } catch (error) {
         console.log("error in initial loadMusic of Boombox audio: ", error);
@@ -44,9 +45,7 @@ function TreehouseView({ styles }) {
 
     async function loadCrowAudio() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/treeHouse/Crow.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/treeHouse/Crow.mp3"));
         setCrowAudio(sound);
       } catch (error) {
         console.log("error in initial loadMusic of Crow audio: ", error);
@@ -55,9 +54,7 @@ function TreehouseView({ styles }) {
 
     async function loadCansAudio() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/treeHouse/Cans.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/treeHouse/Cans.mp3"));
         setCansAudio(sound);
       } catch (error) {
         console.log("error in initial loadMusic of Cans audio: ", error);
@@ -66,9 +63,7 @@ function TreehouseView({ styles }) {
 
     async function loadPopcornAudio() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/treeHouse/Popcorn.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/treeHouse/Popcorn.mp3"));
         setPopcornAudio(sound);
       } catch (error) {
         console.log("error in initial loadMusic of Popcorn audio: ", error);
@@ -80,20 +75,6 @@ function TreehouseView({ styles }) {
     loadCansAudio();
     loadPopcornAudio();
   }, []);
-
-  //set Skyblinking timer
-  // useEffect(() => {
-  //   // Start the blink animation every 3 seconds
-  //   const blinkTimer = setInterval(() => {
-  //     skyBlink(); // Trigger the blink animation
-  //     setTimeout(() => {
-  //       setIsBlinking(false);
-  //     }, 2000); // Assuming blink animation duration is 2000 milliseconds
-  //   }, 3000);
-
-  //   // Clean up the timer when the component is unmounted
-  //   return () => clearInterval(blinkTimer);
-  // }, []);
 
   async function playAudio(audio) {
     try {
@@ -123,58 +104,77 @@ function TreehouseView({ styles }) {
 
   // sky blinking
 
-  // const skyBlink = () => {
-  //   this.skyWave.play({
-  //     type: "blink",
-  //     fps: 24,
-  //     loops: false,
-  //     resetAfterFinish: true,
-  //   });
-  // };
-
   // sky waving
-
-  // const skyWave = () => {
-  //   if (!isBlinking) {
-  //     this.skyWave.play({
-  //       type: "wave",
-  //       fps: 24,
-  //       loops: false,
-  //       resetAfterFinish: true,
-  //     });
-  //   }
-  // };
-
   const skyWave = () => {
+    if (!skyisBlinking && !skyisWaving) {
+      this.skyWave.play({
+        type: "wave",
+        fps: 24,
+        loops: false,
+        resetAfterFinish: true,
+        onFinish: () => {
+          setSkyisWaving(false);
+        },
+      });
+    }
+  };
+  //skyblink
+  const skyBlink = () => {
     this.skyWave.play({
-      type: "wave",
+      type: "blink",
       fps: 24,
       loops: false,
       resetAfterFinish: true,
+      onFinish: () => {
+        setSkyisBlinking(false);
+      },
     });
   };
-
-  // Torden blinking
-
-  // const tordenBlink = () => {
-  //   this.tordenBlink.play({
-  //     type: "blink",
-  //     fps: 24,
-  //     loops: false,
-  //     resetAfterFinish: true,
-  //   });
-  // };
+  useEffect(() => {
+    if (!skyisWaving) {
+      const blinkTimer = setInterval(() => {
+        setSkyisBlinking(true);
+        skyBlink();
+      }, 4500);
+      return () => clearInterval(blinkTimer);
+    }
+  }, [skyisWaving]);
 
   // Torden waving
-
   const tordenWave = () => {
+    if (!isBlinking) {
+      this.tordenWave.play({
+        type: "wave",
+        fps: 24,
+        loops: false,
+        resetAfterFinish: true,
+        onFinish: () => {
+          setIsWaving(false);
+        },
+      });
+    }
+  };
+  // Torden blinking
+  const tordenBlink = () => {
     this.tordenWave.play({
-      type: "wave",
+      type: "blink",
       fps: 24,
       loops: false,
       resetAfterFinish: true,
+      onFinish: () => {
+        setIsBlinking(false);
+      },
     });
   };
+  useEffect(() => {
+    if (!isWaving) {
+      const blinkTimer = setInterval(() => {
+        setIsBlinking(true);
+        tordenBlink();
+      }, 5000);
+      return () => clearInterval(blinkTimer);
+    }
+  }, [isWaving]);
 
   // Boombox animation
 
@@ -215,9 +215,8 @@ function TreehouseView({ styles }) {
               left: 290,
               width: 200,
               height: 200,
-              borderWidth: 3,
-              borderColor: "green",
-              zIndex: 2,
+
+              zIndex: 4,
             }}
           >
             <Image
@@ -251,11 +250,7 @@ function TreehouseView({ styles }) {
             frameHeight={150}
             frameWidth={150}
             animations={{
-              squawk: [
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-                18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-                34, 35, 36, 37, 38, 39, 40, 41, 42,
-              ],
+              squawk: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42],
             }}
           ></SpriteSheet>
 
@@ -272,8 +267,7 @@ function TreehouseView({ styles }) {
         <View
           style={{
             position: "absolute",
-            borderWidth: 2,
-            borderColor: "orange",
+
             height: 85,
             width: 100,
             top: 500,
@@ -305,8 +299,7 @@ function TreehouseView({ styles }) {
         <View
           style={{
             position: "absolute",
-            borderWidth: 3,
-            borderColor: "purple",
+
             height: 160,
             width: 180,
             top: 540,
@@ -339,8 +332,7 @@ function TreehouseView({ styles }) {
         <View
           style={{
             position: "absolute",
-            borderWidth: 3,
-            borderColor: "yellow",
+
             width: 200,
             height: 300,
             left: 0,
@@ -361,11 +353,7 @@ function TreehouseView({ styles }) {
               left: -60,
             }}
             animations={{
-              bounce: [
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2,
-                3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5,
-                6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-              ],
+              bounce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
             }}
           ></SpriteSheet>
           <Pressable
@@ -381,8 +369,7 @@ function TreehouseView({ styles }) {
         <View
           style={{
             position: "absolute",
-            borderWidth: 3,
-            borderColor: "pink",
+
             left: 100,
             top: 210,
             width: 260,
@@ -405,18 +392,16 @@ function TreehouseView({ styles }) {
               zIndex: 0,
             }}
             animations={{
-              wave: [
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-                18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-                34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
-                50, 51, 52, 53, 54, 55, 56, 57,
-              ],
-              // blink: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+              wave: [0, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57],
+              blink: [0, 1, 2, 3, 4, 5, 6, 7, 8, 0],
             }}
           ></SpriteSheet>
 
           <Pressable
-            onPress={() => skyWave()}
+            onPress={() => {
+              skyWave();
+              setSkyisWaving(true);
+            }}
             style={{
               position: "absolute",
               height: "100%",
@@ -428,8 +413,7 @@ function TreehouseView({ styles }) {
         <View
           style={{
             position: "absolute",
-            borderWidth: 3,
-            borderColor: "blue",
+
             top: 220,
             left: 730,
             height: 300,
@@ -450,15 +434,15 @@ function TreehouseView({ styles }) {
               left: -20,
             }}
             animations={{
-              wave: [
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-                18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-                34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
-              ],
+              wave: [0, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49],
+              blink: [0, 1, 2, 3, 4, 5, 6, 7],
             }}
           ></SpriteSheet>
           <Pressable
-            onPress={() => tordenWave()}
+            onPress={() => {
+              tordenWave();
+              setIsWaving(true);
+            }}
             style={{
               position: "absolute",
               height: "100%",
@@ -482,8 +466,6 @@ function TreehouseView({ styles }) {
         <Image
           source={require("./assets/TreeHouse/TreeHouseFG.png")}
           style={{
-            borderWidth: 3,
-            borderColor: "red",
             width: "100%",
             height: "100%",
             position: "absolute",
@@ -491,9 +473,7 @@ function TreehouseView({ styles }) {
         />
         {/* </View> */}
 
-        {bugGameOpen === true && (
-          <BugGameView styles={styles} handleGameOpen={handleGameOpen} />
-        )}
+        {bugGameOpen === true && <BugGameView styles={styles} handleGameOpen={handleGameOpen} />}
 
         {/* story book component
 
