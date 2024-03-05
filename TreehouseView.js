@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, ImageBackground, Text, Image, Pressable } from "react-native";
+import { View, ImageBackground, Text, Image, Pressable, Animated } from "react-native";
+import { Asset } from "expo-asset";
 
 import { Audio } from "expo-av";
 
 import SpriteSheet from "rn-sprite-sheet";
-
 import BugGameView from "./BugGameView";
 import BookViewAction from "./BookViewAction";
 
@@ -19,21 +19,46 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
   const [isWaving, setIsWaving] = useState(false);
   const [skyisBlinking, setSkyisBlinking] = useState(false);
   const [skyisWaving, setSkyisWaving] = useState(false);
+  const [loadedImages, setLoadedImages] = useState({});
+  const [localIsLoaded, setLocalIsLoaded] = useState(false);
+  const [loadingCover] = useState(new Animated.Value(99));
 
-  //set all sfx
-
+  //preload images
   useEffect(() => {
-    // async function loadBirdSound() {
-    //     try {
-    //         const [sound] = await Audio.Sound.createAsync(require())
-    //         setBirdSfx( sound );
-    //     } catch (error) {
-    //         console.log('error loading bird sfx');
-    //     }
-    // }
-    // more SFX loading here
-    //     loadBirdSound()
+    const loadAssets = async () => {
+      const images = {
+        birdSing: require("./assets/graphics/spritesheets/birdSing.png"),
+        BoomboxAnim: require("./assets/graphics/spritesheets/BoomboxAnim.png"),
+        SkyWave: require("./assets/graphics/spritesheets/SkyWaveSml.png"),
+        tordenWaveTreehouse: require("./assets/graphics/spritesheets/tordenWaveTreehouseSml.png"),
+        TreeHouseFG: require("./assets/TreeHouse/TreeHouseFG.png"),
+        TreeHouseBG: require("./assets/TreeHouse/TreeHouseBG.png"),
+        Cards: require("./assets/TreeHouse/Cards.png"),
+        cola: require("./assets/TreeHouse/cola.png"),
+      };
 
+      const cacheImages = Object.entries(images).map(async ([key, image]) => {
+        const asset = Asset.fromModule(image);
+        await asset.downloadAsync();
+        setLoadedImages((prevLoadedImages) => ({
+          ...prevLoadedImages,
+          [key]: asset.localUri,
+        }));
+      });
+
+      try {
+        await Promise.all(cacheImages);
+        setLocalIsLoaded(true);
+      } catch (error) {
+        console.warn("Error: ", error);
+      }
+    };
+
+    loadAssets();
+  }, []);
+  console.log("local is loaded", localIsLoaded);
+  //set all sfx
+  useEffect(() => {
     async function loadBoomboxAudio() {
       try {
         const { sound } = await Audio.Sound.createAsync(require("./assets/audio/treeHouse/Boombox.mp3"));
@@ -86,7 +111,14 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
     }
   }
 
-  //   sprite animations
+  //   sprite
+  const LoadingCover = () => {
+    Animated.timing(loadingCover, {
+      toValue: -99,
+      duration: 0,
+      useNativeDriver: false,
+    }).start();
+  };
 
   // bird singing
 
@@ -198,14 +230,42 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
     }
     console.log(bugGameOpen);
   };
-
+  if (!localIsLoaded) {
+    return (
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          height: "100%",
+          width: "100%",
+          backgroundColor: "#8AC1DF",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Text style={styles.h1Text}>loading</Text>
+      </View>
+    );
+  }
   return (
     <>
-      <ImageBackground
-        source={require("./assets/TreeHouse/TreeHouseBG.png")}
-        // source={require("./assets/TreeHouse/TreeHousePlacement.png")}
-        style={styles.fullWidthBackground}
-      >
+      <ImageBackground source={{ uri: loadedImages.TreeHouseBG }} style={styles.fullWidthBackground}>
+        <Animated.View
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            height: "100%",
+            width: "100%",
+            backgroundColor: "#8AC1DF",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: loadingCover,
+          }}
+        >
+          <Text style={styles.h1Text}>Loading...</Text>
+        </Animated.View>
         {bugGameOpen === false && (
           <Pressable
             onPress={() => handleGameOpen()}
@@ -220,7 +280,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
             }}
           >
             <Image
-              source={require("./assets/TreeHouse/Cards.png")}
+              source={{ uri: loadedImages.Cards }}
               style={{
                 resizeMode: "contain",
                 width: "100%",
@@ -243,7 +303,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
         >
           <SpriteSheet
             ref={(ref) => (this.birdSong = ref)}
-            source={require("./assets/graphics/spritesheets/birdSing.png")}
+            source={{ uri: loadedImages.birdSing, width: 1878, height: 2232 }}
             columns={6}
             rows={8}
             height={150}
@@ -342,7 +402,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
         >
           <SpriteSheet
             ref={(ref) => (this.boomBox = ref)}
-            source={require("./assets/graphics/spritesheets/BoomboxAnim.png")}
+            source={{ uri: loadedImages.BoomboxAnim, width: 3516, height: 3160 }}
             columns={4}
             rows={4}
             frameHeight={735}
@@ -380,7 +440,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
           {/* Sky placeholder */}
           <SpriteSheet
             ref={(ref) => (this.skyWave = ref)}
-            source={require("./assets/graphics/spritesheets/SkyWave.png")}
+            source={{ uri: loadedImages.SkyWave, width: 4000, height: 4730 }}
             columns={8}
             rows={8}
             frameHeight={7496}
@@ -423,7 +483,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
         >
           <SpriteSheet
             ref={(ref) => (this.tordenWave = ref)}
-            source={require("./assets/graphics/spritesheets/tordenWaveTreehouse.png")}
+            source={{ uri: loadedImages.tordenWaveTreehouse, width: 2100, height: 4802 }}
             columns={5}
             rows={10}
             frameHeight={1690}
@@ -437,6 +497,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
               wave: [0, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49],
               blink: [0, 1, 2, 3, 4, 5, 6, 7],
             }}
+            onLoad={() => LoadingCover()}
           ></SpriteSheet>
           <Pressable
             onPress={() => {
@@ -464,7 +525,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
         > */}
         {/* Foreground */}
         <Image
-          source={require("./assets/TreeHouse/TreeHouseFG.png")}
+          source={{ uri: loadedImages.TreeHouseFG }}
           style={{
             width: "100%",
             height: "100%",

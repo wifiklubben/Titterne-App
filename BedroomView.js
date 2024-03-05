@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, ImageBackground, Image, Pressable, Animated, Text } from "react-native";
-
+import { View, ImageBackground, Pressable, Animated, Text } from "react-native";
+import { Asset } from "expo-asset";
 import { Audio } from "expo-av";
+import { Image } from "expo-image";
 
 import SockGameView from "./SockGameView";
 import BookView from "./BookView";
@@ -18,8 +19,51 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
   const [animation] = useState(new Animated.Value(0));
   const [driveAnimation] = useState(new Animated.Value(0));
   const [flyAnim] = useState(new Animated.Value(0));
-  // set all sfx
+  const [localIsLoaded, setLocalIsLoaded] = useState(false);
+  const [loadedImages, setLoadedImages] = useState({});
+  const [imageArray, setImageArray] = useState();
+  const [loadingCover] = useState(new Animated.Value(99));
 
+  useEffect(() => {
+    const loadAssets = async () => {
+      const images = {
+        skyAnim: require("./assets/graphics/spritesheets/SkyAnim.png"),
+        TordenBedroomAnimWave: require("./assets/graphics/spritesheets/TordenBedroomAnimWaveSml.png"),
+        Curtain1Notanimated: require("./assets/Bedroom/BedroomGraphics/Curtain1NotanimatedSml.png"),
+        curtainnAnimFix: require("./assets/graphics/spritesheets/curtainnAnimFixSml.png"),
+        bedroomBG: require("./assets/Bedroom/bedroomBG.png"),
+        bedroomEnd: require("./assets/Bedroom/bedEndOverlaySml.png"),
+        robotAnim: require("./assets/graphics/spritesheets/RobotAnimSml.png"),
+        dragonAnim: require("./assets/graphics/spritesheets/DragonAnimSml.png"),
+        doll: require("./assets/Bedroom/BedroomGraphics/dollNotanimated.png"),
+        carDriving: require("./assets/graphics/spritesheets/CarDrivingSml.png"),
+        planeAnim: require("./assets/graphics/spritesheets/PlananimSml.png"),
+      };
+
+      const cacheImages = Object.entries(images).map(async ([key, image]) => {
+        const asset = Asset.fromModule(image);
+        setImageArray(images);
+        await asset.downloadAsync();
+        setLoadedImages((prevLoadedImages) => ({
+          ...prevLoadedImages,
+          [key]: asset.localUri,
+        }));
+      });
+
+      try {
+        await Promise.all(cacheImages);
+        setLocalIsLoaded(true);
+      } catch (error) {
+        console.warn("Error: ", error);
+      }
+    };
+
+    loadAssets();
+  }, []);
+
+  console.log("local is loaded", localIsLoaded);
+
+  // set all sfx
   useEffect(() => {
     async function loadWaveSound() {
       try {
@@ -164,9 +208,15 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
       loops: false,
       resetAfterFinish: true,
     });
-    // play sound function here if/when it exists
   };
   //animations
+  const LoadingCover = () => {
+    Animated.timing(loadingCover, {
+      toValue: -99,
+      duration: 0,
+      useNativeDriver: false,
+    }).start();
+  };
   const car = () => {
     this.car.play({
       type: "carDriving",
@@ -223,6 +273,7 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
       }),
     ]).start();
   };
+
   const DriveAnimation = () => {
     Animated.sequence([
       Animated.timing(driveAnimation, {
@@ -412,487 +463,521 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
       setSockGameOpen(false);
     }
   };
-
-  return (
-    // <ImageBackground source={require("./assets/Bedroom/Titterne_bedroom_placement.png")} style={styles.fullWidthBackground}>
-    <ImageBackground source={require("./assets/Bedroom/bedroomBG.png")} style={styles.fullWidthBackground}>
-      {/* bed frame graphics */}
-
-      {sockGameOpen === false && (
-        <Image
-          source={require("./assets/Bedroom/bedEndOverlay.png")}
-          style={{
-            height: "100%",
-            width: "100%",
-            zIndex: 3,
-          }}
-          pointerEvents="none"
-        />
-      )}
-
-      {/* bedroom toys */}
-
-      <Animated.View
-        style={{
-          position: "absolute",
-          height: 250,
-          width: 200,
-          top: 410,
-          left: 800,
-          zIndex: 4,
-          transform: [{ translateX: animation }],
-        }}
-      >
-        <SpriteSheet
-          ref={(ref) => (this.robot = ref)}
-          source={require("./assets/graphics/spritesheets/RobotAnim.png")}
-          columns={9}
-          rows={3}
-          width={200}
-          animations={{
-            robotDance: [0, 9, 18, 1, 10, 19, 2, 11, 20, 3, 12, 21, 4, 13, 22, 5, 14, 23, 6, 15, 24, 7, 16, 25, 8, 0, 9, 18, 1, 10, 19, 2, 11, 20, 3, 12, 21, 4, 13, 22, 5, 14, 23, 6, 15, 24, 7, 16, 25, 8],
-          }}
-        />
-        <Pressable
-          onPress={() => {
-            robotAnimation();
-            robot();
-          }}
-          style={{
-            position: "absolute",
-            height: "100%",
-            width: "100%",
-          }}
-        />
-      </Animated.View>
-
+  if (!localIsLoaded) {
+    return (
       <View
         style={{
           position: "absolute",
-          height: 250,
-          width: 200,
-          top: 440,
-          left: 40,
-          zIndex: 4,
-        }}
-      >
-        <SpriteSheet
-          ref={(ref) => (this.dragon = ref)}
-          source={require("./assets/graphics/spritesheets/DragonAnim.png")}
-          columns={8}
-          rows={4}
-          width={300}
-          animations={{
-            roar: [0, 8, 16, 24, 1, 9, 17, 25, 2, 10, 18, 26, 3, 11, 19, 27, 4, 12, 20, 28, 5, 6, 7, 13, 21, 29, 14, 15, 22, 30, 23, 31],
-          }}
-        />
-
-        <Pressable
-          onPress={() => dragon()}
-          style={{
-            position: "absolute",
-            height: "100%",
-            width: "100%",
-          }}
-        />
-      </View>
-
-      <Animated.Image
-        source={require("./assets/Bedroom/BedroomGraphics/dollNotanimated.png")}
-        style={{
-          position: "absolute",
-          height: 170,
-          width: 140,
-          top: 455,
-          left: 260,
-          zIndex: 3,
-        }}
-      />
-
-      <Animated.View
-        style={{
-          position: "absolute",
-          height: 120,
-          width: 240,
-          top: 620,
-          left: 200,
-          zIndex: 6,
-          overflow: "visible",
-          transform: [{ translateX: driveAnimation }],
-        }}
-      >
-        <SpriteSheet
-          ref={(ref) => (this.car = ref)}
-          source={require("./assets/graphics/spritesheets/CarDriving.png")}
-          width={240}
-          columns={7}
-          rows={3}
-          animations={{
-            carDriving: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 18],
-          }}
-        />
-
-        <Pressable
-          onPress={() => {
-            car();
-            DriveAnimation();
-          }}
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-          }}
-        />
-      </Animated.View>
-      <Pressable
-        onPress={() => {
-          plane();
-        }}
-        style={{
-          position: "absolute",
-          height: 130,
-          width: 180,
-          top: 550,
-          left: 640,
-          zIndex: 4,
-        }}
-      >
-        <SpriteSheet
-          ref={(ref) => (this.plane = ref)}
-          source={require("./assets/graphics/spritesheets/Plananim.png")}
-          imageStyle={{
-            marginBottom: 0,
-            top: -50,
-            right: 10,
-          }}
-          width={240}
-          columns={3}
-          rows={4}
-          animations={{
-            planeFly: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-          }}
-        />
-      </Pressable>
-
-      <View
-        source={require("./assets/Bedroom/BedroomGraphics/SkyNotanimated.png")}
-        style={{
-          position: "absolute",
-          height: 280,
-          width: 300,
-          top: 230,
-          left: 80,
-          flex: 1,
-          zIndex: 2,
-          alignItems: "flex-end",
-        }}
-      >
-        <SpriteSheet
-          ref={(ref) => (this.sky = ref)}
-          source={require("./assets/graphics/spritesheets/SkyAnim.png")}
-          columns={9}
-          rows={7}
-          width={320}
-          animations={{
-            skyBlink: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
-              61,
-            ],
-          }}
-        />
-
-        <Pressable
-          onPress={() => blink()}
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-          }}
-        />
-      </View>
-
-      <View
-        style={{
-          position: "absolute",
-          height: 200,
-          width: 330,
-          top: 218,
-          left: 715,
-          flex: 1,
-          zIndex: 2,
-          alignItems: "flex-end",
-        }}
-      >
-        <SpriteSheet
-          ref={(ref) => (this.thorden = ref)}
-          source={require("./assets/graphics/spritesheets/TordenBedroomAnimWave.png")}
-          imageStyle={{
-            marginBottom: 0,
-          }}
-          columns={8}
-          rows={8}
-          width={300}
-          animations={{
-            waveSleep: [
-              0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
-              61, 62,
-            ],
-          }}
-        />
-
-        <Pressable
-          onPress={() => wave()}
-          style={{
-            position: "absolute",
-            top: "10%",
-            height: "100%",
-            left: "15%",
-            width: "60%",
-          }}
-        />
-      </View>
-
-      <Image
-        source={require("./assets/Bedroom/BedroomGraphics/Curtain1Notanimated.png")}
-        style={{
-          position: "absolute",
-          height: 260,
-          width: 240,
           top: 0,
-          left: 110,
-          zIndex: 1,
-        }}
-      />
-
-      <View
-        style={{
-          position: "absolute",
-          height: 270,
-          width: 250,
-          top: 0,
-          left: 700,
-          zIndex: 1,
-          overflow: "hidden",
+          right: 0,
+          height: "100%",
+          width: "100%",
+          backgroundColor: "#8AC1DF",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <SpriteSheet
-          ref={(ref) => (this.curtain = ref)}
-          source={require("./assets/graphics/spritesheets/curtainnAnimFix.png")}
-          columns={8}
-          rows={6}
-          width={340}
-          imageStyle={{
-            left: -50,
-            top: -90,
-          }}
-          animations={{
-            curtainClose: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45],
-          }}
-        />
-
-        <Pressable
-          onPress={() => curtain()}
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-          }}
-        />
+        <Text style={styles.h1Text}>loading</Text>
       </View>
+    );
+  }
+  if (localIsLoaded) {
+    return (
+      <ImageBackground source={imageArray.bedroomBG} style={styles.fullWidthBackground}>
+        {/* bed frame graphics */}
 
-      {/* Sock buttons */}
+        {sockGameOpen === false && (
+          <Image
+            source={{ uri: loadedImages.bedroomEnd }}
+            style={{
+              height: "100%",
+              width: "100%",
+              zIndex: 3,
+            }}
+            pointerEvents="none"
+          />
+        )}
 
-      {/* sock button red */}
-
-      {sockGameOpen === false && (
-        <ImageBackground
-          source={require("./assets/graphics/socks/sockRed.png")}
+        {/* bedroom toys */}
+        <Animated.View
           style={{
             position: "absolute",
-            resizeMode: "contain",
-            width: 100,
-            height: 100,
-            top: 690,
-            left: 65,
-            zIndex: 4,
-
-            transform: [{ scaleX: -1 }],
-          }}
-        />
-      )}
-
-      {sockGameOpen === false && (
-        <Pressable
-          onPress={() => handleGameOpen()}
-          style={{
-            position: "absolute",
-            resizeMode: "contain",
-            width: 100,
-            height: 100,
-            top: 690,
-            left: 65,
-            zIndex: 4,
-          }}
-        />
-      )}
-
-      {/* sock button pink */}
-
-      {sockGameOpen === false && (
-        <ImageBackground
-          source={require("./assets/graphics/socks/sockPink.png")}
-          style={{
-            position: "absolute",
-            resizeMode: "contain",
-            width: 110,
-            height: 110,
-            top: 675,
-            left: 435,
-            zIndex: 4,
-            transform: [
-              {
-                rotate: "40deg",
-              },
-              { scaleX: -1 },
-            ],
-          }}
-        />
-      )}
-
-      {sockGameOpen === false && (
-        <Pressable
-          onPress={() => handleGameOpen()}
-          style={{
-            position: "absolute",
-            resizeMode: "contain",
-            width: 110,
-            height: 110,
-            top: 675,
-            left: 435,
-            zIndex: 4,
-          }}
-        />
-      )}
-
-      {/* sock button yellow */}
-
-      {sockGameOpen === false && (
-        <ImageBackground
-          source={require("./assets/graphics/socks/sockYellow.png")}
-          style={{
-            position: "absolute",
-            resizeMode: "contain",
-            width: 110,
-            height: 110,
-            top: 470,
-            left: 665,
-            zIndex: 4,
-          }}
-        />
-      )}
-
-      {sockGameOpen === false && (
-        <Pressable
-          onPress={() => handleGameOpen()}
-          style={{
-            position: "absolute",
-            resizeMode: "contain",
-            width: 110,
-            height: 110,
-            top: 470,
-            left: 665,
-            zIndex: 4,
-          }}
-        />
-      )}
-
-      {/* sock button green */}
-
-      {sockGameOpen === false && (
-        <ImageBackground
-          source={require("./assets/graphics/socks/sockGreen.png")}
-          style={{
-            position: "absolute",
-            resizeMode: "contain",
-            width: 115,
-            height: 115,
-            top: 675,
-            left: 695,
-            zIndex: 4,
-          }}
-        />
-      )}
-
-      {sockGameOpen === false && (
-        <Pressable
-          onPress={() => handleGameOpen()}
-          style={{
-            position: "absolute",
-            resizeMode: "contain",
-            width: 115,
-            height: 115,
-            top: 675,
-            left: 695,
-            zIndex: 4,
-          }}
-        />
-      )}
-
-      {sockGameOpen === true && (
-        <SockGameView
-          styles={styles}
-          handleGameOpen={handleGameOpen}
-          style={{
-            zIndex: 50,
-          }}
-        />
-      )}
-
-      {/* story book component */}
-
-      {isBookOpen === false && (
-        <Pressable
-          onPress={() => {
-            setIsBookOpen(true);
-            {
-              stopBedroomAmbientSound();
-            }
-          }}
-          style={{
-            position: "absolute",
-            height: 220,
-            width: 220,
-            left: 420,
-            top: 450,
-            zIndex: 5,
+            top: 0,
+            right: 0,
+            height: "100%",
+            width: "100%",
+            backgroundColor: "#8AC1DF",
+            zIndex: 99,
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: loadingCover,
           }}
         >
-          <Image
-            source={require("./assets/Bedroom/books.png")}
+          <Text style={styles.h1Text}>Loading...</Text>
+        </Animated.View>
+        <Animated.View
+          style={{
+            position: "absolute",
+            height: 250,
+            width: 200,
+            top: 410,
+            left: 800,
+            zIndex: 4,
+            alignItems: "center",
+            transform: [{ translateX: animation }],
+          }}
+        >
+          <SpriteSheet
+            ref={(ref) => (this.robot = ref)}
+            source={{ uri: loadedImages.robotAnim, width: 4230, height: 2019 }}
+            columns={9}
+            rows={3}
+            width={200}
+            animations={{
+              robotDance: [0, 9, 18, 1, 10, 19, 2, 11, 20, 3, 12, 21, 4, 13, 22, 5, 14, 23, 6, 15, 24, 7, 16, 25, 8, 0, 9, 18, 1, 10, 19, 2, 11, 20, 3, 12, 21, 4, 13, 22, 5, 14, 23, 6, 15, 24, 7, 16, 25, 8],
+            }}
+          />
+          <Pressable
+            onPress={() => {
+              robotAnimation();
+              robot();
+            }}
             style={{
-              resizeMode: "contain",
-              height: 220,
-              width: 220,
-              zIndex: 5,
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+            }}
+          />
+        </Animated.View>
+
+        <View
+          style={{
+            position: "absolute",
+            height: 250,
+            width: 200,
+            top: 440,
+            left: 40,
+            zIndex: 4,
+          }}
+        >
+          <SpriteSheet
+            ref={(ref) => (this.dragon = ref)}
+            source={{ uri: loadedImages.dragonAnim, width: 4000, height: 1978 }}
+            columns={8}
+            rows={4}
+            width={300}
+            animations={{
+              roar: [0, 8, 16, 24, 1, 9, 17, 25, 2, 10, 18, 26, 3, 11, 19, 27, 4, 12, 20, 28, 5, 6, 7, 13, 21, 29, 14, 15, 22, 30, 23, 31],
+            }}
+          />
+
+          <Pressable
+            onPress={() => dragon()}
+            style={{
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+            }}
+          />
+        </View>
+
+        <Animated.Image
+          source={{ uri: loadedImages.doll }}
+          style={{
+            position: "absolute",
+            height: 170,
+            width: 140,
+            top: 455,
+            left: 260,
+            zIndex: 3,
+          }}
+        />
+
+        <Animated.View
+          style={{
+            position: "absolute",
+            height: 120,
+            width: 240,
+            top: 620,
+            left: 200,
+            zIndex: 6,
+            overflow: "visible",
+            transform: [{ translateX: driveAnimation }],
+          }}
+        >
+          <SpriteSheet
+            ref={(ref) => (this.car = ref)}
+            source={{ uri: loadedImages.carDriving, width: 2800, height: 801 }}
+            width={240}
+            columns={7}
+            rows={3}
+            animations={{
+              carDriving: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 18],
+            }}
+          />
+
+          <Pressable
+            onPress={() => {
+              car();
+              DriveAnimation();
+            }}
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </Animated.View>
+        <Pressable
+          onPress={() => {
+            plane();
+          }}
+          style={{
+            position: "absolute",
+            height: 130,
+            width: 180,
+            top: 550,
+            left: 640,
+            zIndex: 4,
+          }}
+        >
+          <SpriteSheet
+            ref={(ref) => (this.plane = ref)}
+            source={{ uri: loadedImages.planeAnim, width: 990, height: 1320 }}
+            imageStyle={{
+              marginBottom: 0,
+              top: -50,
+              right: 10,
+            }}
+            width={240}
+            columns={3}
+            rows={4}
+            animations={{
+              planeFly: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             }}
           />
         </Pressable>
-      )}
 
-      {isBookOpen === true && (
-        <BookView
-          //   todo remove unnecessary props
-          storyIsPaused={storyIsPaused}
-          pausePlayStory={pausePlayStory}
-          currentStory={currentStory}
-          setCurrentStory={setCurrentStory}
-          storyTitles={storyTitles}
-          styles={styles}
-          renderStoryContents={renderStoryContents}
-          handleBookClose={handleBookClose}
-          handleStoryClose={handleStoryClose}
+        <View
+          style={{
+            position: "absolute",
+            height: 280,
+            width: 300,
+            top: 230,
+            left: 80,
+            flex: 1,
+            zIndex: 2,
+            alignItems: "flex-end",
+          }}
+        >
+          <SpriteSheet
+            ref={(ref) => (this.sky = ref)}
+            source={{ uri: loadedImages.skyAnim, width: 8019, height: 5054 }}
+            columns={9}
+            rows={7}
+            width={320}
+            animations={{
+              skyBlink: [
+                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+                61,
+              ],
+            }}
+            onLoad={() => LoadingCover()}
+          />
+
+          <Pressable
+            onPress={() => blink()}
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </View>
+
+        <View
+          style={{
+            position: "absolute",
+            height: 200,
+            width: 330,
+            top: 218,
+            left: 715,
+            flex: 1,
+            zIndex: 2,
+            alignItems: "flex-end",
+          }}
+        >
+          <SpriteSheet
+            ref={(ref) => (this.thorden = ref)}
+            source={{ uri: loadedImages.TordenBedroomAnimWave, width: 3000, height: 2600 }}
+            imageStyle={{
+              marginBottom: 0,
+            }}
+            columns={8}
+            rows={8}
+            width={300}
+            animations={{
+              waveSleep: [
+                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+                61, 62,
+              ],
+            }}
+          />
+
+          <Pressable
+            onPress={() => wave()}
+            style={{
+              position: "absolute",
+              top: "10%",
+              height: "100%",
+              left: "15%",
+              width: "60%",
+            }}
+          />
+        </View>
+
+        <Image
+          source={{ uri: loadedImages.Curtain1Notanimated }}
+          style={{
+            position: "absolute",
+            height: 260,
+            width: 240,
+            top: 0,
+            left: 110,
+            zIndex: 1,
+          }}
         />
-      )}
-    </ImageBackground>
-  );
+
+        <View
+          style={{
+            position: "absolute",
+            height: 270,
+            width: 250,
+            top: 0,
+            left: 700,
+            zIndex: 1,
+            overflow: "hidden",
+          }}
+        >
+          <SpriteSheet
+            ref={(ref) => (this.curtain = ref)}
+            source={{ uri: loadedImages.curtainnAnimFix, width: 7216, height: 5706 }}
+            columns={8}
+            rows={6}
+            width={340}
+            imageStyle={{
+              left: -50,
+              top: -90,
+            }}
+            animations={{
+              curtainClose: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45],
+            }}
+          />
+
+          <Pressable
+            onPress={() => curtain()}
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </View>
+
+        {/* Sock buttons */}
+
+        {/* sock button red */}
+
+        {sockGameOpen === false && (
+          <ImageBackground
+            source={require("./assets/graphics/socks/sockRed.png")}
+            style={{
+              position: "absolute",
+              contentFit: "contain",
+              width: 100,
+              height: 100,
+              top: 690,
+              left: 65,
+              zIndex: 4,
+
+              transform: [{ scaleX: -1 }],
+            }}
+          />
+        )}
+
+        {sockGameOpen === false && (
+          <Pressable
+            onPress={() => handleGameOpen()}
+            style={{
+              position: "absolute",
+              contentFit: "contain",
+              width: 100,
+              height: 100,
+              top: 690,
+              left: 65,
+              zIndex: 4,
+            }}
+          />
+        )}
+
+        {/* sock button pink */}
+
+        {sockGameOpen === false && (
+          <ImageBackground
+            source={require("./assets/graphics/socks/sockPink.png")}
+            style={{
+              position: "absolute",
+              contentFit: "contain",
+              width: 110,
+              height: 110,
+              top: 675,
+              left: 435,
+              zIndex: 4,
+              transform: [
+                {
+                  rotate: "40deg",
+                },
+                { scaleX: -1 },
+              ],
+            }}
+          />
+        )}
+
+        {sockGameOpen === false && (
+          <Pressable
+            onPress={() => handleGameOpen()}
+            style={{
+              position: "absolute",
+              contentFit: "contain",
+              width: 110,
+              height: 110,
+              top: 675,
+              left: 435,
+              zIndex: 4,
+            }}
+          />
+        )}
+
+        {/* sock button yellow */}
+
+        {sockGameOpen === false && (
+          <ImageBackground
+            source={require("./assets/graphics/socks/sockYellow.png")}
+            style={{
+              position: "absolute",
+              contentFit: "contain",
+              width: 110,
+              height: 110,
+              top: 470,
+              left: 665,
+              zIndex: 4,
+            }}
+          />
+        )}
+
+        {sockGameOpen === false && (
+          <Pressable
+            onPress={() => handleGameOpen()}
+            style={{
+              position: "absolute",
+              contentFit: "contain",
+              width: 110,
+              height: 110,
+              top: 470,
+              left: 665,
+              zIndex: 4,
+            }}
+          />
+        )}
+
+        {/* sock button green */}
+
+        {sockGameOpen === false && (
+          <ImageBackground
+            source={require("./assets/graphics/socks/sockGreen.png")}
+            style={{
+              position: "absolute",
+              contentFit: "contain",
+              width: 115,
+              height: 115,
+              top: 675,
+              left: 695,
+              zIndex: 4,
+            }}
+          />
+        )}
+
+        {sockGameOpen === false && (
+          <Pressable
+            onPress={() => handleGameOpen()}
+            style={{
+              position: "absolute",
+              contentFit: "contain",
+              width: 115,
+              height: 115,
+              top: 675,
+              left: 695,
+              zIndex: 4,
+            }}
+          />
+        )}
+
+        {sockGameOpen === true && (
+          <SockGameView
+            styles={styles}
+            handleGameOpen={handleGameOpen}
+            style={{
+              zIndex: 50,
+            }}
+          />
+        )}
+
+        {/* story book component */}
+
+        {isBookOpen === false && (
+          <Pressable
+            onPress={() => {
+              setIsBookOpen(true);
+              {
+                stopBedroomAmbientSound();
+              }
+            }}
+            style={{
+              position: "absolute",
+              height: 220,
+              width: 220,
+              left: 420,
+              top: 450,
+              zIndex: 5,
+            }}
+          >
+            <Image
+              source={require("./assets/Bedroom/books.png")}
+              style={{
+                contentFit: "contain",
+                height: 220,
+                width: 220,
+                zIndex: 5,
+              }}
+            />
+          </Pressable>
+        )}
+
+        {isBookOpen === true && (
+          <BookView
+            //   todo remove unnecessary props
+            storyIsPaused={storyIsPaused}
+            pausePlayStory={pausePlayStory}
+            currentStory={currentStory}
+            setCurrentStory={setCurrentStory}
+            storyTitles={storyTitles}
+            styles={styles}
+            renderStoryContents={renderStoryContents}
+            handleBookClose={handleBookClose}
+            handleStoryClose={handleStoryClose}
+          />
+        )}
+      </ImageBackground>
+    );
+  }
 }

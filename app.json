@@ -12,9 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#8AC1DF"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "requireFullScreen": true,

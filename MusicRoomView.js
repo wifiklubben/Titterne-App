@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, ImageBackground, Animated, Image, Pressable } from "react-native";
+import { View, ImageBackground, Animated, Image, Pressable, Text } from "react-native";
 
 import OneShot from "./OneShot";
 import MusicGameView from "./MusicGameView";
@@ -18,7 +18,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
   const [skyIsPressed, setSkyIsPresssed] = useState(false);
   const [skyIsDancing, setSkyIsDancing] = useState(false);
   const [isMusicGameOpen, setIsMusicGameOpen] = useState(false);
-
+  const [loadingCover] = useState(new Animated.Value(99));
   const [isPlayignRightNow, setIsPlayingRightNow] = useState(null);
 
   const handleMusicGameOpen = () => {
@@ -253,6 +253,13 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
   }, [skyIsPressed]);
 
   // animation functions
+  const LoadingCover = () => {
+    Animated.timing(loadingCover, {
+      toValue: -99,
+      duration: 0,
+      useNativeDriver: false,
+    }).start();
+  };
 
   const wiggleAnimation = () => {
     console.log("wiggling!");
@@ -282,6 +289,22 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
       // source={require("./assets/MusicRoom/musicRoomCharacterPlacement.png")}
       style={styles.fullWidthBackground}
     >
+      <Animated.View
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          height: "100%",
+          width: "100%",
+          backgroundColor: "#8AC1DF",
+          zIndex: 99,
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: loadingCover,
+        }}
+      >
+        <Text style={styles.h1Text}>Loading...</Text>
+      </Animated.View>
       <Pressable
         onPress={() => handleMusicGameOpen()}
         style={{
@@ -605,6 +628,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
           animations={{
             play: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
           }}
+          onLoad={() => LoadingCover()}
         ></SpriteSheet>
       </Pressable>
 

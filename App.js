@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AppState, StyleSheet, View, ImageBackground, Dimensions, Pressable, Image } from "react-native";
+import { AppState, StyleSheet, View, ImageBackground, Dimensions, Pressable, Image, Animated } from "react-native";
 
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -263,27 +263,31 @@ export default () => {
       }
       birdsAmbientSound.playAsync();
     } else if (activeView === 2 && musicRoomAmbient) {
-      console.log("musicRoomAmbient playing");
+      setShowIntroAnimation(false);
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
       musicRoomAmbient.playAsync();
     } else if (activeView === 3) {
+      setShowIntroAnimation(false);
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
       bedroomAmbientSound.playAsync();
     } else if (activeView === 4 && treeHouseAmbient) {
+      setShowIntroAnimation(false);
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
       treeHouseAmbient.playAsync();
     } else if (activeView === 5 && conservatoryBackgroundSound) {
+      setShowIntroAnimation(false);
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
       startConservatoryBackgroundSound();
     } else if (activeView === 6) {
+      setShowIntroAnimation(false);
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
@@ -302,6 +306,8 @@ export default () => {
         require("./assets/forground.png"),
         require("./assets/TitterneLogo.png"),
         require("./assets/HouseNight.png"),
+        require("./assets/Bg_trees_treehouseopen.png"),
+        require("./assets/House_Open_rooms.png"),
       ];
 
       const cacheImages = images.map((image) => {
@@ -312,13 +318,14 @@ export default () => {
         await Promise.all(cacheImages);
 
         setIsLoaded(true);
-
-        await SplashScreen.hideAsync();
+        setTimeout(async () => {
+          setIsLoaded(true);
+          await SplashScreen.hideAsync();
+        }, 1000);
       } catch (error) {
         console.warn("Error: ", error);
       }
     };
-
     loadAssets();
   }, []);
 
@@ -345,7 +352,7 @@ export default () => {
       left: 0,
       height: "100%",
       width: "100%",
-      zIndex: 1,
+      // zIndex: 1,
     },
 
     animationContainer: {
@@ -370,6 +377,7 @@ export default () => {
       flexDirection: "row",
       gap: 10,
       zIndex: 100,
+      alignItems: "center",
     },
 
     musicButtonContainer: {
@@ -404,6 +412,8 @@ export default () => {
       height: 160,
       left: fullWidth / 2 + 10,
       top: fullHeight / 2 + 10,
+
+      zIndex: 9,
     },
 
     MusicRoomButton: {
@@ -412,6 +422,7 @@ export default () => {
       height: 160,
       left: fullWidth / 2 - 210,
       top: fullHeight / 2 - 140,
+      zIndex: 9,
     },
 
     TreehouseButton: {
@@ -420,14 +431,18 @@ export default () => {
       top: fullHeight / 2 - 120,
       width: 145,
       height: 160,
+
+      zIndex: 9,
     },
 
     ConservatoryButton: {
       position: "absolute",
-      height: 120,
-      width: 120,
-      left: fullWidth / 2 - 350,
+      height: 150,
+      width: 150,
+      left: fullWidth / 2 - 400,
       top: fullHeight / 2 + 70,
+
+      zIndex: 9,
     },
 
     BathroomButton: {
@@ -461,35 +476,23 @@ export default () => {
 
       {activeView === 1 && (
         <HomeView styles={styles} isLoaded={isLoaded} isNightTime={isNightTime} setShowIntroAnimation={setShowIntroAnimation} showIntroAnimation={showIntroAnimation} activeView={activeView} useStore={useStore}>
-          <ImageBackground source={require("./assets/Music_room_icon.png")}>
-            <Pressable onPress={() => handleViewChange(2)} style={styles.MusicRoomButton}></Pressable>
-          </ImageBackground>
+          <Pressable onPress={() => handleViewChange(2)} style={styles.MusicRoomButton}></Pressable>
 
           <Pressable onPress={() => handleViewChange(3)} style={styles.BedroomButton}></Pressable>
 
           <Pressable onPress={() => handleViewChange(4)} style={styles.TreehouseButton} />
 
           <Pressable onPress={() => handleViewChange(5)} style={styles.ConservatoryButton} />
-
-          {/* <ImageBackground
-            source={require("./assets/Thorden.png")}
-            style={{
-              position: "absolute",
-              height: 100,
-              width: 100,
-              left: fullWidth / 2 - 40,
-              top: fullHeight / 2 + 70,
-            }}
-          />
-          <Pressable onPress={() => handleViewChange(6)} style={styles.BathroomButton} /> */}
         </HomeView>
       )}
 
       {/* Music Room View */}
-      {activeView === 2 && <MusicRoomView styles={styles} activeView={activeView} stopMusicRoomBackgroundSound={stopMusicRoomBackgroundSound} startMusicRoomBackgroundSound={startMusicRoomBackgroundSound} />}
+      {activeView === 2 && (
+        <MusicRoomView styles={styles} activeView={activeView} stopMusicRoomBackgroundSound={stopMusicRoomBackgroundSound} setShowIntroAnimation={setShowIntroAnimation} startMusicRoomBackgroundSound={startMusicRoomBackgroundSound} />
+      )}
 
       {/* Bedroom View */}
-      {activeView === 3 && <BedroomView styles={styles} activeView={activeView} stopBedroomAmbientSound={stopBedroomAmbientSound} startBedroomAmbientSound={startBedroomAmbientSound} />}
+      {activeView === 3 && <BedroomView styles={styles} activeView={activeView} setShowIntroAnimation stopBedroomAmbientSound={stopBedroomAmbientSound} startBedroomAmbientSound={startBedroomAmbientSound} />}
 
       {/* Treehouse View */}
       {activeView === 4 && <TreehouseView styles={styles} activeView={activeView} stopTreehouseSound={stopTreehouseSound} startTreehouseSound={startTreehouseSound} />}
@@ -517,9 +520,18 @@ export default () => {
           )}
 
           {activeView < 30 && (
-            <Pressable style={styles.roundButton} onPress={() => handleViewChange(30)}>
+            <Pressable
+              style={{
+                width: 60,
+                height: 60,
+                borderRadius: 100,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onPress={() => handleViewChange(30)}
+            >
               {/* <SettingsIcon width={72} height={72} /> */}
-              <Image source={SettingsIconGreen} style={{ width: 110, height: 110 }} />
+              <Image source={SettingsIconGreen} style={{ width: 60, height: 60 }} />
             </Pressable>
           )}
         </View>
