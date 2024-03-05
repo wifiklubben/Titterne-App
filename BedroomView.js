@@ -8,9 +8,11 @@ import SockGameView from "./SockGameView";
 import BookView from "./BookView";
 
 import SpriteSheet from "rn-sprite-sheet";
+import { Pre } from "@expo/html-elements";
 
 export default function BedroomView({ styles, stopBedroomAmbientSound, startBedroomAmbientSound }) {
   const [waveSfx, setWaveSfx] = useState();
+  const [dollSfx, setDollSfx] = useState();
   const [curtainSfx, setCurtainSfx] = useState();
   const [robotSfx, setRobotSfx] = useState();
   const [dragonSfx, setDragonSfx] = useState();
@@ -64,7 +66,16 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
   console.log("local is loaded", localIsLoaded);
 
   // set all sfx
+
   useEffect(() => {
+    async function loadDollSound() {
+      try {
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/Doll.mp3"));
+        setDollSfx(sound);
+      } catch (error) {
+        console.log("error loading wave sfx");
+      }
+    }
     async function loadWaveSound() {
       try {
         const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/hello.mp3"));
@@ -124,9 +135,19 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
     loadDragonSound();
     loadCarSound();
     loadPlaneSound();
+    loadDollSound();
   }, []);
 
   // play sfx
+  async function playDollSound() {
+    try {
+      if (dollSfx) {
+        dollSfx.replayAsync();
+      }
+    } catch (error) {
+      console.log("error playing doll sound", error);
+    }
+  }
   async function playWaveSound() {
     try {
       if (waveSfx) {
@@ -592,6 +613,19 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
             zIndex: 3,
           }}
         />
+        <Pressable
+          style={{
+            position: "absolute",
+            height: 170,
+            width: 140,
+            top: 455,
+            left: 260,
+            zIndex: 4,
+          }}
+          onPress={() => {
+            playDollSound();
+          }}
+        ></Pressable>
 
         <Animated.View
           style={{

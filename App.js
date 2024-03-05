@@ -136,6 +136,7 @@ export default () => {
   const [treeHouseAmbient, setTreeHouseAmbient] = useState();
   const [bedroomAmbientSound, setBedroomAmbientSound] = useState();
   const [conservatoryBackgroundSound, setConsevratoryBackgroundSound] = useState();
+  const [openRoomSound, setOpenRoomSound] = useState();
 
   SplashScreen.preventAutoHideAsync();
 
@@ -153,6 +154,17 @@ export default () => {
         sound.playAsync();
       } catch (error) {
         console.log("error loading birds ambient sound: ", error);
+      }
+    }
+
+    async function loadOpenRoomSound() {
+      try {
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/openRoom.mp3"));
+        sound.setVolumeAsync(0.3);
+        sound.setIsLoopingAsync(false);
+        setOpenRoomSound(sound);
+      } catch (error) {
+        console.log("error loading rooms sound ", error);
       }
     }
 
@@ -216,9 +228,20 @@ export default () => {
     loadMusicRoomAmbientSound();
     loadTreehouseAmbientSound();
     loadConservatoryBackgroundSound();
+    loadOpenRoomSound();
   }, []);
 
   //start and stop sounds functions for use in other rooms
+  const playOpenRoomSound = async () => {
+    try {
+      if (openRoomSound) {
+        await openRoomSound.replayAsync();
+      }
+    } catch (error) {
+      console.log("error playing open room sound", error);
+    }
+  };
+
   const stopBedroomAmbientSound = () => {
     bedroomAmbientSound.stopAsync();
   };
@@ -267,25 +290,33 @@ export default () => {
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
-      musicRoomAmbient.playAsync();
+      setTimeout(() => {
+        musicRoomAmbient.playAsync();
+      }, 1500);
     } else if (activeView === 3) {
       setShowIntroAnimation(false);
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
-      bedroomAmbientSound.playAsync();
+      setTimeout(() => {
+        bedroomAmbientSound.playAsync();
+      }, 1500);
     } else if (activeView === 4 && treeHouseAmbient) {
       setShowIntroAnimation(false);
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
-      treeHouseAmbient.playAsync();
+      setTimeout(() => {
+        treeHouseAmbient.playAsync();
+      }, 1500);
     } else if (activeView === 5 && conservatoryBackgroundSound) {
       setShowIntroAnimation(false);
       if (birdsAmbientSound) {
         birdsAmbientSound.stopAsync();
       }
-      startConservatoryBackgroundSound();
+      setTimeout(() => {
+        startConservatoryBackgroundSound();
+      }, 1500);
     } else if (activeView === 6) {
       setShowIntroAnimation(false);
       if (birdsAmbientSound) {
@@ -476,13 +507,33 @@ export default () => {
 
       {activeView === 1 && (
         <HomeView styles={styles} isLoaded={isLoaded} isNightTime={isNightTime} setShowIntroAnimation={setShowIntroAnimation} showIntroAnimation={showIntroAnimation} activeView={activeView} useStore={useStore}>
-          <Pressable onPress={() => handleViewChange(2)} style={styles.MusicRoomButton}></Pressable>
+          <Pressable
+            onPress={() => {
+              handleViewChange(2), playOpenRoomSound();
+            }}
+            style={styles.MusicRoomButton}
+          ></Pressable>
 
-          <Pressable onPress={() => handleViewChange(3)} style={styles.BedroomButton}></Pressable>
+          <Pressable
+            onPress={() => {
+              handleViewChange(3), playOpenRoomSound();
+            }}
+            style={styles.BedroomButton}
+          ></Pressable>
 
-          <Pressable onPress={() => handleViewChange(4)} style={styles.TreehouseButton} />
+          <Pressable
+            onPress={() => {
+              handleViewChange(4), playOpenRoomSound();
+            }}
+            style={styles.TreehouseButton}
+          />
 
-          <Pressable onPress={() => handleViewChange(5)} style={styles.ConservatoryButton} />
+          <Pressable
+            onPress={() => {
+              handleViewChange(5), playOpenRoomSound();
+            }}
+            style={styles.ConservatoryButton}
+          />
         </HomeView>
       )}
 
