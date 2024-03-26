@@ -11,15 +11,11 @@ import BookViewAction from "./BookViewAction";
 function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
   const [bugGameOpen, setBugGameOpen] = useState(false);
   const [isBlinking, setIsBlinking] = useState(false);
-  const [birdSfx, setBirdSfx] = useState();
-  const [boomboxAudio, setBoomboxAudio] = useState();
-  const [crowAudio, setCrowAudio] = useState();
-  const [cansAudio, setCansAudio] = useState();
-  const [popcornAudio, setPopcornAudio] = useState();
   const [isWaving, setIsWaving] = useState(false);
   const [skyisBlinking, setSkyisBlinking] = useState(false);
   const [skyisWaving, setSkyisWaving] = useState(false);
   const [loadedImages, setLoadedImages] = useState({});
+  const [loadedSounds, setLoadedSounds] = useState({});
   const [localIsLoaded, setLocalIsLoaded] = useState(false);
   const [loadingCover] = useState(new Animated.Value(99));
 
@@ -36,6 +32,13 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
         Cards: require("./assets/TreeHouse/Cards.png"),
         cola: require("./assets/TreeHouse/cola.png"),
       };
+      //preloaded sounds
+      const sounds = {
+        boomboxSound: require("./assets/audio/treeHouse/Boombox.mp3"),
+        crowSound: require("./assets/audio/treeHouse/Crow.mp3"),
+        canSound: require("./assets/audio/treeHouse/Cans.mp3"),
+        popcornSound: require("./assets/audio/treeHouse/Popcorn.mp3"),
+      };
 
       const cacheImages = Object.entries(images).map(async ([key, image]) => {
         const asset = Asset.fromModule(image);
@@ -46,8 +49,17 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
         }));
       });
 
+      const cacheSounds = Object.entries(sounds).map(async ([key, sound]) => {
+        const { sound: soundObject } = await Audio.Sound.createAsync(sound);
+        setLoadedSounds((prevLoadedSounds) => ({
+          ...prevLoadedSounds,
+          [key]: soundObject,
+        }));
+      });
+
       try {
         await Promise.all(cacheImages);
+        await Promise.all(cacheSounds);
         setLocalIsLoaded(true);
       } catch (error) {
         console.warn("Error: ", error);
@@ -57,59 +69,17 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
     loadAssets();
   }, []);
   console.log("local is loaded", localIsLoaded);
-  //set all sfx
-  useEffect(() => {
-    async function loadBoomboxAudio() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/treeHouse/Boombox.mp3"));
-        setBoomboxAudio(sound);
-      } catch (error) {
-        console.log("error in initial loadMusic of Boombox audio: ", error);
-      }
-    }
 
-    async function loadCrowAudio() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/treeHouse/Crow.mp3"));
-        setCrowAudio(sound);
-      } catch (error) {
-        console.log("error in initial loadMusic of Crow audio: ", error);
-      }
-    }
-
-    async function loadCansAudio() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/treeHouse/Cans.mp3"));
-        setCansAudio(sound);
-      } catch (error) {
-        console.log("error in initial loadMusic of Cans audio: ", error);
-      }
-    }
-
-    async function loadPopcornAudio() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/treeHouse/Popcorn.mp3"));
-        setPopcornAudio(sound);
-      } catch (error) {
-        console.log("error in initial loadMusic of Popcorn audio: ", error);
-      }
-    }
-
-    loadBoomboxAudio();
-    loadCrowAudio();
-    loadCansAudio();
-    loadPopcornAudio();
-  }, []);
-
-  async function playAudio(audio) {
+  const playSound = (soundKey) => {
     try {
-      if (audio) {
-        audio.replayAsync();
+      const soundObject = loadedSounds[soundKey];
+      if (soundObject) {
+        soundObject.replayAsync();
       }
     } catch (error) {
-      console.log("error playing audio", error);
+      console.log(`Error playing ${soundKey} sound:`, error);
     }
-  }
+  };
 
   //   sprite
   const LoadingCover = () => {
@@ -130,7 +100,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
       resetAfterFinish: true,
     });
     setTimeout(() => {
-      playAudio(crowAudio);
+      playSound("crowSound");
     }, 400);
   };
 
@@ -217,7 +187,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
       loops: false,
       resetAfterFinish: true,
     });
-    playAudio(boomboxAudio);
+    playSound("boomboxSound");
   };
 
   const handleGameOpen = () => {
@@ -347,7 +317,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
             }}
           />
           <Pressable
-            onPress={() => playAudio(cansAudio)}
+            onPress={() => playSound("canSound")}
             style={{
               position: "absolute",
               height: "100%",
@@ -380,7 +350,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
             }}
           />
           <Pressable
-            onPress={() => playAudio(popcornAudio)}
+            onPress={() => playSound("popcornSound")}
             style={{
               position: "absolute",
               height: "100%",

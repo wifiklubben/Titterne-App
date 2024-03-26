@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, ImageBackground, Image, Pressable } from "react-native";
+import { View, ImageBackground, Image, Pressable, Text, Animated } from "react-native";
 import SpriteSheet from "rn-sprite-sheet";
 import { Audio } from "expo-av";
+import { Asset } from "expo-asset";
 
 import PlanterView from "./PlanterView";
 
@@ -11,6 +12,51 @@ function ConservatoryView({ styles, startConservatoryBackgroundSound, stopConser
   const [tordenIsWaving, setTordenisWaving] = useState(false);
   const [skyisBlinking, setSkyisBlinking] = useState(false);
   const [skyisWaving, setSkyisWaving] = useState(false);
+  const [loadedImages, setLoadedImages] = useState({});
+  const [loadedSounds, setLoadedSounds] = useState({});
+  const [localIsLoaded, setLocalIsLoaded] = useState(false);
+  const [loadingCover] = useState(new Animated.Value(99));
+  //preload images and sounds
+  useEffect(() => {
+    const loadAssets = async () => {
+      const images = {
+        ConservatoryBackground: require("./assets/ConservatoryRoom/Conservatory_Bg_puddle_SM.png"),
+        skyWaveBlink: require("./assets/graphics/spritesheets/SkyConservatoryWaveBlink_SM.png"),
+        tordenWaveBlink: require("./assets/graphics/spritesheets/TordenAnimConservatoryWaveBlink_SM.png"),
+        plant: require("./assets/graphics/plants/ConservatoryPlant_06.png"),
+        hose: require("./assets/graphics/spritesheets/hoseAnim_SM.png"),
+        ConservatoryFG: require("./assets/ConservatoryRoom/Conservatory_Fg_SM.png"),
+      };
+      const sounds = {
+        boomboxSound: require("./assets/audio/treeHouse/Boombox.mp3"),
+      };
+      const cacheImages = Object.entries(images).map(async ([key, image]) => {
+        const asset = Asset.fromModule(image);
+        await asset.downloadAsync();
+        setLoadedImages((prevLoadedImages) => ({
+          ...prevLoadedImages,
+          [key]: asset.localUri,
+        }));
+      });
+
+      const cacheSounds = Object.entries(sounds).map(async ([key, sound]) => {
+        const { sound: soundObject } = await Audio.Sound.createAsync(sound);
+        setLoadedSounds((prevLoadedSounds) => ({
+          ...prevLoadedSounds,
+          [key]: soundObject,
+        }));
+      });
+
+      try {
+        await Promise.all(cacheImages);
+        await Promise.all(cacheSounds);
+        setLocalIsLoaded(true);
+      } catch (error) {
+        console.warn("Error: ", error);
+      }
+    };
+    loadAssets();
+  }, []);
 
   const handleGameOpen = () => {
     console.log("handle game open");
@@ -25,7 +71,15 @@ function ConservatoryView({ styles, startConservatoryBackgroundSound, stopConser
   };
 
   //Animations
-  //tordenWave
+  //loading
+  const LoadingCover = () => {
+    Animated.timing(loadingCover, {
+      toValue: -99,
+      duration: 0,
+      useNativeDriver: false,
+    }).start();
+  };
+  //tordenWav
   const wave = () => {
     if (!tordenisBlinking && !tordenIsWaving) {
       this.torden.play({
@@ -106,16 +160,48 @@ function ConservatoryView({ styles, startConservatoryBackgroundSound, stopConser
       return () => clearInterval(torBlinkTimer);
     }
   }, [tordenIsWaving]);
-
+  if (!localIsLoaded) {
+    return (
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          height: "100%",
+          width: "100%",
+          backgroundColor: "#8AC1DF",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Text style={styles.h1Text}>loading</Text>
+      </View>
+    );
+  }
   return (
     <>
       <ImageBackground
-        source={require("./assets/ConservatoryRoom/Conservatory_Bg_puddle.png")}
+        source={{ uri: loadedImages.ConservatoryBackground }}
         style={{
           width: "100%",
           height: "100%",
         }}
       >
+        <Animated.View
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            height: "100%",
+            width: "100%",
+            backgroundColor: "#8AC1DF",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: loadingCover,
+          }}
+        >
+          <Text style={styles.h1Text}>Loading...</Text>
+        </Animated.View>
         <Pressable
           onPress={() => {
             skyWave();
@@ -132,7 +218,7 @@ function ConservatoryView({ styles, startConservatoryBackgroundSound, stopConser
         >
           <SpriteSheet
             ref={(ref) => (this.sky = ref)}
-            source={require("./assets/graphics/spritesheets/SkyConservatoryWaveBlink.png")}
+            source={{ uri: loadedImages.skyWaveBlink, width: 2800, height: 2999 }}
             imageStyle={{
               marginBottom: 0,
 
@@ -148,7 +234,6 @@ function ConservatoryView({ styles, startConservatoryBackgroundSound, stopConser
               wave: [0, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61],
               blink: [0, 1, 2, 3, 4, 5],
             }}
-            onLoad={() => console.log("SpriteSheet loaded")}
           />
         </Pressable>
 
@@ -164,7 +249,7 @@ function ConservatoryView({ styles, startConservatoryBackgroundSound, stopConser
         >
           <SpriteSheet
             ref={(ref) => (this.torden = ref)}
-            source={require("./assets/graphics/spritesheets/TordenAnimConservatoryWaveBlink.png")}
+            source={{ uri: loadedImages.tordenWaveBlink, width: 1600, height: 4348 }}
             imageStyle={{
               marginBottom: 0,
             }}
@@ -175,7 +260,7 @@ function ConservatoryView({ styles, startConservatoryBackgroundSound, stopConser
               wave: [0, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58],
               blink: [0, 1, 2, 3, 5, 6],
             }}
-            onLoad={() => console.log("SpriteSheet loaded")}
+            onLoad={() => LoadingCover()}
           />
 
           <Pressable
@@ -205,28 +290,14 @@ function ConservatoryView({ styles, startConservatoryBackgroundSound, stopConser
               }}
             >
               <Image
-                source={require("./assets/graphics/plants/ConservatoryPlant_06.png")}
+                source={{ uri: loadedImages.plant }}
                 style={{
-                  // height: '105%',
-                  // width: '105%',
-                  // bottom: '5%',
                   height: "100%",
                   width: "100%",
                 }}
               />
             </Pressable>
 
-            {/* <Image
-              source={require("./assets/ConservatoryRoom/Hose.png")}
-              style={{
-                position: "absolute",
-                width: 460,
-                height: 280,
-                bottom: 0,
-                left: 120,
-                resizeMode: "contain",
-              }}
-            /> */}
             <Pressable
               onPress={() => hoseDance()}
               style={{
@@ -240,7 +311,11 @@ function ConservatoryView({ styles, startConservatoryBackgroundSound, stopConser
             >
               <SpriteSheet
                 ref={(ref) => (this.hose = ref)}
-                source={require("./assets/graphics/spritesheets/hoseAnim.png")}
+                source={{
+                  uri: loadedImages.hose,
+                  width: 3000,
+                  height: 3580,
+                }}
                 imageStyle={{
                   marginBottom: 0,
                   bottom: 0,
@@ -263,7 +338,7 @@ function ConservatoryView({ styles, startConservatoryBackgroundSound, stopConser
 
         <Image
           pointerEvents="none"
-          source={require("./assets/ConservatoryRoom/Conservatory_Fg.png")}
+          source={{ uri: loadedImages.ConservatoryFG }}
           style={{
             width: "100%",
             height: "100%",

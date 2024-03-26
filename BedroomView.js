@@ -8,21 +8,14 @@ import SockGameView from "./SockGameView";
 import BookView from "./BookView";
 
 import SpriteSheet from "rn-sprite-sheet";
-import { Pre } from "@expo/html-elements";
 
 export default function BedroomView({ styles, stopBedroomAmbientSound, startBedroomAmbientSound }) {
-  const [waveSfx, setWaveSfx] = useState();
-  const [dollSfx, setDollSfx] = useState();
-  const [curtainSfx, setCurtainSfx] = useState();
-  const [robotSfx, setRobotSfx] = useState();
-  const [dragonSfx, setDragonSfx] = useState();
-  const [carSfx, setCarSfx] = useState();
-  const [planeSfx, setPlaneSfx] = useState();
   const [animation] = useState(new Animated.Value(0));
   const [driveAnimation] = useState(new Animated.Value(0));
   const [flyAnim] = useState(new Animated.Value(0));
   const [localIsLoaded, setLocalIsLoaded] = useState(false);
   const [loadedImages, setLoadedImages] = useState({});
+  const [loadedSounds, setLoadedSounds] = useState({});
   const [imageArray, setImageArray] = useState();
   const [loadingCover] = useState(new Animated.Value(99));
 
@@ -42,6 +35,15 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
         planeAnim: require("./assets/graphics/spritesheets/PlananimSml.png"),
       };
 
+      const sounds = {
+        dollSound: require("./assets/audio/sfx/Doll.mp3"),
+        curtainSound: require("./assets/audio/sfx/Curtain.mp3"),
+        robotSound: require("./assets/audio/sfx/Robot.mp3"),
+        dragonSound: require("./assets/audio/sfx/Dino.mp3"),
+        carSound: require("./assets/audio/sfx/Bil.mp3"),
+        planeSound: require("./assets/audio/sfx/Plane.mp3"),
+      };
+
       const cacheImages = Object.entries(images).map(async ([key, image]) => {
         const asset = Asset.fromModule(image);
         setImageArray(images);
@@ -52,8 +54,17 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
         }));
       });
 
+      const cacheSounds = Object.entries(sounds).map(async ([key, sound]) => {
+        const { sound: soundObject } = await Audio.Sound.createAsync(sound);
+        setLoadedSounds((prevLoadedSounds) => ({
+          ...prevLoadedSounds,
+          [key]: soundObject,
+        }));
+      });
+
       try {
         await Promise.all(cacheImages);
+        await Promise.all(cacheSounds);
         setLocalIsLoaded(true);
       } catch (error) {
         console.warn("Error: ", error);
@@ -64,149 +75,16 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
   }, []);
 
   console.log("local is loaded", localIsLoaded);
-
-  // set all sfx
-
-  useEffect(() => {
-    async function loadDollSound() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/Doll.mp3"));
-        setDollSfx(sound);
-      } catch (error) {
-        console.log("error loading wave sfx");
-      }
-    }
-    async function loadWaveSound() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/hello.mp3"));
-        setWaveSfx(sound);
-      } catch (error) {
-        console.log("error loading wave sfx");
-      }
-    }
-
-    async function loadCurtainSound() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/Curtain.mp3"));
-        setCurtainSfx(sound);
-      } catch (error) {
-        console.log("error loading curtain sfx");
-      }
-    }
-
-    async function loadRobotSound() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/Robot.mp3"));
-        setRobotSfx(sound);
-      } catch (error) {
-        console.log("error loading robot sfx");
-      }
-    }
-
-    async function loadDragonSound() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/Dino.mp3"));
-        setDragonSfx(sound);
-      } catch (error) {
-        console.log("error loading dragon sfx");
-      }
-    }
-
-    async function loadCarSound() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/Bil.mp3"));
-        setCarSfx(sound);
-      } catch (error) {
-        console.log("error loading car sfx");
-      }
-    }
-    async function loadPlaneSound() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/sfx/Plane.mp3"));
-        setPlaneSfx(sound);
-      } catch (error) {
-        console.log("error loading plane sfx");
-      }
-    }
-
-    loadWaveSound();
-    loadCurtainSound();
-    loadRobotSound();
-    loadDragonSound();
-    loadCarSound();
-    loadPlaneSound();
-    loadDollSound();
-  }, []);
-
-  // play sfx
-  async function playDollSound() {
+  const playSound = (soundKey) => {
     try {
-      if (dollSfx) {
-        dollSfx.replayAsync();
+      const soundObject = loadedSounds[soundKey];
+      if (soundObject) {
+        soundObject.replayAsync();
       }
     } catch (error) {
-      console.log("error playing doll sound", error);
+      console.log(`Error playing ${soundKey} sound:`, error);
     }
-  }
-  async function playWaveSound() {
-    try {
-      if (waveSfx) {
-        waveSfx.replayAsync();
-      }
-    } catch (error) {
-      console.log("error playing wave sound", error);
-    }
-  }
-
-  async function playRobotSound() {
-    try {
-      if (robotSfx) {
-        robotSfx.replayAsync();
-      }
-    } catch (error) {
-      console.log("error playing robot sound", error);
-    }
-  }
-
-  async function playDragonSound() {
-    try {
-      if (dragonSfx) {
-        dragonSfx.replayAsync();
-      }
-    } catch (error) {
-      console.log("error playing dragon sound", error);
-    }
-  }
-
-  async function playCurtainSound() {
-    try {
-      if (curtainSfx) {
-        curtainSfx.replayAsync();
-      }
-    } catch (error) {
-      console.log("error playing curtain sound", error);
-    }
-  }
-
-  async function playCarSound() {
-    try {
-      if (carSfx) {
-        carSfx.replayAsync();
-      }
-    } catch (error) {
-      console.log("error playing car sound", error);
-    }
-  }
-
-  async function playPlaneSound() {
-    try {
-      if (planeSfx) {
-        planeSfx.replayAsync();
-      }
-    } catch (error) {
-      console.log("error playing plane sound", error);
-    }
-  }
+  };
 
   // sprite animation and sound
 
@@ -219,7 +97,6 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
       loops: false,
       resetAfterFinish: true,
     });
-    playWaveSound();
   };
 
   const blink = () => {
@@ -245,7 +122,7 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
       loops: false,
       resetAfterFinish: true,
     });
-    playCarSound();
+    playSound("carSound");
   };
 
   const dragon = () => {
@@ -256,7 +133,7 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
       resetAfterFinish: true,
     });
 
-    playDragonSound();
+    playSound("dragonSound");
   };
 
   const curtain = () => {
@@ -267,7 +144,7 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
       resetAfterFinish: true,
     });
 
-    playCurtainSound();
+    playSound("curtainSound");
   };
 
   const robot = () => {
@@ -278,7 +155,7 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
       resetAfterFinish: true,
     });
 
-    playRobotSound();
+    playSound("robotSound");
   };
   const robotAnimation = () => {
     Animated.sequence([
@@ -323,7 +200,7 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
       resetAfterFinish: true,
     });
 
-    playPlaneSound();
+    playSound("planeSound");
   };
 
   // * story book logic
@@ -623,7 +500,7 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
             zIndex: 4,
           }}
           onPress={() => {
-            playDollSound();
+            playSound("dollSound");
           }}
         ></Pressable>
 

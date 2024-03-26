@@ -21,17 +21,15 @@ function BugGameView(props) {
 
   const [openCards, setOpenCards] = useState([]);
   const [clearedCards, setClearedcards] = useState([]);
-  const [, setFirstCardOpenedID] = useState(0);
-
-  const [moves, setMoves] = useState(0);
+  const [firstCardOpenedID, setFirstCardOpenedID] = useState(0);
+  // const flipAnim = useMemo(() => new Animated.Value(0), []); //this animation is buggy//
+  // const [moves, setMoves] = useState(0); //No need to know how many moves //
 
   //load sounds
   useEffect(() => {
     async function loadPop() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/pop.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/pop.mp3"));
         setPopSound(sound);
       } catch (error) {
         console.log("error loading sound: ", error);
@@ -43,9 +41,7 @@ function BugGameView(props) {
   useEffect(() => {
     async function loadFart() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/fart.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/fart.mp3"));
         setFartSound(sound);
       } catch (error) {
         console.log("error loading sound: ", error);
@@ -57,9 +53,7 @@ function BugGameView(props) {
   useEffect(() => {
     async function loadYay() {
       try {
-        const { sound } = await Audio.Sound.createAsync(
-          require("./assets/audio/yay.mp3")
-        );
+        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/yay.mp3"));
         setYaySound(sound);
       } catch (error) {
         console.log("error loading sound: ", error);
@@ -101,6 +95,7 @@ function BugGameView(props) {
     try {
       popSound.stopAsync();
       popSound.playAsync();
+      popSound.replayAsync();
     } catch (error) {
       console.log("PLAYBACK error here is: ", error);
     }
@@ -110,6 +105,7 @@ function BugGameView(props) {
     try {
       fartSound.stopAsync();
       fartSound.playAsync();
+      fartSound.replayAsync();
     } catch (error) {
       console.log("PLAYBACK error here is: ", error);
     }
@@ -119,32 +115,34 @@ function BugGameView(props) {
     try {
       yaySound.stopAsync();
       yaySound.playAsync();
+      yaySound.replayAsync();
     } catch (error) {
       console.log("PLAYBACK error here is: ", error);
     }
   };
 
   //  animations
+  // const flipAnim = useRef(new Animated.Value(0)).current;
+
   const CardView = React.memo(({ isOpen, isCleared, image }) => {
-    const flipAnim = useRef(new Animated.Value(0)).current;
+    /// these animations are buggy and need fixed to be used
+    // const interpolatedRotation = flipAnim.interpolate({
+    //   inputRange: [0, 0.5, 1],
+    //   outputRange: ["0deg", "90deg", "180deg"],
+    // });
 
-    const interpolatedRotation = flipAnim.interpolate({
-      inputRange: [0, 0.5, 1],
-      outputRange: ["0deg", "90deg", "180deg"],
-    });
+    // const interpolatedOpacity = flipAnim.interpolate({
+    //   inputRange: [0, 0.5, 1],
+    //   outputRange: [1, 0, 1],
+    // });
 
-    const interpolatedOpacity = flipAnim.interpolate({
-      inputRange: [0, 0.5, 1],
-      outputRange: [1, 0, 1],
-    });
-
-    useEffect(() => {
-      Animated.timing(flipAnim, {
-        toValue: isOpen ? 1 : 0,
-        duration: 250,
-        useNativeDriver: true,
-      }).start();
-    }, [flipAnim, isOpen]);
+    // useEffect(() => {
+    //   Animated.timing(flipAnim, {
+    //     toValue: isOpen ? 1 : 0,
+    //     duration: 900,
+    //     useNativeDriver: true,
+    //   }).start();
+    // }, [flipAnim, isOpen]);
 
     return (
       <View style={{ flex: 1 }}>
@@ -152,12 +150,12 @@ function BugGameView(props) {
           style={{
             height: 150,
             width: 150,
-            opacity: isCleared ? 1 : interpolatedOpacity,
-            transform: [
-              {
-                rotateY: interpolatedRotation,
-              },
-            ],
+            opacity: isCleared ? 1 : 1,
+            // transform: [
+            //   {
+            //     rotateY: interpolatedRotation,
+            //   },
+            // ],
           }}
         >
           <Image
@@ -212,7 +210,7 @@ function BugGameView(props) {
   const handleCardClick = async (clickedBug, bugId) => {
     if (openCards.length === 1) {
       setOpenCards((prev) => [...prev, { bug: clickedBug, id: bugId }]);
-      setMoves((moves) => moves + 1);
+      // setMoves((moves) => moves + 1);
     } else {
       setOpenCards([{ bug: clickedBug, id: bugId }]);
       setFirstCardOpenedID({ bugId });
@@ -226,10 +224,7 @@ function BugGameView(props) {
       const delay = 1000;
       if (areBugsMatched(openCards[0], openCards[1])) {
         const timeoutId = setTimeout(() => {
-          setClearedcards((prevClearedCards) => [
-            ...prevClearedCards,
-            ...openCards,
-          ]);
+          setClearedcards((prevClearedCards) => [...prevClearedCards, ...openCards]);
           playYaySound();
         }, delay);
       } else {
@@ -264,9 +259,7 @@ function BugGameView(props) {
     const bugId = index;
 
     const isCardOpen = openCards.some((card) => card.id === bugId);
-    const isCardCleared = clearedCards.some(
-      (card) => card.bug.name === item.name
-    );
+    const isCardCleared = clearedCards.some((card) => card.bug.name === item.name);
 
     return (
       <Pressable
@@ -283,9 +276,7 @@ function BugGameView(props) {
     );
   };
 
-  const [cards, setCards] = useState(() =>
-    shuffleBugs(unqiqueBugsArray.concat(unqiqueBugsArray))
-  );
+  const [cards, setCards] = useState(() => shuffleBugs(unqiqueBugsArray.concat(unqiqueBugsArray)));
 
   return (
     <>
@@ -351,7 +342,7 @@ function BugGameView(props) {
           ></FlatList>
         )}
 
-        {clearedCards.length === 12 && (
+        {/* {clearedCards.length === 12 && (
           <Text
             style={{
               fontSize: 60,
@@ -361,7 +352,7 @@ function BugGameView(props) {
           >
             You did it in only {moves} moves! GOOD JOB!
           </Text>
-        )}
+        )} */}
       </View>
     </>
   );

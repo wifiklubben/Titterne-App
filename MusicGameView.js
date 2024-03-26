@@ -38,6 +38,7 @@ export default function MusicGameView(props) {
       try {
         const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_bas.mp3"));
         setTrack1(sound);
+        sound.setIsLoopingAsync(true);
         console.log("track one set");
       } catch (error) {
         console.log("error in initial loadMusic of track 1", error);
@@ -47,6 +48,7 @@ export default function MusicGameView(props) {
       try {
         const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_Grin.mp3"));
         setTrack2(sound);
+        sound.setIsLoopingAsync(true);
       } catch (error) {
         console.log("error in initial loadMusic of track 2: ", error);
       }
@@ -55,6 +57,7 @@ export default function MusicGameView(props) {
       try {
         const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_Guitar.mp3"));
         setTrack3(sound);
+        sound.setIsLoopingAsync(true);
       } catch (error) {
         console.log("error in initial loadMusic of track 3: ", error);
       }
@@ -63,6 +66,7 @@ export default function MusicGameView(props) {
       try {
         const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_Orgel.mp3"));
         setTrack4(sound);
+        sound.setIsLoopingAsync(true);
       } catch (error) {
         console.log("error in initial loadMusic of track 4: ", error);
       }
@@ -71,6 +75,7 @@ export default function MusicGameView(props) {
       try {
         const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_perc1.mp3"));
         setTrack5(sound);
+        sound.setIsLoopingAsync(true);
       } catch (error) {
         console.log("error in initial loadMusic of track 5: ", error);
       }
@@ -79,6 +84,7 @@ export default function MusicGameView(props) {
       try {
         const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_perc2.mp3"));
         setTrack6(sound);
+        sound.setIsLoopingAsync(true);
       } catch (error) {
         console.log("error in initial loadMusic of track 6: ", error);
       }
@@ -87,6 +93,7 @@ export default function MusicGameView(props) {
       try {
         const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_Tema.mp3"));
         setTrack7(sound);
+        sound.setIsLoopingAsync(true);
       } catch (error) {
         console.log("error in initial loadMusic of track 7: ", error);
       }
@@ -95,6 +102,7 @@ export default function MusicGameView(props) {
       try {
         const { sound } = await Audio.Sound.createAsync(require("./assets/audio/piano/Multitracks/Titel_Stem_Vibrafon.mp3"));
         setTrack8(sound);
+        sound.setIsLoopingAsync(true);
       } catch (error) {
         console.log("error in initial loadMusic of track 8: ", error);
       }
