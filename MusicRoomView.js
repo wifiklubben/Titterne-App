@@ -7,12 +7,6 @@ import { Asset } from "expo-asset";
 import { Audio } from "expo-av";
 
 export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, stopMusicRoomBackgroundSound }) {
-  const [sfx2, setSfx2] = useState();
-  const [guitarAudio, setGuitarAudio] = useState();
-  const [fluteAudio, setFluteAudio] = useState();
-  const [maracasAudio, setMaracasAudio] = useState();
-  const [tambourineAudio, setTambourineAudio] = useState();
-  const [trumpetAudio, setTrumpetAudio] = useState();
   const [skyIsPressed, setSkyIsPresssed] = useState(false);
   const [skyIsDancing, setSkyIsDancing] = useState(false);
   const [tordenIsBlinking, setTordenIsBlinking] = useState(false);
@@ -27,12 +21,19 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
   useEffect(() => {
     const loadAssets = async () => {
       const images = {
-        ConservatoryBackground: require("./assets/ConservatoryRoom/Conservatory_Bg_puddle_SM.png"),
+        musicRoomBackground: require("./assets/MusicRoom/MusicRoomAssets/musicRoomBG.png"),
+        keyboard: require("./assets/MusicRoom/MusicRoomAssets/Keyboard.png"),
+        pillows: require("./assets/MusicRoom/MusicRoomAssets/pillows.png"),
       };
       const sounds = {
         recordScratch: require("./assets/audio/musicRoom/Scratch.mp3"),
         guitarLick: require("./assets/audio/guitarLick.mp3"),
         drumSolo: require("./assets/audio/musicRoom/Drums.mp3"),
+        guitarStrum: require("./assets/audio/musicRoom/guitar.mp3"),
+        fluteSound: require("./assets/audio/musicRoom/flute.mp3"),
+        maracasShake: require("./assets/audio/musicRoom/maracas.mp3"),
+        tambourineShake: require("./assets/audio/musicRoom/tambourine.mp3"),
+        trumpet: require("./assets/audio/musicRoom/trumpet.mp3"),
       };
       const cacheImages = Object.entries(images).map(async ([key, image]) => {
         const asset = Asset.fromModule(image);
@@ -89,69 +90,6 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
     }
   };
 
-  useEffect(() => {
-    async function loadGuitarAudio() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/musicRoom/guitar.mp3"));
-        setGuitarAudio(sound);
-      } catch (error) {
-        console.log("error in initial loadMusic of guitar audio: ", error);
-      }
-    }
-
-    async function loadFluteAudio() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/musicRoom/flute.mp3"));
-        setFluteAudio(sound);
-      } catch (error) {
-        console.log("error in initial loadMusic of flute audio: ", error);
-      }
-    }
-
-    async function loadMaracasAudio() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/musicRoom/maracas.mp3"));
-        setMaracasAudio(sound);
-      } catch (error) {
-        console.log("error in initial loadMusic of maracas audio: ", error);
-      }
-    }
-
-    async function loadTambourineAudio() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/musicRoom/tambourine.mp3"));
-        setTambourineAudio(sound);
-      } catch (error) {
-        console.log("error in initial loadMusic of tambourine audio: ", error);
-      }
-    }
-
-    async function loadTrumpetAudio() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/musicRoom/trumpet.mp3"));
-        setTrumpetAudio(sound);
-      } catch (error) {
-        console.log("error in initial loadMusic of trumpet audio: ", error);
-      }
-    }
-
-    async function loadSfx2() {
-      try {
-        const { sound } = await Audio.Sound.createAsync(require("./assets/audio/Airhorn.mp3"));
-        setSfx2(sound);
-      } catch (error) {
-        console.log("error in initial loadMusic of sfx2: ", error);
-      }
-    }
-
-    loadSfx2();
-    loadGuitarAudio();
-    loadFluteAudio();
-    loadMaracasAudio();
-    loadTambourineAudio();
-    loadTrumpetAudio();
-  }, []);
-
   // Play Audio function
 
   async function playAudio(audio) {
@@ -175,7 +113,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
       loop: false,
       resetAfterFinish: true,
     });
-    playAudio(maracasAudio);
+    playSound("maracasShake");
   };
 
   // Guitar animation
@@ -199,7 +137,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
       loops: false,
       resetAfterFinish: true,
     });
-    playAudio(fluteAudio);
+    playSound("fluteSound");
   };
 
   // Tambourine animation
@@ -211,7 +149,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
       loops: false,
       resetAfterFinish: true,
     });
-    playAudio(tambourineAudio);
+    playSound("maracasShake");
   };
 
   // Trumpet animation
@@ -223,7 +161,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
       loops: false,
       resetAfterFinish: true,
     });
-    playAudio(trumpetAudio);
+    playSound("trumpet");
   };
 
   // Record player animation
@@ -366,12 +304,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
   }
   if (localIsLoaded) {
     return (
-      <ImageBackground
-        // source={require("./assets/MusicRoom/musicRoomPlacement.png")}
-        source={require("./assets/MusicRoom/MusicRoomAssets/musicRoomBG.png")}
-        // source={require("./assets/MusicRoom/musicRoomCharacterPlacement.png")}
-        style={styles.fullWidthBackground}
-      >
+      <ImageBackground source={{ uri: loadedImages.musicRoomBackground }} style={styles.fullWidthBackground}>
         <Animated.View
           style={{
             position: "absolute",
@@ -401,7 +334,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
           }}
         >
           <Image
-            source={require("./assets/MusicRoom/MusicRoomAssets/Keyboard.png")}
+            source={{ uri: loadedImages.keyboard }}
             style={{
               height: "145%",
               width: "145%",
@@ -727,7 +660,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
         >
           <Image
             pointerEvents="none"
-            source={require("./assets/MusicRoom/MusicRoomAssets/pillows.png")}
+            source={{ uri: loadedImages.pillows }}
             style={{
               width: "100%",
               height: "100%",
@@ -736,41 +669,6 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
         </View>
 
         {isMusicGameOpen && <MusicGameView styles={styles} handleMusicGameOpen={handleMusicGameOpen} />}
-
-        {/* <View style={{
-            position:'absolute',
-            top: 300,
-            right: 150,
-          
-          }}>
-
-          <OneShot soundToPlay={sfx1} styles={styles}>
-
-            <Animated.Image source={require('./assets/ThordenBass.png')}
-              styles={[
-                styles.speakerButton
-              ]}
-              onPress={wiggleAnimation}
-            />
-              
-          </OneShot>
-
-        </View>
-
-        <View style={{
-            position:'absolute',
-            top: 100,
-            right: 350,
-            }}>
-
-          <OneShot  soundToPlay={sfx2} styles={styles}>
-
-          <Image source={require('./assets/speakerR.png')}
-          styles={styles.speakerButton}/>
-
-          </OneShot>
-          
-        </View> */}
       </ImageBackground>
     );
   }

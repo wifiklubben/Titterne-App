@@ -123,7 +123,7 @@ export default function HomeView({ styles, children, setShowIntroAnimation, isLo
   };
 
   return isNightTime ? (
-    <ImageBackground style={styles.fullWidthBackground} source={require("./assets/HouseNight.png")}></ImageBackground>
+    <ImageBackground style={[styles.fullWidthBackground, { transform: [{ scale: 1.2 }] }]} source={require("./assets/HouseNight.png")}></ImageBackground>
   ) : !showIntroAnimation ? (
     // Main view
     <View>
