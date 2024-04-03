@@ -1,8 +1,14 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
-import { View, Image, FlatList, Pressable, Animated, Text } from "react-native";
+import { View, Image, FlatList, Pressable, Animated, Text, Dimensions } from "react-native";
+import { Emitter } from "react-native-particles";
 
 import { Audio } from "expo-av";
-
+const fullWidth = Dimensions.get("window").width;
+const fullHeight = Dimensions.get("window").height;
+const halfHeight = fullHeight / 2;
+const halfWidth = fullWidth / 2;
+console.log(halfHeight);
+console.log(halfWidth);
 // matching bugs stock function
 function areBugsMatched(bug1, bug2) {
   console.log("bug1 id: ", bug1.id);
@@ -22,8 +28,8 @@ function BugGameView(props) {
   const [openCards, setOpenCards] = useState([]);
   const [clearedCards, setClearedcards] = useState([]);
   const [firstCardOpenedID, setFirstCardOpenedID] = useState(0);
-  // const flipAnim = useMemo(() => new Animated.Value(0), []); //this animation is buggy//
-  // const [moves, setMoves] = useState(0); //No need to know how many moves //
+
+  const [moves, setMoves] = useState(0);
 
   //load sounds
   useEffect(() => {
@@ -95,7 +101,6 @@ function BugGameView(props) {
     try {
       popSound.stopAsync();
       popSound.playAsync();
-      popSound.replayAsync();
     } catch (error) {
       console.log("PLAYBACK error here is: ", error);
     }
@@ -105,7 +110,6 @@ function BugGameView(props) {
     try {
       fartSound.stopAsync();
       fartSound.playAsync();
-      fartSound.replayAsync();
     } catch (error) {
       console.log("PLAYBACK error here is: ", error);
     }
@@ -115,77 +119,113 @@ function BugGameView(props) {
     try {
       yaySound.stopAsync();
       yaySound.playAsync();
-      yaySound.replayAsync();
     } catch (error) {
       console.log("PLAYBACK error here is: ", error);
     }
   };
 
   //  animations
-  // const flipAnim = useRef(new Animated.Value(0)).current;
+  // const CardView = React.memo(({ isOpen, isCleared, image }) => {
+  //   const flipAnim = useRef(new Animated.Value(0)).current;
+
+  //   const interpolatedRotation = flipAnim.interpolate({
+  //     inputRange: [0, 0.5, 1],
+  //     outputRange: ["0deg", "90deg", "180deg"],
+  //   });
+
+  //   const interpolatedOpacity = flipAnim.interpolate({
+  //     inputRange: [0, 0.5, 1],
+  //     outputRange: [1, 0, 1],
+  //   });
+
+  //   useEffect(() => {
+  //     Animated.timing(flipAnim, {
+  //       toValue: isOpen ? 1 : 0,
+  //       duration: 250,
+  //       useNativeDriver: true,
+  //     }).start();
+  //   }, [flipAnim, isOpen]);
+
+  //   return (
+  //     <View style={{ flex: 1 }}>
+  //       <Animated.View
+  //         style={{
+  //           height: 150,
+  //           width: 150,
+  //           opacity: isCleared ? 1 : interpolatedOpacity,
+  //           transform: [
+  //             {
+  //               rotateY: interpolatedRotation,
+  //             },
+  //           ],
+  //         }}
+  //       >
+  //         <Image
+  //           source={image}
+  //           style={{
+  //             height: "100%",
+  //             width: "100%",
+  //             resizeMode: "contain",
+  //             opacity: 1,
+  //           }}
+  //         />
+  //       </Animated.View>
+  //       <Animated.View
+  //         style={{
+  //           position: "absolute",
+  //           top: 0,
+  //           left: 0,
+  //           opacity: isOpen ? 0 : 1,
+  //         }}
+  //       >
+  //         <Image
+  //           source={require("./assets/graphics/bugs/Memorygamecardfront.png")}
+  //           style={{
+  //             height: 150,
+  //             width: 150,
+  //             resizeMode: "contain",
+  //             opacity: 1,
+  //             overflow: "visible",
+  //           }}
+  //         />
+  //       </Animated.View>
+  //     </View>
+  //   );
+  // });
+
+  // no amiation card view
 
   const CardView = React.memo(({ isOpen, isCleared, image }) => {
-    /// these animations are buggy and need fixed to be used
-    // const interpolatedRotation = flipAnim.interpolate({
-    //   inputRange: [0, 0.5, 1],
-    //   outputRange: ["0deg", "90deg", "180deg"],
-    // });
-
-    // const interpolatedOpacity = flipAnim.interpolate({
-    //   inputRange: [0, 0.5, 1],
-    //   outputRange: [1, 0, 1],
-    // });
-
-    // useEffect(() => {
-    //   Animated.timing(flipAnim, {
-    //     toValue: isOpen ? 1 : 0,
-    //     duration: 900,
-    //     useNativeDriver: true,
-    //   }).start();
-    // }, [flipAnim, isOpen]);
-
     return (
       <View style={{ flex: 1 }}>
         <Animated.View
           style={{
             height: 150,
             width: 150,
-            opacity: isCleared ? 1 : 1,
-            // transform: [
-            //   {
-            //     rotateY: interpolatedRotation,
-            //   },
-            // ],
           }}
         >
-          <Image
-            source={image}
-            style={{
-              height: "100%",
-              width: "100%",
-              resizeMode: "contain",
-              opacity: 1,
-            }}
-          />
-        </Animated.View>
-        <Animated.View
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            opacity: isOpen ? 0 : 1,
-          }}
-        >
-          <Image
-            source={require("./assets/graphics/bugs/Memorygamecardfront.png")}
-            style={{
-              height: 150,
-              width: 150,
-              resizeMode: "contain",
-              opacity: 1,
-              overflow: "visible",
-            }}
-          />
+          {isOpen || isCleared ? (
+            <Image
+              source={image}
+              style={{
+                height: "100%",
+                width: "100%",
+                resizeMode: "contain",
+                opacity: 1,
+              }}
+            />
+          ) : (
+            <Image
+              source={require("./assets/graphics/bugs/Memorygamecardfront.png")}
+              style={{
+                height: "100%",
+                width: "100%",
+                resizeMode: "contain",
+                opacity: 1,
+                overflow: "visible",
+              }}
+            />
+          )}
         </Animated.View>
       </View>
     );
@@ -210,7 +250,7 @@ function BugGameView(props) {
   const handleCardClick = async (clickedBug, bugId) => {
     if (openCards.length === 1) {
       setOpenCards((prev) => [...prev, { bug: clickedBug, id: bugId }]);
-      // setMoves((moves) => moves + 1);
+      setMoves((moves) => moves + 1);
     } else {
       setOpenCards([{ bug: clickedBug, id: bugId }]);
       setFirstCardOpenedID({ bugId });
@@ -342,17 +382,20 @@ function BugGameView(props) {
           ></FlatList>
         )}
 
-        {/* {clearedCards.length === 12 && (
-          <Text
-            style={{
-              fontSize: 60,
-              fontFamily: "Bubblegum",
-              color: "black",
-            }}
-          >
-            You did it in only {moves} moves! GOOD JOB!
-          </Text>
-        )} */}
+        {clearedCards.length === 12 && (
+          // <Text
+          //   style={{
+          //     fontSize: 60,
+          //     fontFamily: "Bubblegum",
+          //     color: "black",
+          //   }}
+          // >
+          //   You did it in only {moves} moves! GOOD JOB!
+          // </Text>
+          <Emitter numberOfParticles={100} emissionRate={10} interval={200} particleLife={1000} direction={0} spread={200} speed={100} width={halfWidth} fromPosition={{ x: halfWidth, y: halfHeight }}>
+            <Image source={require("./assets/graphics/bugs/Memorygamecardfront.png")} style={{ resizeMode: "contain", height: 90, width: 90 }} />
+          </Emitter>
+        )}
       </View>
     </>
   );

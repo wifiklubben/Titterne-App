@@ -8,7 +8,7 @@ import SpriteSheet from "rn-sprite-sheet";
 import BugGameView from "./BugGameView";
 import BookViewAction from "./BookViewAction";
 
-function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
+function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound, fullWidth, fullHeight }) {
   const [bugGameOpen, setBugGameOpen] = useState(false);
   const [isBlinking, setIsBlinking] = useState(false);
   const [isWaving, setIsWaving] = useState(false);
@@ -504,7 +504,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound }) {
         />
         {/* </View> */}
 
-        {bugGameOpen === true && <BugGameView styles={styles} handleGameOpen={handleGameOpen} />}
+        {bugGameOpen === true && <BugGameView styles={styles} handleGameOpen={handleGameOpen} fullHeight={fullHeight} fullWidth={fullWidth} />}
 
         {/* story book component
 

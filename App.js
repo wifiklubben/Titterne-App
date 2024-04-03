@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { AppState, StyleSheet, View, ImageBackground, Dimensions, Pressable, Image, Animated } from "react-native";
-
+import { AppState, StyleSheet, View, ImageBackground, Dimensions, Pressable, Image, Animated, Linking, Alert } from "react-native";
+import * as WebBrowser from "expo-web-browser";
+import { openBrowserAsync } from "expo-web-browser";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { Asset } from "expo-asset";
@@ -15,6 +16,7 @@ import HomeIconGreen from "./assets/graphics/homeIconGreen.png";
 
 import SettingsIcon from "./assets/graphics/settingsIcon";
 import SettingsIconGreen from "./assets/graphics/settingsIconGreen.png";
+import playerIcon from "./assets/graphics/saxIcon.png";
 
 import HomeView from "./HomeView";
 import MusicRoomView from "./MusicRoomView";
@@ -360,6 +362,8 @@ export default () => {
     loadAssets();
   }, []);
 
+  /// Open n app browser ///
+
   // ********* STYLES ***********************
 
   const styles = StyleSheet.create({
@@ -546,7 +550,7 @@ export default () => {
       {activeView === 3 && <BedroomView styles={styles} activeView={activeView} setShowIntroAnimation stopBedroomAmbientSound={stopBedroomAmbientSound} startBedroomAmbientSound={startBedroomAmbientSound} />}
 
       {/* Treehouse View */}
-      {activeView === 4 && <TreehouseView styles={styles} activeView={activeView} stopTreehouseSound={stopTreehouseSound} startTreehouseSound={startTreehouseSound} />}
+      {activeView === 4 && <TreehouseView styles={styles} fullHeight={fullHeight} fullWidth={fullWidth} activeView={activeView} stopTreehouseSound={stopTreehouseSound} startTreehouseSound={startTreehouseSound} />}
 
       {/* Conservartory View */}
       {activeView === 5 && <ConservatoryView styles={styles} activeView={activeView} startConservatoryBackgroundSound={startConservatoryBackgroundSound} stopConservatoryBackgroundSound={stopConservatoryBackgroundSound} />}
@@ -567,6 +571,13 @@ export default () => {
             <Pressable style={styles.roundButton} onPress={() => handleViewChange(1)}>
               {/* <HomeIcon width={72} height={72} /> */}
               <Image source={HomeIconGreen} style={{ width: 110, height: 110 }} />
+            </Pressable>
+          )}
+
+          {activeView < 30 && (
+            <Pressable style={styles.roundButton} onPress={() => openBrowserAsync("https://titterne.dk/video/")}>
+              {/* <SettingsIcon width={72} height={72} /> */}
+              <Image source={playerIcon} style={{ width: 60, height: 60 }} />
             </Pressable>
           )}
 
