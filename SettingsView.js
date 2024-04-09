@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Pressable, Switch, SafeAreaView, ScrollView } from "react-native";
-
+import { openBrowserAsync } from "expo-web-browser";
 import moment from "moment";
 
 import { A } from "@expo/html-elements";
@@ -74,18 +74,17 @@ function SettingsView({ styles, useStore, timeLimitAmount, timeLimitActive, setT
           <Text style={styles.h1Text}>Indstillinger</Text>
 
           <Pressable onPress={showParentals}>
-            <Text style={styles.h2Text}>Forældre kontrol</Text>
+            <Text style={styles.h2Text}>Forældrekontrol</Text>
           </Pressable>
-
-          <A href="https://titterne.dk/" style={styles.h2Text}>
-            Butik
-          </A>
-          <A href="https://titterne.dk/video/" style={styles.h2Text}>
-            Youtube kanal
-          </A>
-          <A href="https://titterne.dk/om-os/" style={styles.h2Text}>
-            Om os
-          </A>
+          <Pressable onPress={() => openBrowserAsync("https://titterne.dk/")}>
+            <Text style={styles.h2Text}>Butik</Text>
+          </Pressable>
+          <Pressable onPress={() => openBrowserAsync("https://titterne.dk/video/")}>
+            <Text style={styles.h2Text}>Youtube kanal</Text>
+          </Pressable>
+          <Pressable onPress={() => openBrowserAsync("https://titterne.dk/om-os/")}>
+            <Text style={styles.h2Text}>Om os</Text>
+          </Pressable>
         </View>
       )}
 
@@ -107,7 +106,7 @@ function SettingsView({ styles, useStore, timeLimitAmount, timeLimitActive, setT
                     justifyContent: "space-between",
                   }}
                 >
-                  <Text style={styles.h1Text}>dvaletilstand</Text>
+                  <Text style={styles.h1Text}>Dvaletilstand</Text>
                   <Switch
                     trackColor={{ false: "#F45656", true: "#7DD966" }}
                     style={{
@@ -202,7 +201,7 @@ function SettingsView({ styles, useStore, timeLimitAmount, timeLimitActive, setT
                     value={timeLimitActive}
                   />
                 </View>
-                <Text style={styles.pText}>Bestem, hvor lang tid dit barn vil være i stand til at bruge på Titterne-appen under denne session. Aktuel sessionstid er {elapsedTime} minutter.</Text>
+                <Text style={styles.pText}>Bestem, hvor lang tid dit barn vil være i stand til at bruge på Titterne-appen under denne session.</Text>
                 {timeLimitActive && (
                   <View
                     style={{

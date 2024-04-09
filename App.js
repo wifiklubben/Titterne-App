@@ -11,12 +11,9 @@ import moment from "moment";
 
 import { create } from "zustand";
 
-import HomeIcon from "./assets/graphics/homeIcon.svg";
 import HomeIconGreen from "./assets/graphics/homeIconGreen.png";
-
-import SettingsIcon from "./assets/graphics/settingsIcon";
+import VideosIconGreen from "./assets/graphics/videosIcon.png";
 import SettingsIconGreen from "./assets/graphics/settingsIconGreen.png";
-import playerIcon from "./assets/graphics/saxIcon.png";
 
 import HomeView from "./HomeView";
 import MusicRoomView from "./MusicRoomView";
@@ -435,8 +432,7 @@ export default () => {
       width: 100,
       height: 100,
       borderRadius: 100,
-      borderWidth: 3,
-      borderColor: "black",
+
       justifyContent: "center",
       alignItems: "center",
     },
@@ -577,7 +573,7 @@ export default () => {
           {activeView < 30 && (
             <Pressable style={styles.roundButton} onPress={() => openBrowserAsync("https://titterne.dk/video/")}>
               {/* <SettingsIcon width={72} height={72} /> */}
-              <Image source={playerIcon} style={{ width: 60, height: 60 }} />
+              <Image source={VideosIconGreen} style={{ width: 116, height: 116 }} />
             </Pressable>
           )}
 

@@ -68,7 +68,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound, fullWi
 
     loadAssets();
   }, []);
-  console.log("local is loaded", localIsLoaded);
+  console.log("local is loaded is", localIsLoaded);
 
   const playSound = (soundKey) => {
     try {
@@ -541,4 +541,4 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound, fullWi
   );
 }
 
-export default TreehouseView;
+export default React.memo(TreehouseView);

@@ -154,7 +154,7 @@ export default function BubbleGame(props) {
         }}
       >
         <Image
-          source={require("../../assets/graphics/closeIcon.png")}
+          source={require("../..//assets/Global/closeIcon.png")}
           style={{
             resizeMode: "contain",
             height: "100%",

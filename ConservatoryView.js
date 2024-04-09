@@ -302,7 +302,7 @@ function ConservatoryView({ styles, startConservatoryBackgroundSound, stopConser
               onPress={() => hoseDance()}
               style={{
                 position: "absolute",
-                width: 460,
+                width: 410,
                 height: 330,
                 bottom: 0,
                 left: 144,

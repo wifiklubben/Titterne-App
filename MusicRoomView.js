@@ -325,7 +325,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
           onPress={() => handleMusicGameOpen()}
           style={{
             position: "absolute",
-            height: 90,
+            height: 80,
             width: 290,
             top: 615,
             left: 300,
@@ -336,7 +336,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
           <Image
             source={{ uri: loadedImages.keyboard }}
             style={{
-              height: "145%",
+              height: "175%",
               width: "145%",
               transform: [{ rotateZ: "17deg" }],
               overflow: "visible",
@@ -553,7 +553,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
             position: "absolute",
             height: 100,
             width: 175,
-            top: 710,
+            top: 720,
             left: 360,
 
             // transform: "rotateZ(-40deg)",
