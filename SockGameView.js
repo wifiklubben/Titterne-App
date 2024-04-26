@@ -269,7 +269,7 @@ function SockGameView(props) {
 
           {clearedCards.length === 12 && (
             // <Text style={[props.styles.h1Text]}>You did it!!</Text>
-            <Emitter numberOfParticles={100} emissionRate={10} interval={200} particleLife={1000} direction={0} spread={200} speed={100} width={300} fromPosition={{ x: 300, y: 300 }}>
+            <Emitter numberOfParticles={25} emissionRate={5} interval={0} particleLife={2000} direction={90} spread={360} speed={100} width={300} gravity={20} fromPosition={{ x: 240, y: 240 }}>
               <Image source={require("./assets/graphics/socks/sockBlue.png")} style={{ resizeMode: "contain", height: 90, width: 90 }} />
             </Emitter>
           )}

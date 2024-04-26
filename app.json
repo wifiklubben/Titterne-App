@@ -3,18 +3,18 @@
     "name": "titterne",
     "slug": "titterne",
     "owner": "wifiklubben",
-    "version": "1.3.8",
+    "version": "1.4.1",
     "orientation": "landscape",
     "icon": "./assets/TitterneIcon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/TitterneSplash.png",
+      "image": "./assets/TitterneLogo.png",
       "resizeMode": "contain",
       "backgroundColor": "#8AC1DF"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true,
+      "isTabletOnly": true,
       "requireFullScreen": true,
       "bundleIdentifier": "com.teatreedimitri.titterne"
     },

@@ -190,12 +190,17 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
 
   // Torden animation
   const tordenWave = () => {
-    this.tordenWave.play({
-      type: "wave",
-      fps: 24,
-      loops: false,
-      resetAfterFinish: true,
-    });
+    if (!tordenIsBlinking) {
+      this.tordenWave.play({
+        type: "wave",
+        fps: 24,
+        loops: false,
+        resetAfterFinish: true,
+        onFinish: () => {
+          setTordenIsPressed(false);
+        },
+      });
+    }
   };
   // torden idle dance
   const tordenIdle = () => {
@@ -214,7 +219,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
       const danceTimer = setInterval(() => {
         setTordenIsBlinking(true);
         tordenIdle();
-      }, 4000);
+      }, 1500);
       return () => clearInterval(danceTimer);
     }
   }, [tordenIsPressed]);
@@ -250,7 +255,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
       const danceTimer = setInterval(() => {
         setSkyIsDancing(true);
         skyIdle();
-      }, 5000);
+      }, 1500);
       return () => clearInterval(danceTimer);
     }
   }, [skyIsPressed]);
@@ -348,6 +353,7 @@ export default function MusicRoomView({ styles, startMusicRoomBackgroundSound, s
         <Pressable
           onPress={() => {
             tordenWave();
+            setTordenIsPressed(true);
           }}
           style={{
             position: "absolute",

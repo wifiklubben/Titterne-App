@@ -399,12 +399,12 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound, fullWi
         <View
           style={{
             position: "absolute",
-
-            left: 100,
+            left: 90,
             top: 210,
-            width: 260,
-            height: 310,
+            width: 286,
+            height: 315,
             zIndex: 2,
+            overflow: "hidden",
           }}
         >
           {/* Sky placeholder */}
@@ -417,8 +417,8 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound, fullWi
             width={370}
             imageStyle={{
               position: "absolute",
-              top: -65,
-              left: -45,
+              top: -60,
+              left: -48,
               zIndex: 0,
             }}
             animations={{

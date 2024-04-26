@@ -564,7 +564,10 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
             columns={3}
             rows={4}
             animations={{
-              planeFly: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+              planeFly: [
+                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5,
+                6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+              ],
             }}
           />
         </Pressable>
@@ -662,7 +665,7 @@ export default function BedroomView({ styles, stopBedroomAmbientSound, startBedr
         <View
           style={{
             position: "absolute",
-            height: 270,
+            height: 268,
             width: 250,
             top: 0,
             left: 700,

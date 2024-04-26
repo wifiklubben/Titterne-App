@@ -392,7 +392,8 @@ function BugGameView(props) {
           // >
           //   You did it in only {moves} moves! GOOD JOB!
           // </Text>
-          <Emitter numberOfParticles={100} emissionRate={10} interval={200} particleLife={1000} direction={0} spread={200} speed={100} width={halfWidth} fromPosition={{ x: halfWidth, y: halfHeight }}>
+
+          <Emitter numberOfParticles={25} emissionRate={5} interval={0} particleLife={2000} direction={180} spread={360} gravity={18} speed={120} width={halfWidth} fromPosition={{ x: halfWidth, y: halfHeight }}>
             <Image source={require("./assets/graphics/bugs/Memorygamecardfront.png")} style={{ resizeMode: "contain", height: 90, width: 90 }} />
           </Emitter>
         )}

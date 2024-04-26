@@ -437,6 +437,10 @@ export default () => {
       alignItems: "center",
     },
 
+    roundButtonInvisible: {
+      display: "none",
+    },
+
     BedroomButton: {
       position: "absolute",
       width: 135,
@@ -571,7 +575,7 @@ export default () => {
           )}
 
           {activeView < 30 && (
-            <Pressable style={styles.roundButton} onPress={() => openBrowserAsync("https://titterne.dk/video/")}>
+            <Pressable style={styles.roundButtonInvisible} onPress={() => openBrowserAsync("https://titterne.dk/video/")}>
               {/* <SettingsIcon width={72} height={72} /> */}
               <Image source={VideosIconGreen} style={{ width: 116, height: 116 }} />
             </Pressable>
@@ -579,13 +583,14 @@ export default () => {
 
           {activeView < 30 && (
             <Pressable
-              style={{
-                width: 60,
-                height: 60,
-                borderRadius: 100,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+              style={styles.roundButtonInvisible}
+              // style={{
+              //   width: 60,
+              //   height: 60,
+              //   borderRadius: 100,
+              //   justifyContent: "center",
+              //   alignItems: "center",
+              // }}
               onPress={() => handleViewChange(30)}
             >
               {/* <SettingsIcon width={72} height={72} /> */}
