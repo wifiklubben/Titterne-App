@@ -156,7 +156,7 @@ function SockGameView(props) {
 
   useEffect(() => {
     if (clearedCards.length === 12) {
-      //   console.log("YOU DID IT");
+      console.log("YOU DID IT");
 
       const delay = 10000000;
       const timeoutId = setTimeout(() => {
