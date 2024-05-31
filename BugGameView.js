@@ -19,6 +19,32 @@ function areBugsMatched(bug1, bug2) {
   } else {
   }
 }
+const unqiqueBugsArray = [
+  {
+    name: "ant",
+    image: require("./assets/graphics/bugs/Memorygamecat.png"),
+  },
+  {
+    name: "beetle",
+    image: require("./assets/graphics/bugs/Memorygamechicken.png"),
+  },
+  {
+    name: "caterpillar",
+    image: require("./assets/graphics/bugs/Memorygamedog.png"),
+  },
+  {
+    name: "ladybird",
+    image: require("./assets/graphics/bugs/Memorygameowl.png"),
+  },
+  {
+    name: "snail",
+    image: require("./assets/graphics/bugs/Memorygamepig.png"),
+  },
+  {
+    name: "worm",
+    image: require("./assets/graphics/bugs/Memorygamesheep.png"),
+  },
+];
 
 function BugGameView(props) {
   const [popSound, setPopSound] = useState();
@@ -67,33 +93,6 @@ function BugGameView(props) {
     }
     loadYay();
   }, []);
-
-  const unqiqueBugsArray = [
-    {
-      name: "ant",
-      image: require("./assets/graphics/bugs/Memorygamecat.png"),
-    },
-    {
-      name: "beetle",
-      image: require("./assets/graphics/bugs/Memorygamechicken.png"),
-    },
-    {
-      name: "caterpillar",
-      image: require("./assets/graphics/bugs/Memorygamedog.png"),
-    },
-    {
-      name: "ladybird",
-      image: require("./assets/graphics/bugs/Memorygameowl.png"),
-    },
-    {
-      name: "snail",
-      image: require("./assets/graphics/bugs/Memorygamepig.png"),
-    },
-    {
-      name: "worm",
-      image: require("./assets/graphics/bugs/Memorygamesheep.png"),
-    },
-  ];
 
   // play sounds
 
@@ -195,41 +194,43 @@ function BugGameView(props) {
 
   // no amiation card view
 
-  const CardView = React.memo(({ isOpen, isCleared, image }) => {
-    return (
-      <View style={{ flex: 1 }}>
-        <Animated.View
-          style={{
-            height: 150,
-            width: 150,
-          }}
-        >
-          {isOpen || isCleared ? (
-            <Image
-              source={image}
-              style={{
-                height: "100%",
-                width: "100%",
-                resizeMode: "contain",
-                opacity: 1,
-              }}
-            />
-          ) : (
-            <Image
-              source={require("./assets/graphics/bugs/Memorygamecardfront.png")}
-              style={{
-                height: "100%",
-                width: "100%",
-                resizeMode: "contain",
-                opacity: 1,
-                overflow: "visible",
-              }}
-            />
-          )}
-        </Animated.View>
-      </View>
-    );
-  });
+  const CardView = useMemo(() => {
+    return ({ isOpen, isCleared, image }) => {
+      return (
+        <View style={{ flex: 1 }}>
+          <Animated.View
+            style={{
+              height: 150,
+              width: 150,
+            }}
+          >
+            {isOpen || isCleared ? (
+              <Image
+                source={image}
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  resizeMode: "contain",
+                  opacity: 1,
+                }}
+              />
+            ) : (
+              <Image
+                source={require("./assets/graphics/bugs/Memorygamecardfront.png")}
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  resizeMode: "contain",
+                  opacity: 1,
+                  overflow: "visible",
+                }}
+              />
+            )}
+          </Animated.View>
+        </View>
+      );
+    };
+  }, []);
 
   //shuffle function
 
@@ -401,4 +402,4 @@ function BugGameView(props) {
     </>
   );
 }
-export default BugGameView;
+export default React.memo(BugGameView);

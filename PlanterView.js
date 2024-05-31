@@ -7,12 +7,13 @@ function PlanterView(props) {
   const [thisRound, setThisRound] = useState(0);
   const [timerInterval, setTimerInterval] = useState(2000);
   const [plantGrowthStage, setPlantGrowthStage] = useState(1);
-
   const [sunSound, setSunSound] = useState();
   const [waterSound, setWaterSound] = useState();
   const [growSound, setGrowSound] = useState();
   const [winSound, setWinSound] = useState();
   const [showGlowstar, setShowGlowstar] = useState(true);
+  const [sunIsPressed, setSunIsPressed] = useState(false);
+  const [canIsPressed, setCanIsPressed] = useState(false);
 
   //* load music
   useEffect(() => {
@@ -117,19 +118,16 @@ function PlanterView(props) {
     if (plantGrowthStage <= 5) {
       console.log("not won yet!");
       setPlantGrowthStage(plantGrowthStage + 1);
-      setTimerInterval(4800);
+      setTimerInterval(3800);
       playGrowSound();
     } else if (plantGrowthStage === 6) {
-      console.log("win condition run");
       stopGrowSound();
       setThisRound(0);
     }
   };
 
   useEffect(() => {
-    console.log("plant growth stage: ", plantGrowthStage);
     if (plantGrowthStage === 6) {
-      console.log("win condition run");
       setTimerInterval(20000);
       playWinSound();
       setThisRound(0);
@@ -169,8 +167,9 @@ function PlanterView(props) {
       // randomly chooses either watering can or sun or nothing, can only choose one,
       let randNum = Math.floor(Math.random() * 2 + 1);
       setThisRound(randNum);
-      console.log("round is", randNum);
       setShowGlowstar(true);
+      setCanIsPressed(false);
+      setSunIsPressed(false);
     }, timerInterval);
     return () => {
       clearInterval(intervalId);
@@ -192,7 +191,6 @@ function PlanterView(props) {
   }, [thisRound]);
 
   // if correct pressable is pressed... plant grows to next stage
-
   // When plant gets to level 6, big party time, new plant starts
 
   return (
@@ -227,8 +225,10 @@ function PlanterView(props) {
 
       <Pressable
         onPress={() => {
+          if (canIsPressed) return;
           addWater();
           setShowGlowstar(false);
+          setCanIsPressed(true);
         }}
         style={{
           position: "absolute",
@@ -264,8 +264,10 @@ function PlanterView(props) {
 
       <Pressable
         onPress={() => {
+          if (sunIsPressed) return;
           addSun();
           setShowGlowstar(false);
+          setSunIsPressed(true);
         }}
         style={{
           position: "absolute",

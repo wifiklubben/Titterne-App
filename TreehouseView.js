@@ -68,7 +68,7 @@ function TreehouseView({ styles, startTreehouseSound, stopTreehouseSound, fullWi
 
     loadAssets();
   }, []);
-  // console.log("local is loaded is", localIsLoaded);
+  console.log("local treehouse loaded is", localIsLoaded);
 
   const playSound = (soundKey) => {
     try {

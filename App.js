@@ -447,7 +447,6 @@ export default () => {
       height: 160,
       left: fullWidth / 2 + 10,
       top: fullHeight / 2 + 10,
-
       zIndex: 9,
     },
 
